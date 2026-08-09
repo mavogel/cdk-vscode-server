@@ -431,9 +431,9 @@ const idleMonitorProps: IdleMonitorProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.aws_cloudfront.IDistribution</code> | The CloudFront distribution to monitor for activity. |
+| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.distribution">distribution</a></code> | <code>aws-cdk-lib.interfaces.aws_cloudfront.IDistributionRef</code> | The CloudFront distribution to monitor for activity. |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.idleTimeoutMinutes">idleTimeoutMinutes</a></code> | <code>number</code> | Number of minutes of inactivity before stopping the instance. |
-| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.instance">instance</a></code> | <code>aws-cdk-lib.aws_ec2.IInstance</code> | The EC2 instance to monitor. |
+| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.instance">instance</a></code> | <code>aws-cdk-lib.interfaces.aws_ec2.IInstanceRef</code> | The EC2 instance to monitor. |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.checkIntervalMinutes">checkIntervalMinutes</a></code> | <code>number</code> | How often to check for idle activity (in minutes). |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.skipStatusChecks">skipStatusChecks</a></code> | <code>boolean</code> | Skip instance status checks before stopping When true, IdleMonitor will stop idle instances even if status checks haven't passed This is useful for integration tests where status check initialization time exceeds test timeout limits. |
 
@@ -442,10 +442,10 @@ const idleMonitorProps: IdleMonitorProps = { ... }
 ##### `distribution`<sup>Required</sup> <a name="distribution" id="@mavogel/cdk-vscode-server.IdleMonitorProps.property.distribution"></a>
 
 ```typescript
-public readonly distribution: IDistribution;
+public readonly distribution: IDistributionRef;
 ```
 
-- *Type:* aws-cdk-lib.aws_cloudfront.IDistribution
+- *Type:* aws-cdk-lib.interfaces.aws_cloudfront.IDistributionRef
 
 The CloudFront distribution to monitor for activity.
 
@@ -466,10 +466,10 @@ Number of minutes of inactivity before stopping the instance.
 ##### `instance`<sup>Required</sup> <a name="instance" id="@mavogel/cdk-vscode-server.IdleMonitorProps.property.instance"></a>
 
 ```typescript
-public readonly instance: IInstance;
+public readonly instance: IInstanceRef;
 ```
 
-- *Type:* aws-cdk-lib.aws_ec2.IInstance
+- *Type:* aws-cdk-lib.interfaces.aws_ec2.IInstanceRef
 
 The EC2 instance to monitor.
 
