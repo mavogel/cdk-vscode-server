@@ -9,6 +9,7 @@ const project = new MvcCdkConstructLibrary({
   packageName: '@mavogel/cdk-vscode-server',
   packageManager: javascript.NodePackageManager.NPM,
   projenrcTs: true,
+  npmTrustedPublishing: true,
   repositoryUrl: 'https://github.com/mavogel/cdk-vscode-server.git',
   keywords: ['aws', 'cdk', 'vscode', 'construct', 'server'],
   deps: [
