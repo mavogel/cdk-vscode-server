@@ -6,6 +6,7 @@ import {
   IAspect,
   Stack,
   Tags,
+  Validations,
 } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cf from 'aws-cdk-lib/aws-cloudfront';
@@ -15,7 +16,6 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct, IConstruct } from 'constructs';
 import { IdleMonitor } from './idle-monitor/idle-monitor';
 import { IdleMonitorEnabler } from './idle-monitor-enabler/idle-monitor-enabler';
@@ -23,6 +23,7 @@ import { Installer } from './installer/installer';
 import { getAmiSSMParameterForLinuxArchitectureAndFlavor } from './mappings';
 import { AwsManagedPrefixList } from './prefixlist-retriever/prefixlist-retriever';
 import { SecretRetriever } from './secret-retriever/secret-retriever';
+import { acknowledgeGranularFinding } from './suppress-nags';
 
 /**
  * Custom installation step for SSM document
@@ -435,17 +436,11 @@ export class VSCodeServer extends Construct {
           generateStringKey: 'password',
         },
       });
-      NagSuppressions.addResourceSuppressions(
-        [secret],
-        [
-          {
-            id: 'AwsSolutions-SMG4',
-            reason:
-              'For this tmp vc code server we do not need password rotation',
-          },
-        ],
-        true,
-      );
+      Validations.of(secret).acknowledge({
+        id: 'AwsSolutions-SMG4',
+        reason:
+          'For this tmp vc code server we do not need password rotation',
+      });
 
       // Have a custom resource to pass the secret data on? -> yes because not resolvable on compile time
       const secretRetriever = SecretRetriever.new({
@@ -533,21 +528,17 @@ export class VSCodeServer extends Construct {
           }),
         });
 
-        NagSuppressions.addResourceSuppressions(
-          [certificate],
-          [
-            {
-              id: 'AwsSolutions-ACM1',
-              reason:
-                'Certificate is created for VS Code server with proper domain validation',
-            },
-            {
-              id: 'AwsSolutions-IAM5',
-              reason:
-                'Certificate validation Lambda needs wildcard permissions for ACM and Route53',
-            },
-          ],
-          true,
+        Validations.of(certificate).acknowledge(
+          {
+            id: 'AwsSolutions-ACM1',
+            reason:
+              'Certificate is created for VS Code server with proper domain validation',
+          },
+          {
+            id: 'AwsSolutions-IAM5',
+            reason:
+              'Certificate validation Lambda needs wildcard permissions for ACM and Route53',
+          },
         );
       }
     }
@@ -565,16 +556,10 @@ export class VSCodeServer extends Construct {
       enableDnsHostnames: true,
       enableDnsSupport: true,
     });
-    NagSuppressions.addResourceSuppressions(
-      [vpc],
-      [
-        {
-          id: 'AwsSolutions-VPC7',
-          reason: 'For this tmp vpc we do not need flow logs',
-        },
-      ],
-      true,
-    );
+    Validations.of(vpc).acknowledge({
+      id: 'AwsSolutions-VPC7',
+      reason: 'For this tmp vpc we do not need flow logs',
+    });
 
     // Create a SecGroup associated withe the CF dist pList
     const secGroup = new ec2.SecurityGroup(this, 'cf-to-server-sg', {
@@ -590,16 +575,10 @@ export class VSCodeServer extends Construct {
         name: 'com.amazonaws.global.cloudfront.origin-facing',
       },
     );
-    NagSuppressions.addResourceSuppressions(
-      [awsManagedPrefixList],
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'For this provider wildcards are fine',
-        },
-      ],
-      true,
-    );
+    Validations.of(awsManagedPrefixList).acknowledge({
+      id: 'AwsSolutions-IAM5[Resource::*]',
+      reason: 'For this provider wildcards are fine',
+    });
 
     secGroup.addIngressRule(
       ec2.Peer.prefixList(awsManagedPrefixList.prefixList.prefixListId),
@@ -749,20 +728,72 @@ export class VSCodeServer extends Construct {
         iam.ManagedPolicy.fromAwsManagedPolicyName('ReadOnlyAccess'),
       ],
     });
-    NagSuppressions.addResourceSuppressions(
-      [instanceRole],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'For this tmp role we do not need to restrict managed policies',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'For this tmp role the wildcards are fine',
-        },
-      ],
-      true,
+    for (const managedPolicyArn of [
+      'AmazonSSMManagedInstanceCore',
+      'CloudWatchAgentServerPolicy',
+      'AmazonQDeveloperAccess',
+      'ReadOnlyAccess',
+    ]) {
+      acknowledgeGranularFinding(
+        instanceRole,
+        `AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/${managedPolicyArn}]`,
+        'For this tmp role we do not need to restrict managed policies',
+      );
+    }
+    acknowledgeGranularFinding(
+      instanceRole,
+      `AwsSolutions-IAM5[Resource::arn:aws:iam::${Stack.of(this).account}:role/cdk-*]`,
+      'For this tmp role the wildcards are fine',
+    );
+    Validations.of(instanceRole).acknowledge(
+      {
+        id: 'AwsSolutions-IAM5[Resource::*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::cloudformation:*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: `AwsSolutions-IAM5[Resource::arn:aws:cloudformation:*:${Stack.of(this).account}:stack/CDKToolkit/*]`,
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::s3:*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: `AwsSolutions-IAM5[Resource::arn:aws:ecr:*:${Stack.of(this).account}:repository/cdk-*]`,
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::ssm:GetParameter*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::ssm:PutParameter*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::ssm:DeleteParameter*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: `AwsSolutions-IAM5[Resource::arn:aws:ssm:*:${Stack.of(this).account}:parameter/cdk-bootstrap/*]`,
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-IAM5[Action::ec2:DescribeVolumesModifications*]',
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: `AwsSolutions-IAM5[Resource::arn:aws:codepipeline:*:${Stack.of(this).account}:*/*]`,
+        reason: 'For this tmp role the wildcards are fine',
+      },
+      {
+        id: `AwsSolutions-IAM5[Resource::arn:aws:kms:*:${Stack.of(this).account}:key/*]`,
+        reason: 'For this tmp role the wildcards are fine',
+      },
     );
 
     this.instance = new ec2.Instance(this, 'server-instance', {
@@ -800,16 +831,10 @@ export class VSCodeServer extends Construct {
             - mkdir -p ${homeFolder} && chown -R ${vsCodeUser}:${vsCodeUser} ${homeFolder}
       `),
     });
-    NagSuppressions.addResourceSuppressions(
-      [this.instance],
-      [
-        {
-          id: 'AwsSolutions-EC29',
-          reason: 'For this tmp instance we do not need an asg',
-        },
-      ],
-      true,
-    );
+    Validations.of(this.instance).acknowledge({
+      id: 'AwsSolutions-EC29',
+      reason: 'For this tmp instance we do not need an asg',
+    });
 
     // Conditionally allocate Elastic IP for auto-stop scenarios
     // When auto-stop is enabled, the instance will be stopped and started, which changes
@@ -833,16 +858,10 @@ export class VSCodeServer extends Construct {
         instanceId: this.instance.instanceId,
       });
 
-      NagSuppressions.addResourceSuppressions(
-        [eip],
-        [
-          {
-            id: 'AwsSolutions-EC23',
-            reason: 'Elastic IP required for consistent public IP across stop/start cycles when auto-stop is enabled',
-          },
-        ],
-        true,
-      );
+      Validations.of(eip).acknowledge({
+        id: 'AwsSolutions-EC23',
+        reason: 'Elastic IP required for consistent public IP across stop/start cycles when auto-stop is enabled',
+      });
     }
 
     // Create a CF distribution (special id) and special CachePolicy to instance
@@ -883,6 +902,13 @@ export class VSCodeServer extends Construct {
       originId: `Cloudfront-${Stack.of(this).stackName}-${Stack.of(this).stackName}`,
     });
 
+    // Managed-AllViewer - see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html#:~:text=When%20using%20AWS,47e4%2Db989%2D5492eafa07d3
+    const allViewerOriginRequestPolicy = cf.OriginRequestPolicy.fromOriginRequestPolicyId(
+      this,
+      'all-viewer-origin-request-policy',
+      '216adef6-5c7f-47e4-b989-5492eafa07d3',
+    );
+
     const distribution = new cf.Distribution(this, 'cf-distribution', {
       enabled: true,
       httpVersion: cf.HttpVersion.HTTP2_AND_3,
@@ -902,10 +928,7 @@ export class VSCodeServer extends Construct {
       defaultBehavior: {
         allowedMethods: cf.AllowedMethods.ALLOW_ALL,
         cachePolicy: cfCachePolicy,
-        originRequestPolicy: {
-          // Managed-AllViewer - see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html#:~:text=When%20using%20AWS,47e4%2Db989%2D5492eafa07d3
-          originRequestPolicyId: '216adef6-5c7f-47e4-b989-5492eafa07d3',
-        },
+        originRequestPolicy: allViewerOriginRequestPolicy,
         viewerProtocolPolicy: cf.ViewerProtocolPolicy.ALLOW_ALL,
         origin,
       },
@@ -915,43 +938,36 @@ export class VSCodeServer extends Construct {
           compress: false,
           // see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policy-caching-disabled
           cachePolicy: cf.CachePolicy.CACHING_DISABLED,
-          originRequestPolicy: {
-            // Managed-AllViewer - see https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html#:~:text=When%20using%20AWS,47e4%2Db989%2D5492eafa07d3
-            originRequestPolicyId: '216adef6-5c7f-47e4-b989-5492eafa07d3',
-          },
+          originRequestPolicy: allViewerOriginRequestPolicy,
           viewerProtocolPolicy: cf.ViewerProtocolPolicy.ALLOW_ALL,
           origin,
         },
       },
     });
-    NagSuppressions.addResourceSuppressions(
-      [distribution],
-      [
-        {
-          id: 'AwsSolutions-CFR1',
-          reason: 'For this tmp distribution we do not need geo restrictions',
-        },
-        {
-          id: 'AwsSolutions-CFR2',
-          reason: 'For this tmp distribution we do not need waf integration',
-        },
-        {
-          id: 'AwsSolutions-CFR3',
-          reason:
-            'For this tmp distribution we do not need access logging enabled',
-        },
-        {
-          id: 'AwsSolutions-CFR4',
-          reason:
-            'For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert',
-        },
-        {
-          id: 'AwsSolutions-CFR5',
-          reason:
-            'For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert',
-        },
-      ],
-      true,
+    Validations.of(distribution).acknowledge(
+      {
+        id: 'AwsSolutions-CFR1',
+        reason: 'For this tmp distribution we do not need geo restrictions',
+      },
+      {
+        id: 'AwsSolutions-CFR2',
+        reason: 'For this tmp distribution we do not need waf integration',
+      },
+      {
+        id: 'AwsSolutions-CFR3',
+        reason:
+          'For this tmp distribution we do not need access logging enabled',
+      },
+      {
+        id: 'AwsSolutions-CFR4',
+        reason:
+          'For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert',
+      },
+      {
+        id: 'AwsSolutions-CFR5',
+        reason:
+          'For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert',
+      },
     );
 
     // Create Route53 A record for custom domain
@@ -964,16 +980,10 @@ export class VSCodeServer extends Construct {
         ),
       });
 
-      NagSuppressions.addResourceSuppressions(
-        [aRecord],
-        [
-          {
-            id: 'AwsSolutions-R53-1',
-            reason: 'A record created for VS Code server custom domain',
-          },
-        ],
-        true,
-      );
+      Validations.of(aRecord).acknowledge({
+        id: 'AwsSolutions-R53-1',
+        reason: 'A record created for VS Code server custom domain',
+      });
     }
 
     // Use a custom resource lambda to run the SSM document on the instance

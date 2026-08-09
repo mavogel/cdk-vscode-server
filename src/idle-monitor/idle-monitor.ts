@@ -1,12 +1,11 @@
 import * as path from 'path';
-import { Duration, Stack } from 'aws-cdk-lib';
+import { Duration, Stack, Validations } from 'aws-cdk-lib';
 import { IDistribution } from 'aws-cdk-lib/aws-cloudfront';
 import { IInstance } from 'aws-cdk-lib/aws-ec2';
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction as LambdaFunctionTarget } from 'aws-cdk-lib/aws-events-targets';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime, Code, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 
 /**
@@ -121,23 +120,19 @@ export class IdleMonitor extends Construct {
     this.scheduleRule.addTarget(new LambdaFunctionTarget(this.function));
 
     // CDK-nag suppressions
-    NagSuppressions.addResourceSuppressions(
-      this.function,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Managed policies acceptable for workshop Lambda functions',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'CloudWatch metrics require wildcard permissions',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'Latest runtime not required for this function',
-        },
-      ],
-      true,
+    Validations.of(this.function).acknowledge(
+      {
+        id: 'AwsSolutions-IAM4',
+        reason: 'Managed policies acceptable for workshop Lambda functions',
+      },
+      {
+        id: 'AwsSolutions-IAM5',
+        reason: 'CloudWatch metrics require wildcard permissions',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'Latest runtime not required for this function',
+      },
     );
   }
 }

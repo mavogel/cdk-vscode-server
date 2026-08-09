@@ -3,7 +3,7 @@ import { javascript } from 'projen';
 const project = new MvcCdkConstructLibrary({
   author: 'Manuel Vogel',
   authorAddress: 'info@manuel-vogel.de',
-  cdkVersion: '2.190.0', // Find the latest CDK version here: https://www.npmjs.com/package/aws-cdk-lib + https://www.npmjs.com/package/@aws-cdk/integ-runner
+  cdkVersion: '2.261.0', // Find the latest CDK version here: https://www.npmjs.com/package/aws-cdk-lib + https://www.npmjs.com/package/@aws-cdk/integ-runner
   defaultReleaseBranch: 'main',
   name: 'cdk-vscode-server',
   packageName: '@mavogel/cdk-vscode-server',
@@ -13,7 +13,7 @@ const project = new MvcCdkConstructLibrary({
   repositoryUrl: 'https://github.com/mavogel/cdk-vscode-server.git',
   keywords: ['aws', 'cdk', 'vscode', 'construct', 'server'],
   deps: [
-    '@mavogel/mvc-projen@^0.0.25',
+    '@mavogel/mvc-projen@^0.0.30',
     'constructs@^10.4.2',
   ],
   // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.99.34).

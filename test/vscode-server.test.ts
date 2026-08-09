@@ -1,5 +1,7 @@
-import { App, Aspects, Stack } from 'aws-cdk-lib';
-import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
+import * as fs from 'fs';
+import * as path from 'path';
+import { App, Stack, Validations } from 'aws-cdk-lib';
+import { Match, Template } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { VSCodeServer, VSCodeServerProps } from '../src';
 import { suppressCommonNags } from '../src/suppress-nags';
@@ -266,7 +268,7 @@ describe('vscode-server-cdk-nag-AwsSolutions-Pack', () => {
   // do not modify the state of the application
   beforeAll(() => {
     // GIVEN
-    app = new App();
+    app = new App({ context: { '@aws-cdk/core:validationReportJson': true } });
     stack = new Stack(app, 'testStack', {
       env: {
         region: 'us-east-1',
@@ -278,29 +280,28 @@ describe('vscode-server-cdk-nag-AwsSolutions-Pack', () => {
     suppressCommonNags(stack);
 
     // WHEN
-    Aspects.of(stack).add(new AwsSolutionsChecks({ verbose: true }));
+    Validations.of(app).addPlugins(new AwsSolutionsChecks(app, { verbose: true }));
   });
 
   // THEN
-  test('No unsuppressed Warnings', () => {
-    const warnings = Annotations.fromStack(stack).findWarning(
-      '*',
-      Match.stringLikeRegexp('AwsSolutions-.*'),
+  // cdk-nag v3 reports violations via a policy-validation-report.json in the
+  // cloud assembly rather than throwing on app.synth() -- read it directly.
+  test('produces no unacknowledged AwsSolutions violations', () => {
+    const assembly = app.synth();
+    const reportPath = path.join(assembly.directory, 'policy-validation-report.json');
+    const report = fs.existsSync(reportPath)
+      ? JSON.parse(fs.readFileSync(reportPath, 'utf-8'))
+      : { pluginReports: [] };
+    const violations = report.pluginReports.flatMap(
+      (pluginReport: { violations?: unknown[] }) => pluginReport.violations ?? [],
     );
-    expect(warnings).toHaveLength(0);
-  });
-
-  test('No unsuppressed Errors', () => {
-    const errors = Annotations.fromStack(stack).findError(
-      '*',
-      Match.stringLikeRegexp('AwsSolutions-.*'),
-    );
-    if (errors.length > 0) {
-      for (const error of errors) {
-        console.log(`id: '${error.id}': ${error.entry.data}`);
-      }
-    }
-    expect(errors).toHaveLength(0);
+    expect(violations).toHaveLength(0);
+    // Confirm the app was fully synthesized rather than a false-positive 0
+    // from an accidentally-under-synthesized construct tree. cdk-nag v3
+    // omits the plugin from the report entirely once every violation is
+    // acknowledged, so the report itself can't be used as this signal.
+    const resourceCount = Object.keys(Template.fromStack(stack).toJSON().Resources).length;
+    expect(resourceCount).toBeGreaterThan(20);
   });
 });
 

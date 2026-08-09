@@ -27,9 +27,11 @@
 /LICENSE linguist-generated
 /package-lock.json linguist-generated
 /package.json linguist-generated
+/projenrc/tsconfig.json linguist-generated linguist-language=JSON-with-Comments
 /renovate.json5 linguist-generated linguist-language=JSON-with-Comments
 /src/idle-monitor-enabler/idle-monitor-enabler-function.ts linguist-generated
 /src/idle-monitor/idle-monitor-function.ts linguist-generated
 /src/installer/installer-function.ts linguist-generated
 /src/secret-retriever/secret-retriever-function.ts linguist-generated
-/tsconfig.dev.json linguist-generated linguist-language=JSON-with-Comments
+/test/tsconfig.json linguist-generated linguist-language=JSON-with-Comments
+/tsconfig.json linguist-generated

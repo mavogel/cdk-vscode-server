@@ -198,7 +198,7 @@ Suppressions defined in `src/suppress-nags.ts` and applied throughout construct 
 - Public subnet deployment
 - No VPC endpoints
 
-Apply suppressions via `NagSuppressions.addResourceSuppressions()`.
+Apply suppressions via `Validations.of(construct).acknowledge({ id, reason })` (cdk-nag v3's `Validations`/`IPolicyValidationPlugin` API replaced v2's `NagSuppressions`). Granular ARN-embedded findings (e.g. `AwsSolutions-IAM4`/`AwsSolutions-IAM5` for managed policies or wildcard resources) can't go through `acknowledge()` directly — it rejects any id with more than one `::` delimiter — so use the `acknowledgeGranularFinding()` bypass helper in `src/suppress-nags.ts` instead.
 
 ## Integration Tests
 

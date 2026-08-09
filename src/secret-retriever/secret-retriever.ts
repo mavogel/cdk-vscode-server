@@ -1,10 +1,17 @@
+import { Stack, Validations } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Function } from 'aws-cdk-lib/aws-lambda';
+import { CfnFunction, Function } from 'aws-cdk-lib/aws-lambda';
 import { CustomResource, Duration, IResource } from 'aws-cdk-lib/core';
 import { Provider } from 'aws-cdk-lib/custom-resources';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { SecretRetrieverFunction } from './secret-retriever-function';
+import { acknowledgeGranularFinding } from '../suppress-nags';
+
+// The AWSLambdaBasicExecutionRole ARN pattern is the same for every Lambda
+// function using the default execution role, regardless of the consumer's
+// own construct IDs -- safe to acknowledge literally.
+const AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4 =
+  'AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]';
 
 export interface Secret {
   username: string;
@@ -71,21 +78,15 @@ class CustomResourceSecretRetriever extends SecretRetriever {
         memorySize: 128,
       },
     );
-    NagSuppressions.addResourceSuppressions(
-      [onEvent],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'For this event handler we do not need to restrict managed policies',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'For this lambda the latest runtime is not needed',
-        },
-      ],
-      true,
+    acknowledgeGranularFinding(
+      onEvent,
+      AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4,
+      'For this event handler we do not need to restrict managed policies',
     );
+    Validations.of(onEvent).acknowledge({
+      id: 'AwsSolutions-L1',
+      reason: 'For this lambda the latest runtime is not needed',
+    });
 
     onEvent.addToRolePolicy(
       new PolicyStatement({
@@ -97,24 +98,26 @@ class CustomResourceSecretRetriever extends SecretRetriever {
     const provider = new Provider(scope, 'SecretRetrieveProvider', {
       onEventHandler: onEvent,
     });
-    NagSuppressions.addResourceSuppressions(
-      [provider],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'For this provider we do not need to restrict managed policies',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'For this provider wildcards are fine',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'For this provider the latest runtime is not needed',
-        },
-      ],
-      true,
+    acknowledgeGranularFinding(
+      provider,
+      AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4,
+      'For this provider we do not need to restrict managed policies',
+    );
+    // cdk-nag v3 requires the exact granular finding id (no prefix/bulk
+    // suppression) -- resolve onEvent's CloudFormation logical id at
+    // synth time instead of hardcoding it.
+    const onEventLogicalId = Stack.of(onEvent).getLogicalId(
+      onEvent.node.defaultChild as CfnFunction,
+    );
+    Validations.of(provider).acknowledge(
+      {
+        id: `AwsSolutions-IAM5[Resource::<${onEventLogicalId}.Arn>:*]`,
+        reason: 'For this provider wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'For this provider the latest runtime is not needed',
+      },
     );
 
     const resource = new CustomResource(

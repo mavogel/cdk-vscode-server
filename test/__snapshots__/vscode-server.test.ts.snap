@@ -50,7 +50,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "9d043014be736e8162bcc7ec5590cc6d2ff24fd0d9c73a5c5d595151c5fdad00.zip",
+          "S3Key": "9b8fce7ae7f25ef82fdbaf6b72523b99d0875c0c9c826642819fb51f11d9b125.zip",
         },
         "Handler": "index.handler",
         "LoggingConfig": {
@@ -64,7 +64,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
@@ -74,27 +74,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69",
         "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
@@ -115,19 +94,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -197,27 +163,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -253,28 +198,10 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635",
         "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip",
+          "S3Key": "e16ffb3b34af185b8b30c88fdb19faa13b6c42bb38580485c4e84b384ee48b63.zip",
         },
         "Description": "AWS CDK resource provider framework - onEvent (testStack/testVSCodeServer/InstallerProvider)",
         "Environment": {
@@ -288,36 +215,22 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
           },
         },
         "Handler": "framework.onEvent",
+        "LoggingConfig": {
+          "ApplicationLogLevel": "FATAL",
+          "LogFormat": "JSON",
+        },
         "Role": {
           "Fn::GetAtt": [
             "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -349,24 +262,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -448,28 +343,10 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip",
+          "S3Key": "e16ffb3b34af185b8b30c88fdb19faa13b6c42bb38580485c4e84b384ee48b63.zip",
         },
         "Description": "AWS CDK resource provider framework - onEvent (testStack/testVSCodeServer/SecretRetrieveProvider)",
         "Environment": {
@@ -483,36 +360,22 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
           },
         },
         "Handler": "framework.onEvent",
+        "LoggingConfig": {
+          "ApplicationLogLevel": "FATAL",
+          "LogFormat": "JSON",
+        },
         "Role": {
           "Fn::GetAtt": [
             "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -544,24 +407,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -635,20 +480,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
@@ -669,20 +500,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -773,32 +590,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::CloudFront::CachePolicy",
     },
     "testVSCodeServercfdistribution1BAE37CA": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-CFR1",
-              "reason": "For this tmp distribution we do not need geo restrictions",
-            },
-            {
-              "id": "AwsSolutions-CFR2",
-              "reason": "For this tmp distribution we do not need waf integration",
-            },
-            {
-              "id": "AwsSolutions-CFR3",
-              "reason": "For this tmp distribution we do not need access logging enabled",
-            },
-            {
-              "id": "AwsSolutions-CFR4",
-              "reason": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert",
-            },
-            {
-              "id": "AwsSolutions-CFR5",
-              "reason": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DistributionConfig": {
           "CacheBehaviors": [
@@ -879,16 +670,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "DependsOn": [
         "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Create": "{"service":"@aws-sdk/client-ec2","action":"DescribeManagedPrefixListsCommand","parameters":{"Filters":[{"Name":"prefix-list-name","Values":["com.amazonaws.global.cloudfront.origin-facing"]}]},"physicalResourceId":{"id":"cf-prefixlistId-c8fb0620fa063618"}}",
         "InstallLatestAwsSdk": true,
@@ -904,16 +685,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -936,16 +707,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D": {
       "DeletionPolicy": "Delete",
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RetentionInDays": 1,
         "Tags": [
@@ -963,16 +724,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdRoleD421D2BB": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1039,16 +790,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServerpasswordsecret61CA6F59": {
       "DeletionPolicy": "Delete",
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-SMG4",
-              "reason": "For this tmp vc code server we do not need password rotation",
-            },
-          ],
-        },
-      },
       "Properties": {
         "GenerateSecretString": {
           "ExcludePunctuation": true,
@@ -1079,16 +820,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "testVSCodeServervpcpublicSubnet2DefaultRoute476F0834",
         "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-EC29",
-              "reason": "For this tmp instance we do not need an asg",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "BlockDeviceMappings": [
@@ -1162,16 +893,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::EC2::Instance",
     },
     "testVSCodeServerserverinstanceInstanceProfileA6EA56E2": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-EC29",
-              "reason": "For this tmp instance we do not need an asg",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Roles": [
           {
@@ -1193,20 +914,6 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::EC2::LaunchTemplate",
     },
     "testVSCodeServerserverinstancerole26B442A8": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this tmp role we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this tmp role the wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1970,16 +1677,6 @@ fi",
       "Type": "AWS::SSM::Document",
     },
     "testVSCodeServervpc982B35EC": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
@@ -2003,16 +1700,6 @@ fi",
       "Type": "AWS::EC2::VPC",
     },
     "testVSCodeServervpcIGW63D01881": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -2032,16 +1719,6 @@ fi",
       "Type": "AWS::EC2::InternetGateway",
     },
     "testVSCodeServervpcVPCGW0DC5006F": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "InternetGatewayId": {
           "Ref": "testVSCodeServervpcIGW63D01881",
@@ -2056,16 +1733,6 @@ fi",
       "DependsOn": [
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -2078,16 +1745,6 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -2110,16 +1767,6 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540",
@@ -2131,16 +1778,6 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet1SubnetF59A4000": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.0.0/17",
@@ -2177,16 +1814,6 @@ fi",
       "DependsOn": [
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -2199,16 +1826,6 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet2RouteTableE1816C99",
@@ -2220,16 +1837,6 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableE1816C99": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -2252,16 +1859,6 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet2SubnetC19D96B0": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.128.0/17",
@@ -2375,7 +1972,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "9d043014be736e8162bcc7ec5590cc6d2ff24fd0d9c73a5c5d595151c5fdad00.zip",
+          "S3Key": "9b8fce7ae7f25ef82fdbaf6b72523b99d0875c0c9c826642819fb51f11d9b125.zip",
         },
         "Handler": "index.handler",
         "LoggingConfig": {
@@ -2389,7 +1986,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 120,
       },
       "Type": "AWS::Lambda::Function",
@@ -2399,27 +1996,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69",
         "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
@@ -2440,19 +2016,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2522,27 +2085,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-            {
-              "applies_to": [
-                "Resource::*",
-              ],
-              "id": "AwsSolutions-IAM5",
-              "reason": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2578,28 +2120,10 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635",
         "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip",
+          "S3Key": "e16ffb3b34af185b8b30c88fdb19faa13b6c42bb38580485c4e84b384ee48b63.zip",
         },
         "Description": "AWS CDK resource provider framework - onEvent (testStack/testVSCodeServer/InstallerProvider)",
         "Environment": {
@@ -2613,36 +2137,22 @@ exports[`vscode-server vscode-server-default-props 1`] = `
           },
         },
         "Handler": "framework.onEvent",
+        "LoggingConfig": {
+          "ApplicationLogLevel": "FATAL",
+          "LogFormat": "JSON",
+        },
         "Role": {
           "Fn::GetAtt": [
             "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2674,24 +2184,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2773,28 +2265,10 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
-          "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip",
+          "S3Key": "e16ffb3b34af185b8b30c88fdb19faa13b6c42bb38580485c4e84b384ee48b63.zip",
         },
         "Description": "AWS CDK resource provider framework - onEvent (testStack/testVSCodeServer/SecretRetrieveProvider)",
         "Environment": {
@@ -2808,36 +2282,22 @@ exports[`vscode-server vscode-server-default-props 1`] = `
           },
         },
         "Handler": "framework.onEvent",
+        "LoggingConfig": {
+          "ApplicationLogLevel": "FATAL",
+          "LogFormat": "JSON",
+        },
         "Role": {
           "Fn::GetAtt": [
             "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
             "Arn",
           ],
         },
-        "Runtime": "nodejs20.x",
+        "Runtime": "nodejs24.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2869,24 +2329,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this provider we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this provider the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2960,20 +2402,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-1234-us-east-1",
@@ -2994,20 +2422,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this event handler we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-L1",
-              "reason": "For this lambda the latest runtime is not needed",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3098,32 +2512,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::CloudFront::CachePolicy",
     },
     "testVSCodeServercfdistribution1BAE37CA": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-CFR1",
-              "reason": "For this tmp distribution we do not need geo restrictions",
-            },
-            {
-              "id": "AwsSolutions-CFR2",
-              "reason": "For this tmp distribution we do not need waf integration",
-            },
-            {
-              "id": "AwsSolutions-CFR3",
-              "reason": "For this tmp distribution we do not need access logging enabled",
-            },
-            {
-              "id": "AwsSolutions-CFR4",
-              "reason": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert",
-            },
-            {
-              "id": "AwsSolutions-CFR5",
-              "reason": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DistributionConfig": {
           "CacheBehaviors": [
@@ -3200,16 +2588,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "DependsOn": [
         "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Create": "{"service":"@aws-sdk/client-ec2","action":"DescribeManagedPrefixListsCommand","parameters":{"Filters":[{"Name":"prefix-list-name","Values":["com.amazonaws.global.cloudfront.origin-facing"]}]},"physicalResourceId":{"id":"cf-prefixlistId-c8fb0620fa063618"}}",
         "InstallLatestAwsSdk": true,
@@ -3225,16 +2603,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -3257,16 +2625,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D": {
       "DeletionPolicy": "Delete",
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RetentionInDays": 1,
         "Tags": [
@@ -3280,16 +2638,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdRoleD421D2BB": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this provider wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3352,16 +2700,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServerpasswordsecret61CA6F59": {
       "DeletionPolicy": "Delete",
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-SMG4",
-              "reason": "For this tmp vc code server we do not need password rotation",
-            },
-          ],
-        },
-      },
       "Properties": {
         "GenerateSecretString": {
           "ExcludePunctuation": true,
@@ -3388,16 +2726,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "testVSCodeServervpcpublicSubnet2DefaultRoute476F0834",
         "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-EC29",
-              "reason": "For this tmp instance we do not need an asg",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "BlockDeviceMappings": [
@@ -3467,16 +2795,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::EC2::Instance",
     },
     "testVSCodeServerserverinstanceInstanceProfileA6EA56E2": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-EC29",
-              "reason": "For this tmp instance we do not need an asg",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Roles": [
           {
@@ -3498,20 +2816,6 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::EC2::LaunchTemplate",
     },
     "testVSCodeServerserverinstancerole26B442A8": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-IAM4",
-              "reason": "For this tmp role we do not need to restrict managed policies",
-            },
-            {
-              "id": "AwsSolutions-IAM5",
-              "reason": "For this tmp role the wildcards are fine",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -4271,16 +3575,6 @@ fi",
       "Type": "AWS::SSM::Document",
     },
     "testVSCodeServervpc982B35EC": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
@@ -4300,16 +3594,6 @@ fi",
       "Type": "AWS::EC2::VPC",
     },
     "testVSCodeServervpcIGW63D01881": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -4325,16 +3609,6 @@ fi",
       "Type": "AWS::EC2::InternetGateway",
     },
     "testVSCodeServervpcVPCGW0DC5006F": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "InternetGatewayId": {
           "Ref": "testVSCodeServervpcIGW63D01881",
@@ -4349,16 +3623,6 @@ fi",
       "DependsOn": [
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -4371,16 +3635,6 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -4399,16 +3653,6 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540",
@@ -4420,16 +3664,6 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet1SubnetF59A4000": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.0.0/17",
@@ -4462,16 +3696,6 @@ fi",
       "DependsOn": [
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "DestinationCidrBlock": "0.0.0.0/0",
         "GatewayId": {
@@ -4484,16 +3708,6 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet2RouteTableE1816C99",
@@ -4505,16 +3719,6 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableE1816C99": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "Tags": [
           {
@@ -4533,16 +3737,6 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet2SubnetC19D96B0": {
-      "Metadata": {
-        "cdk_nag": {
-          "rules_to_suppress": [
-            {
-              "id": "AwsSolutions-VPC7",
-              "reason": "For this tmp vpc we do not need flow logs",
-            },
-          ],
-        },
-      },
       "Properties": {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.128.0/17",

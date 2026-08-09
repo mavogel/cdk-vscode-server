@@ -3,11 +3,9 @@ import {
   EnableRuleCommand,
   DisableRuleCommand,
 } from '@aws-sdk/client-eventbridge';
+// eslint-disable-next-line import/no-unresolved
 // @ts-ignore
-import type {
-  OnEventRequest,
-  OnEventResponse,
-} from 'aws-cdk-lib/custom-resources/lib/provider-framework/types';
+import type { OnEventRequest, OnEventResponse } from 'aws-cdk-lib/custom-resources/lib/provider-framework/types';
 
 const eventBridge = new EventBridge();
 

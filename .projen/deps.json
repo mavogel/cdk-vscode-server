@@ -2,12 +2,12 @@
   "dependencies": [
     {
       "name": "@aws-cdk/integ-runner",
-      "version": "2.190.0",
+      "version": "2.203.0",
       "type": "build"
     },
     {
       "name": "@aws-cdk/integ-tests-alpha",
-      "version": "2.190.0-alpha.0",
+      "version": "2.261.0-alpha.0",
       "type": "build"
     },
     {
@@ -82,7 +82,7 @@
     },
     {
       "name": "awslint",
-      "version": "2.190.0-alpha.0",
+      "version": "2.261.0-alpha.0",
       "type": "build"
     },
     {
@@ -136,12 +136,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "~5.9.0",
+      "version": "~6.0.0",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "~5.9.0",
+      "version": "~6.0.0",
       "type": "build"
     },
     {
@@ -158,6 +158,7 @@
     },
     {
       "name": "typescript",
+      "version": "^6.0.2",
       "type": "build"
     },
     {
@@ -166,7 +167,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.190.0",
+      "version": "^2.261.0",
       "type": "peer"
     },
     {
@@ -176,12 +177,12 @@
     },
     {
       "name": "@mavogel/mvc-projen",
-      "version": "^0.0.25",
+      "version": "^0.0.30",
       "type": "runtime"
     },
     {
       "name": "cdk-nag",
-      "version": "^2.37.55",
+      "version": "^3.0.1",
       "type": "runtime"
     },
     {
