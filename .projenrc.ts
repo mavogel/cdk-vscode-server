@@ -9,12 +9,24 @@ const project = new MvcCdkConstructLibrary({
   packageName: '@mavogel/cdk-vscode-server',
   packageManager: javascript.NodePackageManager.NPM,
   projenrcTs: true,
-  repositoryUrl: 'https://github.com/MV-Consulting/cdk-vscode-server.git',
+  repositoryUrl: 'https://github.com/mavogel/cdk-vscode-server.git',
   keywords: ['aws', 'cdk', 'vscode', 'construct', 'server'],
   deps: [
     '@mavogel/mvc-projen@^0.0.25',
     'constructs@^10.4.2',
   ],
+  // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.99.34).
+  // The default UpgradeDependencies task bumps this project's top-level `projen`
+  // devDependency independently (e.g. to 0.101.x), which drifts out of that range:
+  // npm then installs a second, nested `projen` for mvc-projen's synthesis, so the
+  // generated release workflow's builtin task names (from the nested version) no
+  // longer match what the top-level `projen` CLI can resolve at runtime, breaking
+  // `npx projen release` with "Cannot find module '.../bump-version.task.js'".
+  // Exclude `projen` from auto-upgrade so it stays aligned with mvc-projen's pin;
+  // bump it deliberately alongside a `@mavogel/mvc-projen` version bump instead.
+  depsUpgradeOptions: {
+    exclude: ['projen'],
+  },
   // If this module is not jsii-enabled, it must also be declared under bundledDependencie
   bundledDeps: ['node-html-parser'],
   description: 'Running VS Code Server on AWS',
@@ -62,7 +74,7 @@ const project = new MvcCdkConstructLibrary({
   // see details for each: https://github.com/cdklabs/publib
   // Go
   // publishToGo: {
-  //   moduleName: 'github.com/MV-Consulting/cdk-vscode-server',
+  //   moduleName: 'github.com/mavogel/cdk-vscode-server',
   //   githubTokenSecret: 'PROJEN_GITHUB_TOKEN',
   // },
   // see https://github.com/cdklabs/publib/issues/1305
