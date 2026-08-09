@@ -2,10 +2,10 @@ package mavogelcdkvscodeserver
 
 import (
 	_jsii_ "github.com/aws/jsii-runtime-go/runtime"
-	_init_ "github.com/MV-Consulting/cdk-vscode-server/mavogelcdkvscodeserver/jsii"
+	_init_ "github.com/mavogel/cdk-vscode-server/mavogelcdkvscodeserver/jsii"
 
 	"github.com/aws/constructs-go/constructs/v10"
-	"github.com/MV-Consulting/cdk-vscode-server/mavogelcdkvscodeserver/internal"
+	"github.com/mavogel/cdk-vscode-server/mavogelcdkvscodeserver/internal"
 )
 
 // VSCodeServer - spin it up in under 10 minutes.

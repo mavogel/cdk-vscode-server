@@ -1,4 +1,4 @@
-module github.com/MV-Consulting/cdk-vscode-server/mavogelcdkvscodeserver
+module github.com/mavogel/cdk-vscode-server/mavogelcdkvscodeserver
 
 go 1.23
 
