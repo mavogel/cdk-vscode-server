@@ -1,12 +1,19 @@
+import { Validations } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Function } from 'aws-cdk-lib/aws-lambda';
+import { CfnFunction, Function } from 'aws-cdk-lib/aws-lambda';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Arn, CustomResource, Duration, Stack } from 'aws-cdk-lib/core';
 import { Provider } from 'aws-cdk-lib/custom-resources';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { InstallerFunction } from './installer-function';
+import { acknowledgeGranularFinding } from '../suppress-nags';
 import { LinuxFlavorType, CustomInstallStep } from '../vscode-server';
+
+// The AWSLambdaBasicExecutionRole ARN pattern is the same for every Lambda
+// function using the default execution role, regardless of the consumer's
+// own construct IDs -- safe to acknowledge literally.
+const AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4 =
+  'AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]';
 
 interface InstallerOptionsBase {
   /**
@@ -1234,21 +1241,15 @@ class CustomResourceInstaller extends Installer {
         memorySize: 512, // TODO configurable
       },
     );
-    NagSuppressions.addResourceSuppressions(
-      [onEvent],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'For this event handler we do not need to restrict managed policies',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'For this lambda the latest runtime is not needed',
-        },
-      ],
-      true,
+    acknowledgeGranularFinding(
+      onEvent,
+      AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4,
+      'For this event handler we do not need to restrict managed policies',
     );
+    Validations.of(onEvent).acknowledge({
+      id: 'AwsSolutions-L1',
+      reason: 'For this lambda the latest runtime is not needed',
+    });
 
     const documentArn = Arn.format(
       {
@@ -1296,40 +1297,35 @@ class CustomResourceInstaller extends Installer {
 
     // Suppress cdk-nag warning for wildcard permissions on GetCommandInvocation
     // These SSM actions don't support resource-level permissions per AWS documentation
-    NagSuppressions.addResourceSuppressions(
-      onEvent,
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason:
-            'ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources',
-          appliesTo: ['Resource::*'],
-        },
-      ],
-      true,
-    );
+    Validations.of(onEvent).acknowledge({
+      id: 'AwsSolutions-IAM5[Resource::*]',
+      reason:
+        'ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources',
+    });
 
     const provider = new Provider(scope, 'InstallerProvider', {
       onEventHandler: onEvent,
     });
-    NagSuppressions.addResourceSuppressions(
-      [provider],
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason:
-            'For this provider we do not need to restrict managed policies',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'For this provider wildcards are fine',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'For this provider the latest runtime is not needed',
-        },
-      ],
-      true,
+    acknowledgeGranularFinding(
+      provider,
+      AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4,
+      'For this provider we do not need to restrict managed policies',
+    );
+    // cdk-nag v3 requires the exact granular finding id (no prefix/bulk
+    // suppression) -- resolve onEvent's CloudFormation logical id at
+    // synth time instead of hardcoding it.
+    const onEventLogicalId = Stack.of(onEvent).getLogicalId(
+      onEvent.node.defaultChild as CfnFunction,
+    );
+    Validations.of(provider).acknowledge(
+      {
+        id: `AwsSolutions-IAM5[Resource::<${onEventLogicalId}.Arn>:*]`,
+        reason: 'For this provider wildcards are fine',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'For this provider the latest runtime is not needed',
+      },
     );
 
     new CustomResource(scope, 'SSMInstallerCustomResource', {

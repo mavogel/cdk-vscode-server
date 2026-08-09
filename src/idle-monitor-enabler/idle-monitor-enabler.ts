@@ -1,8 +1,7 @@
-import { Duration, Stack, CustomResource } from 'aws-cdk-lib';
+import { Duration, Stack, CustomResource, Validations } from 'aws-cdk-lib';
 import { Rule } from 'aws-cdk-lib/aws-events';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Provider } from 'aws-cdk-lib/custom-resources';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 import { IdleMonitorEnablerFunction } from './idle-monitor-enabler-function';
 
@@ -71,35 +70,27 @@ export class IdleMonitorEnabler extends Construct {
     cfnResource.node.addDependency(props.scheduleRule);
 
     // CDK-nag suppressions
-    NagSuppressions.addResourceSuppressions(
-      enablerFunction,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Managed policies acceptable for custom resource Lambda functions',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'Latest runtime not required for this function',
-        },
-      ],
-      true,
+    Validations.of(enablerFunction).acknowledge(
+      {
+        id: 'AwsSolutions-IAM4',
+        reason: 'Managed policies acceptable for custom resource Lambda functions',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'Latest runtime not required for this function',
+      },
     );
 
     // Suppress for the provider framework
-    NagSuppressions.addResourceSuppressions(
-      provider,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Provider framework uses managed policies',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'Provider framework runtime managed by CDK',
-        },
-      ],
-      true,
+    Validations.of(provider).acknowledge(
+      {
+        id: 'AwsSolutions-IAM4',
+        reason: 'Provider framework uses managed policies',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'Provider framework runtime managed by CDK',
+      },
     );
   }
 }

@@ -1,12 +1,11 @@
 import * as path from 'path';
-import { Duration, Stack } from 'aws-cdk-lib';
-import { IDistribution } from 'aws-cdk-lib/aws-cloudfront';
-import { IInstance } from 'aws-cdk-lib/aws-ec2';
+import { Duration, Stack, Validations } from 'aws-cdk-lib';
+import { IDistributionRef } from 'aws-cdk-lib/aws-cloudfront';
+import { IInstanceRef } from 'aws-cdk-lib/aws-ec2';
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction as LambdaFunctionTarget } from 'aws-cdk-lib/aws-events-targets';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime, Code, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 
 /**
@@ -16,11 +15,11 @@ export interface IdleMonitorProps {
   /**
    * The EC2 instance to monitor
    */
-  readonly instance: IInstance;
+  readonly instance: IInstanceRef;
   /**
    * The CloudFront distribution to monitor for activity
    */
-  readonly distribution: IDistribution;
+  readonly distribution: IDistributionRef;
   /**
    * Number of minutes of inactivity before stopping the instance
    */
@@ -68,8 +67,8 @@ export class IdleMonitor extends Construct {
       timeout: Duration.seconds(30),
       memorySize: 256,
       environment: {
-        INSTANCE_ID: props.instance.instanceId,
-        DISTRIBUTION_ID: props.distribution.distributionId,
+        INSTANCE_ID: props.instance.instanceRef.instanceId,
+        DISTRIBUTION_ID: props.distribution.distributionRef.distributionId,
         IDLE_TIMEOUT_MINUTES: props.idleTimeoutMinutes.toString(),
         SKIP_STATUS_CHECKS: props.skipStatusChecks ? 'true' : 'false',
       },
@@ -104,7 +103,7 @@ export class IdleMonitor extends Construct {
           'ec2:StopInstances',
         ],
         resources: [
-          `arn:aws:ec2:${Stack.of(this).region}:${Stack.of(this).account}:instance/${props.instance.instanceId}`,
+          `arn:aws:ec2:${Stack.of(this).region}:${Stack.of(this).account}:instance/${props.instance.instanceRef.instanceId}`,
         ],
       }),
     );
@@ -121,23 +120,19 @@ export class IdleMonitor extends Construct {
     this.scheduleRule.addTarget(new LambdaFunctionTarget(this.function));
 
     // CDK-nag suppressions
-    NagSuppressions.addResourceSuppressions(
-      this.function,
-      [
-        {
-          id: 'AwsSolutions-IAM4',
-          reason: 'Managed policies acceptable for workshop Lambda functions',
-        },
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'CloudWatch metrics require wildcard permissions',
-        },
-        {
-          id: 'AwsSolutions-L1',
-          reason: 'Latest runtime not required for this function',
-        },
-      ],
-      true,
+    Validations.of(this.function).acknowledge(
+      {
+        id: 'AwsSolutions-IAM4',
+        reason: 'Managed policies acceptable for workshop Lambda functions',
+      },
+      {
+        id: 'AwsSolutions-IAM5',
+        reason: 'CloudWatch metrics require wildcard permissions',
+      },
+      {
+        id: 'AwsSolutions-L1',
+        reason: 'Latest runtime not required for this function',
+      },
     );
   }
 }

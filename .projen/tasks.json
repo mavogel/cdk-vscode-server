@@ -1,4 +1,8 @@
 {
+  "manifestVersion": 3,
+  "env": {
+    "PATH": "$(npx -c \"node --print process.env.PATH\")"
+  },
   "tasks": {
     "build": {
       "name": "build",
@@ -34,15 +38,36 @@
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
         "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"section\":\"Features\"},{\"type\":\"fix\",\"section\":\"Bug Fixes\"},{\"type\":\"chore\",\"section\":\"Chores\"},{\"type\":\"docs\",\"section\":\"Docs\"},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"section\":\"Performance\"},{\"type\":\"test\",\"hidden\":true}]}",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12",
-        "RELEASABLE_COMMITS": "git log --no-merges --oneline $LATEST_TAG..HEAD -E --grep \"^(feat|fix|chore|refactor|perf){1}(\\([^()[:space:]]+\\))?(!)?:[[:blank:]]+.+\""
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
-          "builtin": "release/bump-version"
+          "builtin": "release/resolve-latest-tag",
+          "outputEnv": "LATEST_TAG"
+        },
+        {
+          "spawn": "bump:releasable-commits",
+          "outputEnv": "RELEASABLE_COMMITS",
+          "condition": "git rev-parse --verify --quiet \"refs/tags/$LATEST_TAG\""
+        },
+        {
+          "builtin": "release/suggest-version-bump",
+          "outputEnv": "SUGGESTED_BUMP"
+        },
+        {
+          "builtin": "release/apply-version-bump"
         }
       ],
-      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
+      "condition": "git log --oneline -1 | grep -v \"chore(release):\" > /dev/null"
+    },
+    "bump:releasable-commits": {
+      "name": "bump:releasable-commits",
+      "description": "Print the releasable commits since the latest release",
+      "steps": [
+        {
+          "exec": "git log --no-merges --oneline $LATEST_TAG..HEAD -E --grep '^(feat|fix|chore|refactor|perf){1}(\\([^()[:space:]]+\\))?(!)?:[[:blank:]]+.+'"
+        }
+      ]
     },
     "bundle": {
       "name": "bundle",
@@ -67,7 +92,7 @@
       "description": "Create a JavaScript bundle from src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+          "exec": "esbuild --bundle src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
         }
       ]
     },
@@ -76,7 +101,7 @@
       "description": "Continuously update the JavaScript bundle from src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+          "exec": "esbuild --bundle src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
@@ -85,7 +110,7 @@
       "description": "Create a JavaScript bundle from src/idle-monitor/idle-monitor.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/idle-monitor/idle-monitor.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor/idle-monitor.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+          "exec": "esbuild --bundle src/idle-monitor/idle-monitor.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor/idle-monitor.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
         }
       ]
     },
@@ -94,7 +119,7 @@
       "description": "Continuously update the JavaScript bundle from src/idle-monitor/idle-monitor.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/idle-monitor/idle-monitor.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor/idle-monitor.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+          "exec": "esbuild --bundle src/idle-monitor/idle-monitor.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/idle-monitor/idle-monitor.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
@@ -103,7 +128,7 @@
       "description": "Create a JavaScript bundle from src/installer/installer.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/installer/installer.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/installer/installer.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+          "exec": "esbuild --bundle src/installer/installer.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/installer/installer.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
         }
       ]
     },
@@ -112,7 +137,7 @@
       "description": "Continuously update the JavaScript bundle from src/installer/installer.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/installer/installer.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/installer/installer.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+          "exec": "esbuild --bundle src/installer/installer.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/installer/installer.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
@@ -121,7 +146,7 @@
       "description": "Create a JavaScript bundle from src/secret-retriever/secret-retriever.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/secret-retriever/secret-retriever.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/secret-retriever/secret-retriever.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/*"
+          "exec": "esbuild --bundle src/secret-retriever/secret-retriever.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/secret-retriever/secret-retriever.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/*"
         }
       ]
     },
@@ -130,7 +155,7 @@
       "description": "Continuously update the JavaScript bundle from src/secret-retriever/secret-retriever.lambda.ts",
       "steps": [
         {
-          "exec": "esbuild --bundle src/secret-retriever/secret-retriever.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/secret-retriever/secret-retriever.lambda/index.js\" --tsconfig=\"tsconfig.dev.json\" --external:@aws-sdk/* --watch"
+          "exec": "esbuild --bundle src/secret-retriever/secret-retriever.lambda.ts --target=\"node24\" --platform=\"node\" --outfile=\"assets/secret-retriever/secret-retriever.lambda/index.js\" --tsconfig=\"test/tsconfig.json\" --external:@aws-sdk/* --watch"
         }
       ]
     },
@@ -189,7 +214,12 @@
       "description": "Synthesize project files",
       "steps": [
         {
-          "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
+          "execArgs": [
+            "ts-node",
+            "--project",
+            "projenrc/tsconfig.json",
+            ".projenrc.ts"
+          ]
         }
       ]
     },
@@ -198,7 +228,11 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "jsii-docgen -o API.md"
+          "execArgs": [
+            "jsii-docgen",
+            "-o",
+            "API.md"
+          ]
         }
       ]
     },
@@ -277,7 +311,12 @@
       "description": "Create js language bindings",
       "steps": [
         {
-          "exec": "jsii-pacmak -v --target js"
+          "execArgs": [
+            "jsii-pacmak",
+            "-v",
+            "--target",
+            "js"
+          ]
         }
       ]
     },
@@ -286,7 +325,12 @@
       "description": "Create python language bindings",
       "steps": [
         {
-          "exec": "jsii-pacmak -v --target python"
+          "execArgs": [
+            "jsii-pacmak",
+            "-v",
+            "--target",
+            "python"
+          ]
         }
       ]
     },
@@ -368,8 +412,7 @@
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
         "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"section\":\"Features\"},{\"type\":\"fix\",\"section\":\"Bug Fixes\"},{\"type\":\"chore\",\"section\":\"Chores\"},{\"type\":\"docs\",\"section\":\"Docs\"},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"section\":\"Performance\"},{\"type\":\"test\",\"hidden\":true}]}",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12",
-        "RELEASABLE_COMMITS": "git log --no-merges --oneline $LATEST_TAG..HEAD -E --grep \"^(feat|fix|chore|refactor|perf){1}(\\([^()[:space:]]+\\))?(!)?:[[:blank:]]+.+\""
+        "BUMP_PACKAGE": "commit-and-tag-version@^12"
       },
       "steps": [
         {
@@ -385,13 +428,65 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@20 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@aws-sdk/client-cloudwatch,@aws-sdk/client-dynamodb,@aws-sdk/client-ec2,@aws-sdk/client-eventbridge,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@aws-sdk/lib-dynamodb,@types/aws-lambda,@types/jest,@types/jsdom,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii-diff,jsii-pacmak,ts-jest,ts-node,typescript,node-html-parser"
+          "execArgs": [
+            "npx",
+            "npm-check-updates@20",
+            "--upgrade",
+            "--target=minor",
+            "--peer",
+            "--no-deprecated",
+            "--dep=dev,prod,peer,optional",
+            "--filter=@aws-sdk/client-cloudwatch,@aws-sdk/client-dynamodb,@aws-sdk/client-ec2,@aws-sdk/client-eventbridge,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@aws-sdk/lib-dynamodb,@types/aws-lambda,@types/jest,@types/jsdom,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii-diff,jsii-pacmak,ts-jest,ts-node,node-html-parser"
+          ]
         },
         {
           "exec": "npm install"
         },
         {
-          "exec": "npm update @aws-cdk/integ-runner @aws-cdk/integ-tests-alpha @aws-sdk/client-cloudwatch @aws-sdk/client-dynamodb @aws-sdk/client-ec2 @aws-sdk/client-eventbridge @aws-sdk/client-secrets-manager @aws-sdk/client-ssm @aws-sdk/lib-dynamodb @commitlint/cli @commitlint/config-conventional @stylistic/eslint-plugin @types/aws-lambda @types/jest @types/jsdom @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser awslint commit-and-tag-version esbuild eslint-import-resolver-typescript eslint-plugin-import eslint husky jest jest-junit jsii-diff jsii-docgen jsii-pacmak jsii-rosetta jsii ts-jest ts-node typescript node-html-parser aws-cdk-lib constructs @mavogel/mvc-projen cdk-nag"
+          "execArgs": [
+            "npm",
+            "update",
+            "@aws-cdk/integ-runner",
+            "@aws-cdk/integ-tests-alpha",
+            "@aws-sdk/client-cloudwatch",
+            "@aws-sdk/client-dynamodb",
+            "@aws-sdk/client-ec2",
+            "@aws-sdk/client-eventbridge",
+            "@aws-sdk/client-secrets-manager",
+            "@aws-sdk/client-ssm",
+            "@aws-sdk/lib-dynamodb",
+            "@commitlint/cli",
+            "@commitlint/config-conventional",
+            "@stylistic/eslint-plugin",
+            "@types/aws-lambda",
+            "@types/jest",
+            "@types/jsdom",
+            "@types/node",
+            "@typescript-eslint/eslint-plugin",
+            "@typescript-eslint/parser",
+            "awslint",
+            "commit-and-tag-version",
+            "esbuild",
+            "eslint-import-resolver-typescript",
+            "eslint-plugin-import",
+            "eslint",
+            "husky",
+            "jest",
+            "jest-junit",
+            "jsii-diff",
+            "jsii-docgen",
+            "jsii-pacmak",
+            "jsii-rosetta",
+            "jsii",
+            "ts-jest",
+            "ts-node",
+            "typescript",
+            "node-html-parser",
+            "aws-cdk-lib",
+            "constructs",
+            "@mavogel/mvc-projen",
+            "cdk-nag"
+          ]
         },
         {
           "exec": "npx projen"
@@ -410,9 +505,6 @@
         }
       ]
     }
-  },
-  "env": {
-    "PATH": "$(npx -c \"node --print process.env.PATH\")"
   },
   "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

@@ -42,6 +42,7 @@
     "jsii-docgen",
     "jsii-rosetta",
     "jsii",
+    "typescript",
     "aws-cdk-lib",
     "constructs",
     "@mavogel/mvc-projen",

@@ -1,4 +1,4 @@
-import { RemovalPolicy } from 'aws-cdk-lib';
+import { RemovalPolicy, Validations } from 'aws-cdk-lib';
 import { IPrefixList, PrefixList } from 'aws-cdk-lib/aws-ec2';
 import {
   Effect,
@@ -12,7 +12,6 @@ import {
   AwsCustomResourcePolicy,
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
-import { NagSuppressions } from 'cdk-nag';
 import { Construct } from 'constructs';
 
 export interface AwsManagedPrefixListProps {
@@ -70,16 +69,10 @@ export class AwsManagedPrefixList extends Construct {
       }),
       removalPolicy: RemovalPolicy.DESTROY,
     });
-    NagSuppressions.addResourceSuppressions(
-      [cr],
-      [
-        {
-          id: 'AwsSolutions-IAM5',
-          reason: 'For this provider wildcards are fine',
-        },
-      ],
-      true,
-    );
+    Validations.of(cr).acknowledge({
+      id: 'AwsSolutions-IAM5[Resource::*]',
+      reason: 'For this provider wildcards are fine',
+    });
 
     const prefixListId = cr.getResponseField('PrefixLists.0.PrefixListId');
 
