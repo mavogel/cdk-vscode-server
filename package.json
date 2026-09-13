@@ -92,7 +92,7 @@
     "constructs": "^10.5.1"
   },
   "dependencies": {
-    "@mavogel/mvc-projen": "^0.0.35",
+    "@mavogel/mvc-projen": "^0.0.36",
     "cdk-nag": "^3.0.1",
     "constructs": "^10.5.1",
     "node-html-parser": "^7.1.0"
