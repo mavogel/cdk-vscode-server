@@ -1,5 +1,5 @@
 import { MvcCdkConstructLibrary } from '@mavogel/mvc-projen';
-import { javascript } from 'projen';
+import { Component, javascript } from 'projen';
 const project = new MvcCdkConstructLibrary({
   author: 'Manuel Vogel',
   authorAddress: 'info@manuel-vogel.de',
@@ -119,5 +119,46 @@ if (buildWorkflow) {
     });
   }
 }
+
+// Pin GitHub Actions that projen otherwise references by mutable tag, per
+// zizmor's unpinned-uses audit (https://docs.zizmor.sh/audits/#unpinned-uses).
+project.github?.actions.set('actions/setup-node@v7.0.0', 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020'); // v7.0.0
+project.github?.actions.set('actions/setup-python@v7.0.0', 'actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97'); // v7.0.0
+project.github?.actions.set('peter-evans/create-pull-request@v8.1.1', 'peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1'); // v8.1.1
+
+// Stop actions/checkout from persisting a git credential on the runner for
+// jobs that never push back with it, per zizmor's artipacked audit
+// (https://docs.zizmor.sh/audits/#artipacked). Excludes build.yml's
+// `self-mutation` job, which relies on the persisted credential to
+// `git push` its patch back to the PR branch.
+function disableCheckoutCredentialPersistence(workflowName: string, jobIds: string[]) {
+  const workflow = project.github?.tryFindWorkflow(workflowName);
+  if (!workflow) return;
+  for (const jobId of jobIds) {
+    const job = workflow.getJob(jobId);
+    if (!job || !('steps' in job)) continue;
+    workflow.updateJob(jobId, {
+      ...job,
+      steps: job.steps.map((step) =>
+        step.id === 'checkout'
+          ? { ...step, with: { ...step.with, 'persist-credentials': false } }
+          : step,
+      ),
+    });
+  }
+}
+disableCheckoutCredentialPersistence('build', ['build', 'package-js', 'package-python']);
+disableCheckoutCredentialPersistence('upgrade-main', ['upgrade', 'pr']);
+
+// The release workflow's `release_npm`/`release_pypi` jobs are only added by
+// the `Release` component's own `preSynthesize()`, which runs during
+// `project.synth()` (after this script's top-level code). Patch them from a
+// component added afterwards, so its `preSynthesize()` runs later still.
+class ReleaseWorkflowCredentialPatch extends Component {
+  preSynthesize() {
+    disableCheckoutCredentialPersistence('release', ['release', 'release_npm', 'release_pypi']);
+  }
+}
+new ReleaseWorkflowCredentialPatch(project);
 
 project.synth();
