@@ -14,7 +14,7 @@ const project = new MvcCdkConstructLibrary({
   repositoryUrl: 'https://github.com/mavogel/cdk-vscode-server.git',
   keywords: ['aws', 'cdk', 'vscode', 'construct', 'server'],
   deps: [
-    '@mavogel/mvc-projen@^0.0.35',
+    '@mavogel/mvc-projen@^0.0.36',
     'constructs@^10.5.1',
   ],
   // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.103.20).
@@ -119,5 +119,9 @@ if (buildWorkflow) {
     });
   }
 }
+
+// Action pinning and checkout persist-credentials hardening (zizmor's
+// unpinned-uses / artipacked audits) are now applied by MvcCdkConstructLibrary
+// itself (@mavogel/mvc-projen >= 0.0.36) - see mavogel/mvc-projen#77.
 
 project.synth();

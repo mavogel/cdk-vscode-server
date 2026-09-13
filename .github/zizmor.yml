@@ -1,0 +1,14 @@
+rules:
+  dangerous-triggers:
+    ignore:
+      # projen-generated: gates on the `auto-approve` label plus a
+      # bot/dependabot actor check, never checks out or executes PR code.
+      - auto-approve.yml
+      # projen-generated: only lints the PR title via a trusted third-party
+      # action, never checks out or executes PR code.
+      - pull-request-lint.yml
+  artipacked:
+    ignore:
+      # projen-generated `self-mutation` job: needs the credential persisted
+      # by `actions/checkout` to `git push` its patch back to the PR branch.
+      - build.yml:83
