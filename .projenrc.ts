@@ -28,6 +28,14 @@ const project = new MvcCdkConstructLibrary({
   // bump it deliberately alongside a `@mavogel/mvc-projen` version bump instead.
   depsUpgradeOptions: {
     exclude: ['projen'],
+    // The upgrade-main PR is opened as 'mvc-bot' via PROJEN_GITHUB_TOKEN, so
+    // it's excluded from the GitHub Actions auto-approve allowlist (GitHub
+    // rejects a self-review) and instead relies on the Mergify rule that
+    // auto-approves 'author=mvc-bot' PRs carrying this label - see
+    // node_modules/@mavogel/mvc-projen's autoApproveOptions comment.
+    workflowOptions: {
+      labels: ['auto-approve'],
+    },
   },
   // If this module is not jsii-enabled, it must also be declared under bundledDependencie
   bundledDeps: ['node-html-parser'],
