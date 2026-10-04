@@ -18,7 +18,6 @@
       ],
       "groupName": "default",
       "matchPackageNames": [
-        "*",
         "!aws-cdk*",
         "!projen"
       ],
@@ -45,7 +44,6 @@
     "typescript",
     "aws-cdk-lib",
     "constructs",
-    "@mavogel/mvc-projen",
     "cdk-nag",
     "aws-cdk",
     "projen",

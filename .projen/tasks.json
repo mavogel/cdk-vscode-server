@@ -554,7 +554,7 @@
             "--peer",
             "--no-deprecated",
             "--dep=dev,prod,peer,optional",
-            "--filter=@aws-sdk/client-cloudwatch,@aws-sdk/client-dynamodb,@aws-sdk/client-ec2,@aws-sdk/client-eventbridge,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@aws-sdk/lib-dynamodb,@types/aws-lambda,@types/jest,@types/jsdom,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii-diff,jsii-pacmak,ts-jest,ts-node,node-html-parser"
+            "--filter=@aws-sdk/client-cloudwatch,@aws-sdk/client-dynamodb,@aws-sdk/client-ec2,@aws-sdk/client-eventbridge,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@aws-sdk/lib-dynamodb,@types/aws-lambda,@types/jest,@types/jsdom,esbuild,eslint-import-resolver-typescript,eslint-plugin-import,jest,jsii-diff,jsii-pacmak,ts-jest,ts-node,node-html-parser,@mavogel/mvc-projen"
           ]
         },
         {
