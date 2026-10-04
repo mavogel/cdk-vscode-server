@@ -12,6 +12,7 @@
     ".github/workflows/pull-request-lint.yml",
     ".github/workflows/release.yml",
     ".github/workflows/upgrade-main.yml",
+    ".github/zizmor.yml",
     ".gitignore",
     ".mergify.yml",
     ".prettierrc",
