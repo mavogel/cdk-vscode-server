@@ -64,6 +64,7 @@ tmp
 !/.github/ISSUE_TEMPLATE/bug_report.md
 !/.github/ISSUE_TEMPLATE/feature_request.md
 !/.github/FUNDING.yaml
+!/.github/zizmor.yml
 !/CONTRIBUTING.md
 !/.prettierrc
 !/.projenrc.ts
