@@ -14,10 +14,14 @@ const project = new MvcCdkConstructLibrary({
   repositoryUrl: 'https://github.com/mavogel/cdk-vscode-server.git',
   keywords: ['aws', 'cdk', 'vscode', 'construct', 'server'],
   deps: [
-    '@mavogel/mvc-projen@^0.0.36',
+    // Deliberately unversioned: projen treats a dep with an explicit version as
+    // pinned - it lands in renovate's `ignoreDeps` and is only reachable through
+    // `npm update`, which can never leave a 0.0.x caret range (^0.0.36 == 0.0.36).
+    // Left unversioned, upgrade-main (npm-check-updates) and Renovate both bump it.
+    '@mavogel/mvc-projen',
     'constructs@^10.5.1',
   ],
-  // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.103.20).
+  // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.103.23).
   // The default UpgradeDependencies task bumps this project's top-level `projen`
   // devDependency independently (e.g. to 0.101.x), which drifts out of that range:
   // npm then installs a second, nested `projen` for mvc-projen's synthesis, so the
@@ -25,7 +29,7 @@ const project = new MvcCdkConstructLibrary({
   // longer match what the top-level `projen` CLI can resolve at runtime, breaking
   // `npx projen release` with "Cannot find module '.../bump-version.task.js'".
   // Exclude `projen` from auto-upgrade so it stays aligned with mvc-projen's pin;
-  // bump it deliberately alongside a `@mavogel/mvc-projen` version bump instead.
+  // if an automated mvc-projen bump raises that pin, bump `projen` in the same PR.
   depsUpgradeOptions: {
     exclude: ['projen'],
     // The upgrade-main PR is opened as 'mvc-bot' via PROJEN_GITHUB_TOKEN, so
@@ -66,7 +70,9 @@ const project = new MvcCdkConstructLibrary({
         {
           matchManagers: ['npm'],
           groupName: 'default',
-          matchPackageNames: ['*', '!aws-cdk*', '!projen'],
+          // Negations only: Renovate rejects '*' combined with other patterns
+          // ("config-validation"), which silently halts all updates.
+          matchPackageNames: ['!aws-cdk*', '!projen'],
           automerge: true,
         },
       ],
