@@ -62,7 +62,10 @@ const project = new MvcCdkConstructLibrary({
   renovatebot: true,
   renovatebotOptions: {
     labels: ['dependencies', 'auto-approve'],
-    ignore: ['aws-cdk-lib', 'aws-cdk', 'projen'],
+    // mvc-projen is bumped by upgrade-main only: a bump also changes projen-generated
+    // files (package.json pins, workflows), which Renovate cannot regenerate, so its
+    // package.json+lockfile-only PRs fail at `npm ci` before self-mutation can run.
+    ignore: ['aws-cdk-lib', 'aws-cdk', 'projen', '@mavogel/mvc-projen'],
     overrideConfig: {
       extends: ['config:recommended', ':preserveSemverRanges'],
       platformAutomerge: true,
