@@ -3,7 +3,7 @@ module github.com/mavogel/cdk-vscode-server/mavogelcdkvscodeserver
 go 1.23
 
 require (
-	github.com/aws/jsii-runtime-go v1.134.0
+	github.com/aws/jsii-runtime-go v1.141.0
 	github.com/MV-Consulting/mvc-projen/mavogelmvcprojen v0.0.51
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.272.0
 	github.com/cdklabs/cdk-nag-go/cdknag/v2 v2.38.2
