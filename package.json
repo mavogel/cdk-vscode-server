@@ -63,7 +63,7 @@
     "@stylistic/eslint-plugin": "^2",
     "@types/aws-lambda": "^8.10.164",
     "@types/jest": "^30.0.0",
-    "@types/jsdom": "^28.0.3",
+    "@types/jsdom": "^30.0.0",
     "@types/node": "^24",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
@@ -95,7 +95,7 @@
     "@mavogel/mvc-projen": "^0.0.50",
     "cdk-nag": "^3.0.1",
     "constructs": "^10.5.1",
-    "node-html-parser": "^7.1.0"
+    "node-html-parser": "^9.0.0"
   },
   "bundledDependencies": [
     "node-html-parser"
