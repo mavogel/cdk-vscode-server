@@ -1392,7 +1392,7 @@ fi",
                 "runCommand": [
                   "#!/bin/bash",
                   "export HOME=/home/participant",
-                  "curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.123.0",
+                  "curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.140.0",
                   "systemctl enable --now code-server@participant 2>&1",
                   "tee /etc/nginx/conf.d/code-server.conf <<EOF
 server {
@@ -3290,7 +3290,7 @@ fi",
                 "runCommand": [
                   "#!/bin/bash",
                   "export HOME=/home/participant",
-                  "curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.123.0",
+                  "curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.140.0",
                   "systemctl enable --now code-server@participant 2>&1",
                   "tee /etc/nginx/conf.d/code-server.conf <<EOF
 server {
