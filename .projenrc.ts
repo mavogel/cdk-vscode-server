@@ -68,6 +68,9 @@ const project = new MvcCdkConstructLibrary({
     ignore: ['aws-cdk-lib', 'aws-cdk', 'projen', '@mavogel/mvc-projen'],
     overrideConfig: {
       extends: ['config:recommended', ':preserveSemverRanges'],
+      // Automerge every manager (npm, gomod, the code-server regex manager) once the
+      // required checks in the `main` ruleset are green.
+      automerge: true,
       platformAutomerge: true,
       packageRules: [
         {
