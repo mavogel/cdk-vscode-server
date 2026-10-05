@@ -55,6 +55,7 @@
     "amannn/action-semantic-pull-request",
     "peter-evans/create-pull-request"
   ],
+  "automerge": true,
   "platformAutomerge": true,
   "customManagers": [
     {
