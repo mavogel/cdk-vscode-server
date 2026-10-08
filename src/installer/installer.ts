@@ -523,7 +523,7 @@ fi`,
           '#!/bin/bash',
           `export HOME=/home/${vsCodeUser}`,
           // renovate: datasource=github-releases depName=coder/code-server
-          'curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.140.0',
+          'curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 4.141.0',
           `systemctl enable --now code-server@${vsCodeUser} 2>&1`,
           `tee /etc/nginx/conf.d/code-server.conf <<EOF
 server {
