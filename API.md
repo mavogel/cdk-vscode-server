@@ -999,19 +999,11 @@ The flavor of linux you want to run vscode server on.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_22">UBUNTU_22</a></code> | Ubuntu 22. |
 | <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_24">UBUNTU_24</a></code> | Ubuntu 24. |
-| <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_25">UBUNTU_25</a></code> | Ubuntu 25. |
+| <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_26">UBUNTU_26</a></code> | Ubuntu 26. |
 | <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType.AMAZON_LINUX_2023">AMAZON_LINUX_2023</a></code> | Amazon Linux 2023. |
 
 ---
-
-##### `UBUNTU_22` <a name="UBUNTU_22" id="@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_22"></a>
-
-Ubuntu 22.
-
----
-
 
 ##### `UBUNTU_24` <a name="UBUNTU_24" id="@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_24"></a>
 
@@ -1020,9 +1012,9 @@ Ubuntu 24.
 ---
 
 
-##### `UBUNTU_25` <a name="UBUNTU_25" id="@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_25"></a>
+##### `UBUNTU_26` <a name="UBUNTU_26" id="@mavogel/cdk-vscode-server.LinuxFlavorType.UBUNTU_26"></a>
 
-Ubuntu 25.
+Ubuntu 26.
 
 ---
 

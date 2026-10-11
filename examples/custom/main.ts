@@ -17,7 +17,7 @@ export class MyStack extends Stack {
             instanceVolumeSize: 8,
             instanceClass: ec2.InstanceClass.M7G,
             instanceSize: ec2.InstanceSize.LARGE,
-            instanceOperatingSystem: LinuxFlavorType.UBUNTU_24, // Supports UBUNTU_22, UBUNTU_24, UBUNTU_25, AMAZON_LINUX_2023
+            instanceOperatingSystem: LinuxFlavorType.UBUNTU_24, // Supports UBUNTU_24, UBUNTU_26, AMAZON_LINUX_2023
             instanceCpuArchitecture: LinuxArchitectureType.ARM,
 
             // 👇🏽 or if you want to give the InstanceRole more permissions

@@ -19,7 +19,13 @@
        [
         "\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+         }
         },
         "\""
        ]
@@ -33,11 +39,23 @@
        [
         "\"{\\\"testPhase\\\":\\\"verify-auto-stop\\\",\\\"domainName\\\":\\\"https://",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputFnGetAttIntegVSCodeServercfdistributionFDBE873FDomainName3CB40F9D"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputFnGetAttIntegVSCodeServercfdistributionFDBE873FDomainName0C6894BD"
+         }
         },
         "/?folder=/Workshop\\\",\\\"instanceId\\\":\\\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefIntegVSCodeServerserverinstance0A3D62D7BC0861E5"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefIntegVSCodeServerserverinstance0A3D62D7BCE16201"
+         }
         },
         "\\\",\\\"idleTimeoutMinutes\\\":2}\""
        ]
@@ -45,7 +63,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1762256668177"
+    "salt": "1791738446180"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -55,7 +73,13 @@
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
-     "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+     "Fn::GetStackOutput": {
+      "StackName": "IntegTestStackStopOnIdle",
+      "Region": {
+       "Ref": "AWS::Region"
+      },
+      "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+     }
     },
     "Principal": {
      "Fn::GetAtt": [
@@ -124,7 +148,13 @@
              },
              ":function:",
              {
-              "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+              "Fn::GetStackOutput": {
+               "StackName": "IntegTestStackStopOnIdle",
+               "Region": {
+                "Ref": "AWS::Region"
+               },
+               "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+              }
              }
             ]
            ]
@@ -164,7 +194,13 @@
              },
              ":function:",
              {
-              "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+              "Fn::GetStackOutput": {
+               "StackName": "IntegTestStackStopOnIdle",
+               "Region": {
+                "Ref": "AWS::Region"
+               },
+               "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+              }
              }
             ]
            ]
@@ -204,7 +240,13 @@
              },
              ":function:",
              {
-              "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+              "Fn::GetStackOutput": {
+               "StackName": "IntegTestStackStopOnIdle",
+               "Region": {
+                "Ref": "AWS::Region"
+               },
+               "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+              }
              }
             ]
            ]
@@ -244,7 +286,13 @@
              },
              ":function:",
              {
-              "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefloginhandler99CCCCFD29CE21C0"
+              "Fn::GetStackOutput": {
+               "StackName": "IntegTestStackStopOnIdle",
+               "Region": {
+                "Ref": "AWS::Region"
+               },
+               "OutputName": "PublishOutputRefloginhandler99CCCCFDD2D4C0F7"
+              }
              }
             ]
            ]
@@ -260,20 +308,12 @@
   "SingletonFunction1488541a7b23466481b69b4408076b81HandlerCD40AE9F": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
-    "Runtime": {
-     "Fn::FindInMap": [
-      "LatestNodeRuntimeMap",
-      {
-       "Ref": "AWS::Region"
-      },
-      "value"
-     ]
-    },
+    "Runtime": "nodejs24.x",
     "Code": {
      "S3Bucket": {
       "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
      },
-     "S3Key": "530055f7515b3f0a47900f5df37e729ba40ca977b2d07b952bdefa2b8f883f42.zip"
+     "S3Key": "812e1221e906d087fa94328561c1a8828cb50ac8ba05235f4345dde96e0e3ed5.zip"
     },
     "Timeout": 120,
     "Handler": "index.handler",
@@ -282,6 +322,10 @@
       "SingletonFunction1488541a7b23466481b69b4408076b81Role37ABCE73",
       "Arn"
      ]
+    },
+    "LoggingConfig": {
+     "LogFormat": "JSON",
+     "ApplicationLogLevel": "FATAL"
     }
    }
   },
@@ -304,7 +348,13 @@
        [
         "\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+         }
         },
         "\""
        ]
@@ -318,7 +368,13 @@
        [
         "\"{\\\"testPhase\\\":\\\"disable-idle-monitor\\\",\\\"idleMonitorRuleName\\\":\\\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefIntegVSCodeServerIdleMonitorScheduleRuleCF2E60F550AA072C"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefIntegVSCodeServerIdleMonitorScheduleRuleCF2E60F55692C394"
+         }
         },
         "\\\"}\""
        ]
@@ -326,7 +382,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1762256668177"
+    "salt": "1791738446181"
    },
    "DependsOn": [
     "LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637",
@@ -340,7 +396,13 @@
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
-     "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+     "Fn::GetStackOutput": {
+      "StackName": "IntegTestStackStopOnIdle",
+      "Region": {
+       "Ref": "AWS::Region"
+      },
+      "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+     }
     },
     "Principal": {
      "Fn::GetAtt": [
@@ -373,7 +435,13 @@
        [
         "\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+         }
         },
         "\""
        ]
@@ -387,7 +455,13 @@
        [
         "\"{\\\"testPhase\\\":\\\"start-instance\\\",\\\"instanceId\\\":\\\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefIntegVSCodeServerserverinstance0A3D62D7BC0861E5"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefIntegVSCodeServerserverinstance0A3D62D7BCE16201"
+         }
         },
         "\\\"}\""
        ]
@@ -395,7 +469,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1762256668177"
+    "salt": "1791738446181"
    },
    "DependsOn": [
     "LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b",
@@ -409,7 +483,13 @@
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
-     "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefidletesthandler1A304024FDE25B36"
+     "Fn::GetStackOutput": {
+      "StackName": "IntegTestStackStopOnIdle",
+      "Region": {
+       "Ref": "AWS::Region"
+      },
+      "OutputName": "PublishOutputRefidletesthandler1A30402480AD5DAD"
+     }
     },
     "Principal": {
      "Fn::GetAtt": [
@@ -442,7 +522,13 @@
        [
         "\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefloginhandler99CCCCFD29CE21C0"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputRefloginhandler99CCCCFDD2D4C0F7"
+         }
         },
         "\""
        ]
@@ -456,11 +542,23 @@
        [
         "\"{\\\"domainName\\\":\\\"https://",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputFnGetAttIntegVSCodeServercfdistributionFDBE873FDomainName3CB40F9D"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputFnGetAttIntegVSCodeServercfdistributionFDBE873FDomainName0C6894BD"
+         }
         },
         "/?folder=/Workshop\\\",\\\"password\\\":\\\"",
         {
-         "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputFnGetAttIntegVSCodeServerSecretRetrieverCustomResource2F3DB8BDsecretPasswordValue1223507B"
+         "Fn::GetStackOutput": {
+          "StackName": "IntegTestStackStopOnIdle",
+          "Region": {
+           "Ref": "AWS::Region"
+          },
+          "OutputName": "PublishOutputFnGetAttIntegVSCodeServerSecretRetrieverCustomResource2F3DB8BDsecretPasswordValue1FA5FED1"
+         }
         },
         "\\\"}\""
        ]
@@ -468,7 +566,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1762256668177"
+    "salt": "1791738446181"
    },
    "DependsOn": [
     "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7",
@@ -482,7 +580,13 @@
    "Properties": {
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
-     "Fn::ImportValue": "IntegTestStackStopOnIdle:ExportsOutputRefloginhandler99CCCCFD29CE21C0"
+     "Fn::GetStackOutput": {
+      "StackName": "IntegTestStackStopOnIdle",
+      "Region": {
+       "Ref": "AWS::Region"
+      },
+      "OutputName": "PublishOutputRefloginhandler99CCCCFDD2D4C0F7"
+     }
     },
     "Principal": {
      "Fn::GetAtt": [
@@ -528,130 +632,6 @@
      "LambdaInvoke493987f824f978002013a8ed7c9980f4",
      "assertion"
     ]
-   }
-  }
- },
- "Mappings": {
-  "LatestNodeRuntimeMap": {
-   "af-south-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-east-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-northeast-3": {
-    "value": "nodejs20.x"
-   },
-   "ap-south-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-south-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-1": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-2": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-3": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-4": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-5": {
-    "value": "nodejs20.x"
-   },
-   "ap-southeast-7": {
-    "value": "nodejs20.x"
-   },
-   "ca-central-1": {
-    "value": "nodejs20.x"
-   },
-   "ca-west-1": {
-    "value": "nodejs20.x"
-   },
-   "cn-north-1": {
-    "value": "nodejs20.x"
-   },
-   "cn-northwest-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-central-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-central-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-isoe-west-1": {
-    "value": "nodejs18.x"
-   },
-   "eu-north-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-south-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-south-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-1": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-2": {
-    "value": "nodejs20.x"
-   },
-   "eu-west-3": {
-    "value": "nodejs20.x"
-   },
-   "il-central-1": {
-    "value": "nodejs20.x"
-   },
-   "me-central-1": {
-    "value": "nodejs20.x"
-   },
-   "me-south-1": {
-    "value": "nodejs20.x"
-   },
-   "mx-central-1": {
-    "value": "nodejs20.x"
-   },
-   "sa-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-east-2": {
-    "value": "nodejs20.x"
-   },
-   "us-gov-east-1": {
-    "value": "nodejs20.x"
-   },
-   "us-gov-west-1": {
-    "value": "nodejs20.x"
-   },
-   "us-iso-east-1": {
-    "value": "nodejs18.x"
-   },
-   "us-iso-west-1": {
-    "value": "nodejs18.x"
-   },
-   "us-isob-east-1": {
-    "value": "nodejs18.x"
-   },
-   "us-west-1": {
-    "value": "nodejs20.x"
-   },
-   "us-west-2": {
-    "value": "nodejs20.x"
    }
   }
  },

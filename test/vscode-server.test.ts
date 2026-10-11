@@ -3,7 +3,7 @@ import * as path from 'path';
 import { App, Stack, Validations } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { AwsSolutionsChecks } from 'cdk-nag';
-import { VSCodeServer, VSCodeServerProps, LinuxFlavorType } from '../src';
+import { VSCodeServer, VSCodeServerProps, LinuxFlavorType, LinuxArchitectureType } from '../src';
 import { suppressCommonNags } from '../src/suppress-nags';
 
 describe('vscode-server', () => {
@@ -526,6 +526,27 @@ describe('vscode-server-auto-stop', () => {
   // Auto-resume functionality has been removed - instances must be resumed manually via AWS Console
 });
 
+describe('vscode-server-cdk-nag-environment-agnostic-stack', () => {
+  test('synthesizes a stack without env and produces no unacknowledged AwsSolutions violations', () => {
+    const app = new App({ context: { '@aws-cdk/core:validationReportJson': true } });
+    const stack = new Stack(app, 'testStack');
+
+    new VSCodeServer(stack, 'VSCodeServer', {});
+    suppressCommonNags(stack);
+    Validations.of(app).addPlugins(new AwsSolutionsChecks(app, { verbose: true }));
+
+    const assembly = app.synth();
+    const reportPath = path.join(assembly.directory, 'policy-validation-report.json');
+    const report = fs.existsSync(reportPath)
+      ? JSON.parse(fs.readFileSync(reportPath, 'utf-8'))
+      : { pluginReports: [] };
+    const violations = report.pluginReports.flatMap(
+      (pluginReport: { violations?: unknown[] }) => pluginReport.violations ?? [],
+    );
+    expect(violations).toHaveLength(0);
+  });
+});
+
 describe('vscode-server-custom-install-steps', () => {
   test('should create SSM document with custom install steps', () => {
     const app = new App();
@@ -681,5 +702,54 @@ describe('vscode-server-installer-kiro-cli', () => {
     const qStep = mainSteps.find((step: any) => step.name === 'InstallQCLI');
     expect(qStep).toBeUndefined();
     expect(JSON.stringify(mainSteps)).not.toContain('desktop-release.q.us-east-1.amazonaws.com');
+  });
+});
+
+describe('vscode-server-dotnet-sdk-package', () => {
+  test.each([
+    [LinuxFlavorType.UBUNTU_24, 'dotnet-sdk-8.0'],
+    [LinuxFlavorType.UBUNTU_26, 'dotnet-sdk-10.0'],
+  ])('should install the SDK available in the archive on %s', (flavor, sdkPackage) => {
+    const app = new App();
+    const stack = new Stack(app, 'testStack', {
+      env: { region: 'us-east-1', account: '123456789012' },
+    });
+
+    new VSCodeServer(stack, 'testVSCodeServer', { instanceOperatingSystem: flavor });
+
+    const template = Template.fromStack(stack);
+    const ssmDoc = Object.values(template.findResources('AWS::SSM::Document'))[0];
+    const dotnetStep = ssmDoc.Properties.Content.mainSteps.find(
+      (step: any) => step.name === 'InstallDotnetApt',
+    );
+    expect(dotnetStep.inputs.runCommand.join('\n')).toContain(`apt-get install -y -q ${sdkPackage}`);
+  });
+});
+
+describe('vscode-server-ubuntu26', () => {
+  test.each([
+    [LinuxArchitectureType.ARM, 'arm64'],
+    [LinuxArchitectureType.AMD64, 'amd64'],
+  ])('should use the resolute AMI and the Ubuntu installer on %s', (arch, ssmArch) => {
+    const app = new App();
+    const stack = new Stack(app, 'testStack', {
+      env: {
+        region: 'us-east-1',
+        account: '123456789012',
+      },
+    });
+
+    new VSCodeServer(stack, 'testVSCodeServer', {
+      instanceOperatingSystem: LinuxFlavorType.UBUNTU_26,
+      instanceCpuArchitecture: arch,
+    });
+
+    const template = Template.fromStack(stack);
+    template.hasParameter('*', {
+      Default: `/aws/service/canonical/ubuntu/server/resolute/stable/current/${ssmArch}/hvm/ebs-gp3/ami-id`,
+    });
+    template.hasResourceProperties('AWS::SSM::Document', {
+      Name: Match.stringLikeRegexp('^vscode-server-ubuntu-'),
+    });
   });
 });

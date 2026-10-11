@@ -104,7 +104,7 @@ const integ = new IntegTest(app, 'IntegStopOnIdleFunctionality', {
  * 4. verify-login: Check that VS Code Server is accessible via CloudFront (login-handler)
  *
  * This verifies the complete workflow including recovery after auto-stop.
- * Uses the existing login-handler.ts (same as integ.ubuntu.ts) for login verification.
+ * Uses the existing login-handler.ts (same as integ.ubuntu24.ts) for login verification.
  */
 integ.assertions
   // Phase 1: Wait for instance to stop after idle timeout

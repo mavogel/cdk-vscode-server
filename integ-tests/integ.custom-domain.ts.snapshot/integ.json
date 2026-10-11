@@ -1,12 +1,12 @@
 {
-  "version": "41.0.0",
+  "version": "54.0.0",
   "testCases": {
     "IntegSetupVSCodeOnCustomDomain/DefaultTest": {
       "stacks": [
         "IntegTestStackCustomDomain"
       ],
       "regions": [
-        "${Token[AWS.Region.6]}"
+        "${Token[AWS.Region.9]}"
       ],
       "cdkCommandOptions": {
         "destroy": {
@@ -19,5 +19,6 @@
       "assertionStackName": "IntegSetupVSCodeOnCustomDomainDefaultTestDeployAssert6982D514"
     }
   },
-  "minimumCliVersion": "2.1005.0"
+  "enableLookups": true,
+  "minimumCliVersion": "2.1143.0"
 }

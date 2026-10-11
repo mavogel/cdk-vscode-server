@@ -664,11 +664,14 @@ fi`,
       ? `server_name *.cloudfront.net ${customDomainName};`
       : 'server_name *.cloudfront.net;';
 
+    // Ubuntu 26 only ships .NET 10 in its archive; Ubuntu 24 has 8.0
+    const dotnetSdkPackage =
+      linuxFlavor === LinuxFlavorType.UBUNTU_26 ? 'dotnet-sdk-10.0' : 'dotnet-sdk-8.0';
+
     let ssmDocument: ssm.CfnDocument;
     switch (linuxFlavor) {
-      case LinuxFlavorType.UBUNTU_22:
       case LinuxFlavorType.UBUNTU_24:
-      case LinuxFlavorType.UBUNTU_25:
+      case LinuxFlavorType.UBUNTU_26:
         // Create an SSM document with multiple actions to install the software
         ssmDocument = new ssm.CfnDocument(scope, 'ssm-document-ubuntu', {
           name: `vscode-server-ubuntu-${Stack.of(scope).stackName}`,
@@ -809,7 +812,6 @@ EOF`,
                 name: 'InstallPythonApt',
                 inputs: {
                   runCommand: [
-                    // Ubuntu 22 default is Python 3.10
                     // Ubuntu 24 default is Python 3.12
                     // The default installed Python version will map to Python3
                     '#!/bin/bash',
@@ -867,7 +869,7 @@ fi`,
                   runCommand: [
                     '#!/bin/bash',
                     'dpkg --configure -a',
-                    'apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q dotnet-sdk-8.0',
+                    `apt-get -q update && DEBIAN_FRONTEND=noninteractive apt-get install -y -q ${dotnetSdkPackage}`,
                     'dotnet tool install -g Microsoft.Web.LibraryManager.Cli',
                     `echo 'PATH=$PATH:/home/${vsCodeUser}/.dotnet/tools' >> /home/${vsCodeUser}/.bashrc`,
                     `chown -R ${vsCodeUser}:${vsCodeUser} /home/${vsCodeUser}`,

@@ -71,7 +71,7 @@ export class MyStack extends Stack {
       instanceVolumeSize: 8,
       instanceClass: ec2.InstanceClass.M7G,
       instanceSize: ec2.InstanceSize.LARGE,
-      instanceOperatingSystem: LinuxFlavorType.UBUNTU_24,
+      instanceOperatingSystem: LinuxFlavorType.UBUNTU_24, // or UBUNTU_26, AMAZON_LINUX_2023
       instanceCpuArchitecture: LinuxArchitectureType.ARM,
       
       // 👇🏽 or if you want to give the InstanceRole more permissions
@@ -118,6 +118,18 @@ dev.vscodepassword64FBCA12 = foobarbaz
 ```
 
 See the [examples](./examples) folder for more inspiration.
+
+### Supported Operating Systems
+
+Set the operating system with `instanceOperatingSystem` and the CPU architecture with `instanceCpuArchitecture` (`ARM` or `AMD64`). Only Ubuntu LTS releases are supported:
+
+| `LinuxFlavorType` | OS | Notes |
+|---|---|---|
+| `UBUNTU_24` (default) | Ubuntu 24.04 LTS (noble) | Installs .NET SDK 8.0 |
+| `UBUNTU_26` | Ubuntu 26.04 LTS (resolute) | Installs .NET SDK 10.0, since 8.0 is not in the Ubuntu 26 archive |
+| `AMAZON_LINUX_2023` | Amazon Linux 2023 | Installs .NET SDK 8.0 |
+
+**Upgrading:** `UBUNTU_22` and `UBUNTU_25` were removed; only the two current Ubuntu LTS releases (24.04 and 26.04) are supported, and 25.04 was not an LTS release. If your stack uses either removed value, switch to `UBUNTU_24` or `UBUNTU_26`. Changing the operating system replaces the EC2 instance.
 
 ### Pre-populate with Git Repository
 
@@ -313,7 +325,7 @@ new VSCodeServer(this, 'vscode', {
 - Configure IDE extensions or settings
 
 **Supported Operating Systems:**
-- Ubuntu 22/24/25
+- Ubuntu 24/26
 - Amazon Linux 2023
 
 **Requirements:**
