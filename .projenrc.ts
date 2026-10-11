@@ -118,7 +118,11 @@ const project = new MvcCdkConstructLibrary({
     distName: 'cdk-vscode-server',
     module: 'cdk_vscode_server',
   },
-  gitignore: ['settings.local.json'],
+  gitignore: [
+    'settings.local.json',
+    // integ-runner tool report; not read when verifying snapshots
+    'integ-tests/**/validation-report.json',
+  ],
 });
 
 // Verify CLAUDE.md/AGENTS.md and .claude/.agents skill mirrors stay in sync

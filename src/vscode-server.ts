@@ -6,6 +6,7 @@ import {
   IAspect,
   Stack,
   Tags,
+  Token,
   Validations,
 } from 'aws-cdk-lib';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
@@ -299,19 +300,14 @@ export interface VSCodeServerProps {
  */
 export enum LinuxFlavorType {
   /**
-   * Ubuntu 22
-   */
-  UBUNTU_22 = 'ubuntu22',
-
-  /**
    * Ubuntu 24
    */
   UBUNTU_24 = 'ubuntu24',
 
   /**
-   * Ubuntu 25
+   * Ubuntu 26
    */
-  UBUNTU_25 = 'ubuntu25',
+  UBUNTU_26 = 'ubuntu26',
 
   /**
    * Amazon Linux 2023
@@ -740,9 +736,13 @@ export class VSCodeServer extends Construct {
         'For this tmp role we do not need to restrict managed policies',
       );
     }
+    // cdk-nag renders an unresolved account (env-agnostic stack) as this placeholder
+    const nagAccount = Token.isUnresolved(Stack.of(this).account)
+      ? '<AWS::AccountId>'
+      : Stack.of(this).account;
     acknowledgeGranularFinding(
       instanceRole,
-      `AwsSolutions-IAM5[Resource::arn:aws:iam::${Stack.of(this).account}:role/cdk-*]`,
+      `AwsSolutions-IAM5[Resource::arn:aws:iam::${nagAccount}:role/cdk-*]`,
       'For this tmp role the wildcards are fine',
     );
     Validations.of(instanceRole).acknowledge(
@@ -755,7 +755,7 @@ export class VSCodeServer extends Construct {
         reason: 'For this tmp role the wildcards are fine',
       },
       {
-        id: `AwsSolutions-IAM5[Resource::arn:aws:cloudformation:*:${Stack.of(this).account}:stack/CDKToolkit/*]`,
+        id: `AwsSolutions-IAM5[Resource::arn:aws:cloudformation:*:${nagAccount}:stack/CDKToolkit/*]`,
         reason: 'For this tmp role the wildcards are fine',
       },
       {
@@ -763,7 +763,7 @@ export class VSCodeServer extends Construct {
         reason: 'For this tmp role the wildcards are fine',
       },
       {
-        id: `AwsSolutions-IAM5[Resource::arn:aws:ecr:*:${Stack.of(this).account}:repository/cdk-*]`,
+        id: `AwsSolutions-IAM5[Resource::arn:aws:ecr:*:${nagAccount}:repository/cdk-*]`,
         reason: 'For this tmp role the wildcards are fine',
       },
       {
@@ -779,7 +779,7 @@ export class VSCodeServer extends Construct {
         reason: 'For this tmp role the wildcards are fine',
       },
       {
-        id: `AwsSolutions-IAM5[Resource::arn:aws:ssm:*:${Stack.of(this).account}:parameter/cdk-bootstrap/*]`,
+        id: `AwsSolutions-IAM5[Resource::arn:aws:ssm:*:${nagAccount}:parameter/cdk-bootstrap/*]`,
         reason: 'For this tmp role the wildcards are fine',
       },
       {
@@ -787,11 +787,11 @@ export class VSCodeServer extends Construct {
         reason: 'For this tmp role the wildcards are fine',
       },
       {
-        id: `AwsSolutions-IAM5[Resource::arn:aws:codepipeline:*:${Stack.of(this).account}:*/*]`,
+        id: `AwsSolutions-IAM5[Resource::arn:aws:codepipeline:*:${nagAccount}:*/*]`,
         reason: 'For this tmp role the wildcards are fine',
       },
       {
-        id: `AwsSolutions-IAM5[Resource::arn:aws:kms:*:${Stack.of(this).account}:key/*]`,
+        id: `AwsSolutions-IAM5[Resource::arn:aws:kms:*:${nagAccount}:key/*]`,
         reason: 'For this tmp role the wildcards are fine',
       },
     );
@@ -990,9 +990,8 @@ export class VSCodeServer extends Construct {
     // Store the installer reference for dependency management
     let installer: Installer | undefined;
     switch (instanceOperatingSystem) {
-      case LinuxFlavorType.UBUNTU_22:
       case LinuxFlavorType.UBUNTU_24:
-      case LinuxFlavorType.UBUNTU_25:
+      case LinuxFlavorType.UBUNTU_26:
         installer = Installer.ubuntu({
           instanceId: this.instance.instanceId,
           vsCodeUser: vsCodeUser,

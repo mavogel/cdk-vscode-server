@@ -1,12 +1,12 @@
 {
-  "version": "41.0.0",
+  "version": "54.0.0",
   "testCases": {
     "IntegSetupVSCodeOnAl2023/DefaultTest": {
       "stacks": [
         "IntegTestStackAl2023"
       ],
       "regions": [
-        "${Token[AWS.Region.12]}"
+        "${Token[AWS.Region.6]}"
       ],
       "cdkCommandOptions": {
         "destroy": {
@@ -19,5 +19,6 @@
       "assertionStackName": "IntegSetupVSCodeOnAl2023DefaultTestDeployAssert74D8F645"
     }
   },
-  "minimumCliVersion": "2.1005.0"
+  "enableLookups": true,
+  "minimumCliVersion": "2.1143.0"
 }

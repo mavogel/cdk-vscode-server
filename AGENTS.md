@@ -88,7 +88,7 @@ Uses Lambda-backed custom resources via CDK Provider construct:
 
 1. **Installer** (`src/installer/`)
    - Runs SSM documents to install VS Code Server
-   - OS-specific installation for Ubuntu 22/24/25 and Amazon Linux 2023
+   - OS-specific installation for Ubuntu 24/26 and Amazon Linux 2023
    - Returns SUCCESS when installation completes
    - Custom resource name: `SSMInstallerCustomResource`
    - **Critical**: Must pass `linuxFlavorType` parameter to ensure correct OS-specific SSM document is used
@@ -131,13 +131,12 @@ enabler.node.addDependency(installerCustomResource);
 ### AMI Selection (`src/mappings.ts`)
 
 Contains SSM parameter paths for:
-- Ubuntu 22/24/25 (ARM + x86_64)
+- Ubuntu 24/26 (ARM + x86_64)
 - Amazon Linux 2023 (ARM + x86_64)
 
 **Ubuntu Codenames**:
-- Ubuntu 22 = "jammy" (uses ebs-gp2)
 - Ubuntu 24 = "noble" (uses ebs-gp3)
-- Ubuntu 25 = "plucky" (uses ebs-gp3)
+- Ubuntu 26 = "resolute" (uses ebs-gp3)
 
 Function `getAmiSSMParameterForLinuxArchitectureAndFlavor()` returns region-specific SSM parameter for latest AMI.
 
@@ -148,8 +147,8 @@ aws ssm get-parameters-by-path --path "/aws/service/canonical/ubuntu/server/" --
 
 # Verify specific AMI paths exist
 aws ssm get-parameters --names \
-  "/aws/service/canonical/ubuntu/server/plucky/stable/current/amd64/hvm/ebs-gp3/ami-id" \
-  "/aws/service/canonical/ubuntu/server/plucky/stable/current/arm64/hvm/ebs-gp3/ami-id" \
+  "/aws/service/canonical/ubuntu/server/resolute/stable/current/amd64/hvm/ebs-gp3/ami-id" \
+  "/aws/service/canonical/ubuntu/server/resolute/stable/current/arm64/hvm/ebs-gp3/ami-id" \
   --region us-east-1
 ```
 
@@ -200,14 +199,15 @@ Suppressions defined in `src/suppress-nags.ts` and applied throughout construct 
 
 Apply suppressions via `Validations.of(construct).acknowledge({ id, reason })` (cdk-nag v3's `Validations`/`IPolicyValidationPlugin` API replaced v2's `NagSuppressions`). Granular ARN-embedded findings (e.g. `AwsSolutions-IAM4`/`AwsSolutions-IAM5` for managed policies or wildcard resources) can't go through `acknowledge()` directly — it rejects any id with more than one `::` delimiter — so use the `acknowledgeGranularFinding()` bypass helper in `src/suppress-nags.ts` instead.
 
+IAM5 ids that embed the account (e.g. `...:role/cdk-*`) must not use the raw `Stack.of(this).account` token: on a stack without an explicit `env` it is unresolved and synthesis fails with `KeyMustResolveToString`. `VSCodeServer` uses `<AWS::AccountId>` in that case (`nagAccount` in `src/vscode-server.ts`), mirroring cdk-nag's own `<AWS::Partition>` rendering; the integ tests rely on this because their stacks have no `env`.
+
 ## Integration Tests
 
 Located in `integ-tests/`, using `@aws-cdk/integ-tests-alpha` framework.
 
 **Test Files**:
-- `integ.ubuntu.ts` - Basic Ubuntu 22 deployment + login test
 - `integ.ubuntu24.ts` - Ubuntu 24 deployment + login test
-- `integ.ubuntu25.ts` - Ubuntu 25 deployment + login test
+- `integ.ubuntu26.ts` - Ubuntu 26 deployment + login test
 - `integ.al2023.ts` - Amazon Linux 2023 deployment
 - `integ.custom-domain.ts` - Custom domain + ACM certificate
 - `integ.stop-on-idle.ts` - **4-phase auto-stop workflow test**
@@ -217,6 +217,15 @@ Located in `integ-tests/`, using `@aws-cdk/integ-tests-alpha` framework.
 2. `disable-idle-monitor` - Disable EventBridge rule to prevent re-stopping
 3. `start-instance` - Start instance and wait for running state
 4. `verify-login` - Check VS Code Server accessibility via CloudFront
+
+**Custom domain test prerequisites** (`integ.custom-domain.ts`): it needs the Route 53 hosted zone `vscode-server-test.mavogel.xyz` (the zone ID is hardcoded in the test), delegated from the parent `mavogel.xyz` zone via an `NS` record. If the zone is deleted, recreate it, re-point the parent `NS` record at the new name servers, and update the zone ID in the test.
+
+**Run a single test** (the runner needs `--language` together with `--test-regex`; it deploys to AWS and destroys the stack afterwards):
+```bash
+npx integ-runner --directory ./integ-tests --language typescript \
+  --test-regex '^integ\.ubuntu26\.ts$' --parallel-regions eu-west-1 --update-on-failed
+```
+The runner's "destructive changes" warning after a snapshot update is informational, not a failure.
 
 **Run Integration Tests**:
 ```bash
@@ -297,16 +306,16 @@ Custom steps are appended to SSM document `mainSteps` array in `createSSMDocumen
 
 ### Adding Support for a New Ubuntu Version
 
-When Ubuntu releases a new version (e.g., Ubuntu 26):
+When Canonical releases a new LTS version (only LTS releases are supported, e.g., Ubuntu 28):
 
 1. **Add AMI mappings** in `src/mappings.ts`:
    ```typescript
    [
-     'arm-ubuntu26',
+     'arm-ubuntu28',
      '/aws/service/canonical/ubuntu/server/CODENAME/stable/current/arm64/hvm/ebs-gp3/ami-id',
    ],
    [
-     'amd64-ubuntu26',
+     'amd64-ubuntu28',
      '/aws/service/canonical/ubuntu/server/CODENAME/stable/current/amd64/hvm/ebs-gp3/ami-id',
    ],
    ```
@@ -316,13 +325,14 @@ When Ubuntu releases a new version (e.g., Ubuntu 26):
    ```typescript
    export enum LinuxFlavorType {
      // ...
-     UBUNTU_26 = 'ubuntu26',
+     UBUNTU_28 = 'ubuntu28',
    }
    ```
 
 3. **Update Installer** in `src/installer/installer.ts`:
-   - Add `LinuxFlavorType.UBUNTU_26` to the Ubuntu switch case in `createSSMDocument()` (line ~673)
+   - Add `LinuxFlavorType.UBUNTU_28` to the Ubuntu switch case in `createSSMDocument()` (line ~673)
    - Update installer calls in `src/vscode-server.ts` to include new case (line ~993)
+   - Check package availability in the new release's archive: `dotnet-sdk-*` is chosen per flavor via `dotnetSdkPackage` in `createSSMDocument()` (Ubuntu 26 only ships `dotnet-sdk-10.0`). Run the SSM steps in an `ubuntu:<version>` container before the integ test, since the first failing step aborts the whole document and hides later ones.
 
 4. **Pass linuxFlavorType** in `src/vscode-server.ts`:
    ```typescript
@@ -332,7 +342,7 @@ When Ubuntu releases a new version (e.g., Ubuntu 26):
    })._bind(this);
    ```
 
-5. **Create integration test**: Copy `integ-tests/integ.ubuntu25.ts` to `integ.ubuntu26.ts` and update OS version
+5. **Create integration test**: Copy `integ-tests/integ.ubuntu26.ts` to `integ.ubuntu28.ts` and update OS version
 
 6. **Update documentation**:
    - Update README.md examples with inline comments showing all supported versions

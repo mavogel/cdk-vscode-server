@@ -33,6 +33,7 @@ jspm_packages/
 .yarn-integrity
 .cache
 settings.local.json
+integ-tests/**/validation-report.json
 /test-reports/
 junit.xml
 /coverage/

@@ -1,0 +1,154 @@
+{
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637/Default": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637/Invoke": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637Invoke529602B8"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637/AssertionResults": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionResultsLambdaInvoke2b0ac1bc65c03d14e22d254e216f0637"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81/Role": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SingletonFunction1488541a7b23466481b69b4408076b81Role37ABCE73"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/SingletonFunction1488541a7b23466481b69b4408076b81/Handler": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SingletonFunction1488541a7b23466481b69b4408076b81HandlerCD40AE9F"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b/Default": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b/Invoke": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921bInvokeE3C593A0"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b/AssertionResults": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionResultsLambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvokedc3da1442e925b8c33569d5fea03b0f7/Default": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvokedc3da1442e925b8c33569d5fea03b0f7/Invoke": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7Invoke9C84C933"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvokedc3da1442e925b8c33569d5fea03b0f7/AssertionResults": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionResultsLambdaInvokedc3da1442e925b8c33569d5fea03b0f7"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke493987f824f978002013a8ed7c9980f4/Default": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke493987f824f978002013a8ed7c9980f4/Invoke": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke493987f824f978002013a8ed7c9980f4Invoke4806B64D"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke493987f824f978002013a8ed7c9980f4/AssertionResults": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionResultsLambdaInvoke493987f824f978002013a8ed7c9980f4"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637/Default/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b/Default/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvokedc3da1442e925b8c33569d5fea03b0f7/Default/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke493987f824f978002013a8ed7c9980f4/Default/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LambdaInvoke493987f824f978002013a8ed7c9980f4"
+    }
+  ]
+}

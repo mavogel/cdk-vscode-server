@@ -171,7 +171,7 @@ export class CustomInstallStepsExampleStack extends Stack {
       instanceClass: ec2.InstanceClass.M7G,
       instanceSize: ec2.InstanceSize.XLARGE,
       instanceVolumeSize: 50, // Larger volume for additional tools
-      instanceOperatingSystem: LinuxFlavorType.UBUNTU_24, // Supports UBUNTU_22, UBUNTU_24, UBUNTU_25, AMAZON_LINUX_2023
+      instanceOperatingSystem: LinuxFlavorType.UBUNTU_24, // Supports UBUNTU_24, UBUNTU_26, AMAZON_LINUX_2023
       instanceCpuArchitecture: LinuxArchitectureType.ARM,
 
       // VS Code configuration
