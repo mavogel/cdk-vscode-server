@@ -1,0 +1,1849 @@
+{
+  "/IntegTestStackUbuntu24": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "CloudFormation-Validate::W3010": "Literal AZs in template are the result of accessing stack.availabilityZones, this is expected and safe"
+      },
+      "trace": [
+        "    ...new Vpc2 in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:543:17)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/Custom::VpcRestrictDefaultSGCustomResourceProvider": [
+    {
+      "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+      "data": true
+    }
+  ],
+  "/IntegTestStackUbuntu24/AWS679f53fac002430cb0da5b7982bd2287": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "memorySize": "*",
+        "timeout": "*",
+        "role": "*",
+        "logGroup": "*",
+        "functionName": "*",
+        "vpc": "*",
+        "vpcSubnets": "*",
+        "code": "*",
+        "handler": "*",
+        "runtime": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-singleton",
+      "data": true
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+      "data": 0
+    }
+  ],
+  "/IntegTestStackUbuntu24/SsmParameterValue:--aws--service--canonical--ubuntu--server--noble--stable--current--arm64--hvm--ebs-gp3--ami-id:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "SsmParameterValueawsservicecanonicalubuntuservernoblestablecurrentarm64hvmebsgp3amiidC96584B6F00A464EAD1953AFF4B05118Parameter"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "functionName": "*",
+        "entry": "*",
+        "runtime": "*",
+        "logRetention": 1,
+        "timeout": "*",
+        "bundling": {
+          "esbuildArgs": "*"
+        },
+        "code": "*",
+        "handler": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "functionName": "*",
+        "entry": "*",
+        "runtime": "*",
+        "logRetention": 1,
+        "timeout": "*",
+        "bundling": {
+          "esbuildArgs": "*"
+        }
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/IntegTestStackUbuntu24/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/password-secret": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "generateSecretString": {
+          "passwordLength": "*",
+          "secretStringTemplate": "*",
+          "excludePunctuation": true,
+          "includeSpace": false,
+          "generateStringKey": "*"
+        }
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-SMG4": "For this tmp vc code server we do not need password rotation"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:435:30)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "description": "*",
+        "timeout": "*",
+        "memorySize": "*",
+        "runtime": "*",
+        "handler": "*",
+        "code": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this event handler we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-L1": "For this lambda the latest runtime is not needed"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:86:29)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this provider we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::<IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3.Arn>:*]": "For this provider wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-L1": "For this provider the latest runtime is not needed"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverCustomResource": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:warning",
+      "data": "The following keys will be overwritten as they exist in the 'properties' prop. Keys found: ServiceTimeout [ack: @aws-cdk/core:customResourcePropConflict]",
+      "trace": [
+        "Annotations.addMessage (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/annotations.js:1:3506)",
+        "Annotations.addWarningV2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/annotations.js:1:2194)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
+        "new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:123:22)",
+        "SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "Module._compile (node:internal/modules/cjs/loader:1968:14)",
+        "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
+        "node:internal/modules/cjs/loader:2108:10",
+        "Object.require.extensions.<computed> [as .ts] (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1621:12)",
+        "Module.load (node:internal/modules/cjs/loader:1690:32)",
+        "Module._load (node:internal/modules/cjs/loader:1480:12)",
+        "wrapModuleLoad (node:internal/modules/cjs/loader:261:19)",
+        "Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)",
+        "node:internal/main/run_main_module:33:47"
+      ]
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "maxAzs": "*",
+        "createInternetGateway": true,
+        "subnetConfiguration": [
+          {
+            "name": "*",
+            "subnetType": "Public"
+          }
+        ],
+        "enableDnsHostnames": true,
+        "enableDnsSupport": true
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-VPC7": "For this tmp vpc we do not need flow logs"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:555:25)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-to-server-sg": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "vpc": "*",
+        "description": "*",
+        "securityGroupName": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addIngressRule": [
+          {
+            "canInlineRule": false,
+            "connections": "*",
+            "uniqueId": "*"
+          },
+          {},
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "For this provider wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:574:42)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance-role": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "inlinePolicies": "*",
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          },
+          {
+            "managedPolicyArn": "*"
+          },
+          {
+            "managedPolicyArn": "*"
+          },
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/AmazonSSMManagedInstanceCore]": "For this tmp role we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/CloudWatchAgentServerPolicy]": "For this tmp role we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/AmazonQDeveloperAccess]": "For this tmp role we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/ReadOnlyAccess]": "For this tmp role we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM5[Resource::arn:aws:iam::<AWS::AccountId>:role/cdk-*]": "For this tmp role the wildcards are fine"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::cloudformation:*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::arn:aws:cloudformation:*:<AWS::AccountId>:stack/CDKToolkit/*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::s3:*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::arn:aws:ecr:*:<AWS::AccountId>:repository/cdk-*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::ssm:GetParameter*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::ssm:PutParameter*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::ssm:DeleteParameter*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::arn:aws:ssm:*:<AWS::AccountId>:parameter/cdk-bootstrap/*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Action::ec2:DescribeVolumesModifications*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::arn:aws:codepipeline:*:<AWS::AccountId>:*/*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::arn:aws:kms:*:<AWS::AccountId>:key/*]": "For this tmp role the wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "vpc": "*",
+        "instanceName": "*",
+        "instanceType": "*",
+        "machineImage": "*",
+        "requireImdsv2": true,
+        "vpcSubnets": {
+          "subnetType": "Public"
+        },
+        "associatePublicIpAddress": true,
+        "detailedMonitoring": true,
+        "blockDevices": [
+          {
+            "deviceName": "*",
+            "volume": "*"
+          }
+        ],
+        "role": "*",
+        "securityGroup": "*",
+        "userData": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-EC29": "For this tmp instance we do not need an asg"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:834:35)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-cache-policy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "cachePolicyName": "*",
+        "comment": "*",
+        "minTtl": "*",
+        "maxTtl": "*",
+        "defaultTtl": "*",
+        "cookieBehavior": "*",
+        "enableAcceptEncodingGzip": false,
+        "headerBehavior": "*",
+        "queryStringBehavior": "*"
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-distribution": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "enabled": true,
+        "httpVersion": "http2and3",
+        "comment": "*",
+        "priceClass": "PriceClass_All",
+        "defaultBehavior": {
+          "allowedMethods": "*",
+          "cachePolicy": "*",
+          "originRequestPolicy": "*",
+          "viewerProtocolPolicy": "allow-all",
+          "origin": "*"
+        },
+        "additionalBehaviors": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addBehavior": [
+          "*",
+          {},
+          {
+            "allowedMethods": "*",
+            "compress": false,
+            "cachePolicy": "*",
+            "originRequestPolicy": "*",
+            "viewerProtocolPolicy": "allow-all"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-CFR1": "For this tmp distribution we do not need geo restrictions"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-CFR2": "For this tmp distribution we do not need waf integration"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-CFR3": "For this tmp distribution we do not need access logging enabled"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-CFR4": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-CFR5": "For this tmp distribution we do not need limit SSL protocols as we use the default viewer cert"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/ssm-document-ubuntu": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerssmdocumentubuntuED32BACB"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "description": "*",
+        "timeout": "*",
+        "memorySize": "*",
+        "runtime": "*",
+        "handler": "*",
+        "code": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this event handler we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-L1": "For this lambda the latest runtime is not needed"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1231:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "ssm:GetCommandInvocation and ssm:ListCommandInvocations do not support resource-level permissions and require wildcard resources"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1282:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this provider we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::<IntegVSCodeServerInstallerOnEventHandler6FF91542.Arn>:*]": "For this provider wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-L1": "For this provider the latest runtime is not needed"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SSMInstallerCustomResource": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:warning",
+      "data": "The following keys will be overwritten as they exist in the 'properties' prop. Keys found: ServiceTimeout [ack: @aws-cdk/core:customResourcePropConflict]",
+      "trace": [
+        "Annotations.addMessage (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/annotations.js:1:3506)",
+        "Annotations.addWarningV2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/annotations.js:1:2194)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
+        "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
+        "new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1313:5)",
+        "Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "Module._compile (node:internal/modules/cjs/loader:1968:14)",
+        "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
+        "node:internal/modules/cjs/loader:2108:10",
+        "Object.require.extensions.<computed> [as .ts] (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1621:12)",
+        "Module.load (node:internal/modules/cjs/loader:1690:32)",
+        "Module._load (node:internal/modules/cjs/loader:1480:12)",
+        "wrapModuleLoad (node:internal/modules/cjs/loader:261:19)",
+        "Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)",
+        "node:internal/main/run_main_module:33:47"
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/domainName": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerdomainName6B9F2604"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/password": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerpasswordE38D3B2C"
+    }
+  ],
+  "/IntegTestStackUbuntu24/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
+    }
+  ],
+  "/IntegTestStackUbuntu24/Custom::VpcRestrictDefaultSGCustomResourceProvider/Handler": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+    }
+  ],
+  "/IntegTestStackUbuntu24/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "loginhandler99CCCCFD"
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+    }
+  ],
+  "/IntegTestStackUbuntu24/Publish/Output{\"Ref\":\"loginhandler99CCCCFD\"}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "PublishOutputRefloginhandler99CCCCFDD2D4C0F7"
+    }
+  ],
+  "/IntegTestStackUbuntu24/Publish/Output{\"Fn::GetAtt\":[\"IntegVSCodeServercfdistributionFDBE873F\",\"DomainName\"]}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "PublishOutputFnGetAttIntegVSCodeServercfdistributionFDBE873FDomainName0C6894BD"
+    }
+  ],
+  "/IntegTestStackUbuntu24/Publish/Output{\"Fn::GetAtt\":[\"IntegVSCodeServerSecretRetrieverCustomResource2F3DB8BD\",\"secretPasswordValue\"]}": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "PublishOutputFnGetAttIntegVSCodeServerSecretRetrieverCustomResource2F3DB8BDsecretPasswordValue1FA5FED1"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/password-secret/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerpasswordsecret202A5DB3"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "logGroupName": "*"
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "code": "*",
+        "description": "*",
+        "runtime": "*",
+        "handler": "*",
+        "timeout": "*",
+        "loggingFormat": "JSON",
+        "applicationLogLevelV2": "FATAL",
+        "logGroup": "*",
+        "vpc": "*",
+        "vpcSubnets": "*",
+        "securityGroups": "*",
+        "role": "*",
+        "functionName": "*",
+        "environmentEncryption": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addEnvironment": [
+          "*",
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverCustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverCustomResource2F3DB8BD"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpc93DDE887"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "availabilityZone": "*",
+        "vpcId": "*",
+        "cidrBlock": "*",
+        "mapPublicIpOnLaunch": true,
+        "ipv6CidrBlock": "*",
+        "assignIpv6AddressOnCreation": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "availabilityZone": "*",
+        "vpcId": "*",
+        "cidrBlock": "*",
+        "mapPublicIpOnLaunch": true,
+        "ipv6CidrBlock": "*",
+        "assignIpv6AddressOnCreation": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {}
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet2": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "availabilityZone": "*",
+        "vpcId": "*",
+        "cidrBlock": "*",
+        "mapPublicIpOnLaunch": true,
+        "ipv6CidrBlock": "*",
+        "assignIpv6AddressOnCreation": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "availabilityZone": "*",
+        "vpcId": "*",
+        "cidrBlock": "*",
+        "mapPublicIpOnLaunch": true,
+        "ipv6CidrBlock": "*",
+        "assignIpv6AddressOnCreation": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {}
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/IGW": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcIGW960F6D83"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/VPCGW": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcVPCGWA7CDED90"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/RestrictDefaultSecurityGroupCustomResource": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-to-server-sg/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercftoserversgFFE586B0"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-to-server-sg/from {IndirectPeer}:80": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercftoserversgfromIndirectPeer80C4F51713"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListIdLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "removalPolicy": "destroy",
+        "retention": 1
+      }
+    },
+    {
+      "type": "aws:cdk:is-custom-resource-handler-logGroup",
+      "data": true
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListIdRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        }
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "For this provider wildcards are fine"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new AwsManagedPrefixList (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/prefixlist-retriever/prefixlist-retriever.ts:72:24)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:567:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance-role/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerserverinstancerole7745B5BB"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance/InstanceProfile": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerserverinstanceInstanceProfile6130979E"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerserverinstance0A3D62D7"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/server-instance/LaunchTemplate": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerserverinstanceLaunchTemplate43932ED3"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-cache-policy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfcachepolicy8F5F1F69"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-distribution/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfdistributionFDBE873F"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventHandler6FF91542"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/LogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "logGroupName": "*"
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "code": "*",
+        "description": "*",
+        "runtime": "*",
+        "handler": "*",
+        "timeout": "*",
+        "loggingFormat": "JSON",
+        "applicationLogLevelV2": "FATAL",
+        "logGroup": "*",
+        "vpc": "*",
+        "vpcSubnets": "*",
+        "securityGroups": "*",
+        "role": "*",
+        "functionName": "*",
+        "environmentEncryption": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addEnvironment": [
+          "*",
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SSMInstallerCustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
+    }
+  ],
+  "/IntegTestStackUbuntu24/AWS679f53fac002430cb0da5b7982bd2287/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "loginhandlerServiceRole330B0B32"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/LogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "loginhandlerLogRetentionFD323A9B"
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleBEF8D4D2"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole/DefaultPolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerLogGroupA4FDBA01"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventCF035CA3"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "logGroupName": "*"
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1/Subnet": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet1Subnet928029A1"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1/RouteTable": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet1RouteTableFD418D0B"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1/RouteTableAssociation": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet1RouteTableAssociation599AB80D"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1/DefaultRoute": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet1DefaultRoute36845B30"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet2/Subnet": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet2SubnetE381654D"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet2/RouteTable": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet2RouteTableC264EFB4"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet2/RouteTableAssociation": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet2RouteTableAssociationC62A1999"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet2/DefaultRoute": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcpublicSubnet2DefaultRouteEAD8BC23"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/RestrictDefaultSecurityGroupCustomResource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServervpcRestrictDefaultSecurityGroupCustomResourceF6EA8ED1"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListIdLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfprefixlistIdGetPrefixListIdLogGroup171C2803"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListIdRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfprefixlistIdGetPrefixListIdRole1302B3E1"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/Provider": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "uuid": "*",
+        "lambdaPurpose": "*",
+        "memorySize": "*",
+        "timeout": "*",
+        "role": "*",
+        "logGroup": "*",
+        "functionName": "*",
+        "vpc": "*",
+        "vpcSubnets": "*",
+        "code": "*",
+        "handler": "*",
+        "runtime": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addMetadata": [
+          "*",
+          true
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addMetadata": [
+          "*",
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/Resource": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/CustomResourcePolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "statements": "*"
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventHandlerServiceRole59651FEF"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole/DefaultPolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/LogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventHandlerLogGroupBDB3B9B0"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachInlinePolicy": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderframeworkonEvent7B6C1190"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "logGroupName": "*"
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy2641E2C6"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole0F156B64"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole/DefaultPolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventLogGroupBE7DEEA2"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/Resource/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfprefixlistIdGetPrefixListIdF0821FFC"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/CustomResourcePolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicyAB3F4958"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy1CAD86C2"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleA509851F"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole/DefaultPolicy": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "attachToRole": [
+          "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderframeworkonEventLogGroupAF3D3931"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicyEC4DCEA0"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicy3E54FC3A"
+    }
+  ]
+}
