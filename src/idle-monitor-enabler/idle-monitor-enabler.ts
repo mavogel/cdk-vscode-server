@@ -1,9 +1,11 @@
-import { Duration, Stack, CustomResource, Validations } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Stack, CustomResource, Validations } from 'aws-cdk-lib';
 import { Rule } from 'aws-cdk-lib/aws-events';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { IdleMonitorEnablerFunction } from './idle-monitor-enabler-function';
+import { DEFAULT_LOG_REMOVAL_POLICY, DEFAULT_LOG_RETENTION, createLogGroup } from '../log-groups';
 
 /**
  * Props for IdleMonitorEnabler construct
@@ -13,6 +15,19 @@ export interface IdleMonitorEnablerProps {
    * The EventBridge rule to enable after installation completes
    */
   readonly scheduleRule: Rule;
+  /**
+   * How long the logs of the Lambda functions are kept
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 /**
@@ -31,10 +46,14 @@ export class IdleMonitorEnabler extends Construct {
   constructor(scope: Construct, id: string, props: IdleMonitorEnablerProps) {
     super(scope, id);
 
+    const logRetention = props.logRetention ?? DEFAULT_LOG_RETENTION;
+    const logRemovalPolicy = props.logRemovalPolicy ?? DEFAULT_LOG_REMOVAL_POLICY;
+
     // Create the Lambda function that enables the rule
     const enablerFunction = new IdleMonitorEnablerFunction(this, 'Function', {
       timeout: Duration.seconds(30),
       memorySize: 128,
+      logGroup: createLogGroup(this, 'FunctionLogGroup', logRetention, logRemovalPolicy),
     });
 
     // Grant permissions to enable/disable the EventBridge rule
@@ -54,7 +73,7 @@ export class IdleMonitorEnabler extends Construct {
     // Create the custom resource provider
     const provider = new Provider(this, 'Provider', {
       onEventHandler: enablerFunction,
-      logRetention: 1, // 1 day retention for logs
+      logGroup: createLogGroup(this, 'ProviderLogGroup', logRetention, logRemovalPolicy),
     });
 
     // Create the custom resource

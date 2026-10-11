@@ -131,6 +131,22 @@ Set the operating system with `instanceOperatingSystem` and the CPU architecture
 
 **Upgrading:** `UBUNTU_22` and `UBUNTU_25` were removed; only the two current Ubuntu LTS releases (24.04 and 26.04) are supported, and 25.04 was not an LTS release. If your stack uses either removed value, switch to `UBUNTU_24` or `UBUNTU_26`. Changing the operating system replaces the EC2 instance.
 
+### Log Retention
+
+Every log group the construct creates expires its logs after 5 days and is deleted together with the stack. That covers the Lambda functions, the custom resource providers and the install output (`/aws/ssm/<document>`). They are deleted after all other resources of the stack, because Lambda delivers its last logs a few seconds late and would recreate an already deleted group without retention. Change both with:
+
+```ts
+import { RemovalPolicy } from 'aws-cdk-lib';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
+
+new VSCodeServer(this, 'vscode', {
+  logRetention: RetentionDays.ONE_MONTH, // default: FIVE_DAYS, INFINITE never expires the logs
+  logRemovalPolicy: RemovalPolicy.RETAIN, // default: DESTROY, RETAIN keeps the logs after the stack is deleted
+});
+```
+
+**Upgrading:** the Lambda functions now log to log groups of the stack. The groups they used before (`/aws/lambda/<function name>`) are not touched and keep their old retention; delete them if you do not need the logs. If you have several `VSCodeServer` in one stack, the setting of the first one applies to the shared log group of the VPC default security group provider.
+
 ### Pre-populate with Git Repository
 
 Clone a git repository into the VS Code Server's home folder during instance setup - perfect for workshops or development environments with starter code:

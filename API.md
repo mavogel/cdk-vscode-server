@@ -435,6 +435,8 @@ const idleMonitorProps: IdleMonitorProps = { ... }
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.idleTimeoutMinutes">idleTimeoutMinutes</a></code> | <code>number</code> | Number of minutes of inactivity before stopping the instance. |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.instance">instance</a></code> | <code>aws-cdk-lib.interfaces.aws_ec2.IInstanceRef</code> | The EC2 instance to monitor. |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.checkIntervalMinutes">checkIntervalMinutes</a></code> | <code>number</code> | How often to check for idle activity (in minutes). |
+| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.logRemovalPolicy">logRemovalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | What happens to the log groups when the stack is deleted. |
+| <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | How long the logs of the monitoring Lambda function are kept. |
 | <code><a href="#@mavogel/cdk-vscode-server.IdleMonitorProps.property.skipStatusChecks">skipStatusChecks</a></code> | <code>boolean</code> | Skip instance status checks before stopping When true, IdleMonitor will stop idle instances even if status checks haven't passed This is useful for integration tests where status check initialization time exceeds test timeout limits. |
 
 ---
@@ -485,6 +487,32 @@ public readonly checkIntervalMinutes: number;
 - *Default:* 5 - Check every 5 minutes
 
 How often to check for idle activity (in minutes).
+
+---
+
+##### `logRemovalPolicy`<sup>Optional</sup> <a name="logRemovalPolicy" id="@mavogel/cdk-vscode-server.IdleMonitorProps.property.logRemovalPolicy"></a>
+
+```typescript
+public readonly logRemovalPolicy: RemovalPolicy;
+```
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+- *Default:* RemovalPolicy.DESTROY
+
+What happens to the log groups when the stack is deleted.
+
+---
+
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="@mavogel/cdk-vscode-server.IdleMonitorProps.property.logRetention"></a>
+
+```typescript
+public readonly logRetention: RetentionDays;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.RetentionDays
+- *Default:* RetentionDays.FIVE_DAYS
+
+How long the logs of the monitoring Lambda function are kept.
 
 ---
 
@@ -542,6 +570,8 @@ const vSCodeServerProps: VSCodeServerProps = { ... }
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.instanceOperatingSystem">instanceOperatingSystem</a></code> | <code><a href="#@mavogel/cdk-vscode-server.LinuxFlavorType">LinuxFlavorType</a></code> | VSCode Server EC2 operating system. |
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.instanceSize">instanceSize</a></code> | <code>aws-cdk-lib.aws_ec2.InstanceSize</code> | VSCode Server EC2 instance size. |
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.instanceVolumeSize">instanceVolumeSize</a></code> | <code>number</code> | VSCode Server EC2 instance volume size in GB. |
+| <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.logRemovalPolicy">logRemovalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | What happens to the log groups the construct creates when the stack is deleted or the log group is replaced. |
+| <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.logRetention">logRetention</a></code> | <code>aws-cdk-lib.aws_logs.RetentionDays</code> | How long the logs of the Lambda functions, the custom resource providers and the installation (SSM command output) are kept. |
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.repoUrl">repoUrl</a></code> | <code>string</code> | Remote git repository URL to clone into the home folder. |
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.skipStatusChecks">skipStatusChecks</a></code> | <code>boolean</code> | Skip instance status checks in IdleMonitor When true, IdleMonitor will stop idle instances even if status checks haven't passed This is useful for integration tests where status check initialization time exceeds the test timeout limits. |
 | <code><a href="#@mavogel/cdk-vscode-server.VSCodeServerProps.property.vscodePassword">vscodePassword</a></code> | <code>string</code> | Password for VSCode Server. |
@@ -892,6 +922,40 @@ public readonly instanceVolumeSize: number;
 - *Default:* 40
 
 VSCode Server EC2 instance volume size in GB.
+
+---
+
+##### `logRemovalPolicy`<sup>Optional</sup> <a name="logRemovalPolicy" id="@mavogel/cdk-vscode-server.VSCodeServerProps.property.logRemovalPolicy"></a>
+
+```typescript
+public readonly logRemovalPolicy: RemovalPolicy;
+```
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+- *Default:* RemovalPolicy.DESTROY
+
+What happens to the log groups the construct creates when the stack is deleted or the log group is replaced.
+
+Use `RemovalPolicy.RETAIN` to keep the logs.
+
+Applies to every log group the construct creates, including the install log
+group (SSM command output). Supports `DESTROY` and `RETAIN`.
+
+---
+
+##### `logRetention`<sup>Optional</sup> <a name="logRetention" id="@mavogel/cdk-vscode-server.VSCodeServerProps.property.logRetention"></a>
+
+```typescript
+public readonly logRetention: RetentionDays;
+```
+
+- *Type:* aws-cdk-lib.aws_logs.RetentionDays
+- *Default:* RetentionDays.FIVE_DAYS
+
+How long the logs of the Lambda functions, the custom resource providers and the installation (SSM command output) are kept.
+
+Applies to every log group the construct creates. They are deleted together
+with the stack. Use `RetentionDays.INFINITE` to never expire the logs.
 
 ---
 

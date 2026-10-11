@@ -1,9 +1,11 @@
-import { Stack, Validations } from 'aws-cdk-lib';
+import { RemovalPolicy, Stack, Validations } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { CfnFunction, Function } from 'aws-cdk-lib/aws-lambda';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { CustomResource, Duration, IResource } from 'aws-cdk-lib/core';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { DEFAULT_LOG_REMOVAL_POLICY, DEFAULT_LOG_RETENTION, createLogGroup } from '../log-groups';
 import { SecretRetrieverFunction } from './secret-retriever-function';
 import { acknowledgeGranularFinding } from '../suppress-nags';
 
@@ -20,6 +22,20 @@ export interface Secret {
 
 export interface SecretRetrieverOptionsBase {
   readonly secretArn: string;
+
+  /**
+   * How long the logs of the Lambda functions are kept
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 export interface SecretRetrieverOptions extends SecretRetrieverOptionsBase {}
@@ -30,6 +46,8 @@ export abstract class SecretRetriever {
       public _bind(scope: Construct): SecretRetriever {
         const secretRetriever = new CustomResourceSecretRetriever(scope, {
           secretArn: options.secretArn,
+          logRetention: options.logRetention,
+          logRemovalPolicy: options.logRemovalPolicy,
         });
 
         return secretRetriever;
@@ -69,6 +87,8 @@ class CustomResourceSecretRetriever extends SecretRetriever {
     super();
 
     this.secretArn = options.secretArn;
+    const logRetention = options.logRetention ?? DEFAULT_LOG_RETENTION;
+    const logRemovalPolicy = options.logRemovalPolicy ?? DEFAULT_LOG_REMOVAL_POLICY;
 
     const onEvent: Function = new SecretRetrieverFunction(
       scope,
@@ -76,6 +96,7 @@ class CustomResourceSecretRetriever extends SecretRetriever {
       {
         timeout: Duration.seconds(10),
         memorySize: 128,
+        logGroup: createLogGroup(scope, 'SecretRetrieverOnEventLogGroup', logRetention, logRemovalPolicy),
       },
     );
     acknowledgeGranularFinding(
@@ -97,6 +118,7 @@ class CustomResourceSecretRetriever extends SecretRetriever {
 
     const provider = new Provider(scope, 'SecretRetrieveProvider', {
       onEventHandler: onEvent,
+      logGroup: createLogGroup(scope, 'SecretRetrieveProviderLogGroup', logRetention, logRemovalPolicy),
     });
     acknowledgeGranularFinding(
       provider,

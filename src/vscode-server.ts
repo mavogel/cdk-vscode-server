@@ -1,9 +1,11 @@
 import {
   Aspects,
   CfnOutput,
+  CfnResource,
   Duration,
   Fn,
   IAspect,
+  RemovalPolicy,
   Stack,
   Tags,
   Token,
@@ -14,6 +16,8 @@ import * as cf from 'aws-cdk-lib/aws-cloudfront';
 import * as cfo from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { CfnLogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as route53targets from 'aws-cdk-lib/aws-route53-targets';
 import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
@@ -21,6 +25,14 @@ import { Construct, IConstruct } from 'constructs';
 import { IdleMonitor } from './idle-monitor/idle-monitor';
 import { IdleMonitorEnabler } from './idle-monitor-enabler/idle-monitor-enabler';
 import { Installer } from './installer/installer';
+import {
+  DEFAULT_LOG_REMOVAL_POLICY,
+  DEFAULT_LOG_RETENTION,
+  createLogGroup,
+  deleteLogGroupsLast,
+  routeFunctionLogs,
+  routeRestrictDefaultSgLogs,
+} from './log-groups';
 import { getAmiSSMParameterForLinuxArchitectureAndFlavor } from './mappings';
 import { AwsManagedPrefixList } from './prefixlist-retriever/prefixlist-retriever';
 import { SecretRetriever } from './secret-retriever/secret-retriever';
@@ -293,6 +305,28 @@ export interface VSCodeServerProps {
    * @default - no custom installation steps
    */
   readonly customInstallSteps?: CustomInstallStep[];
+
+  /**
+   * How long the logs of the Lambda functions, the custom resource providers
+   * and the installation (SSM command output) are kept.
+   *
+   * Applies to every log group the construct creates. They are deleted together
+   * with the stack. Use `RetentionDays.INFINITE` to never expire the logs.
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups the construct creates when the stack is deleted
+   * or the log group is replaced. Use `RemovalPolicy.RETAIN` to keep the logs.
+   *
+   * Applies to every log group the construct creates, including the install log
+   * group (SSM command output). Supports `DESTROY` and `RETAIN`.
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 /**
@@ -382,6 +416,9 @@ export class VSCodeServer extends Construct {
     const mergedTags = { ...defaultTags, ...additionalTags };
     Aspects.of(this).add(new NodeTagger(mergedTags), { priority: 150 });
 
+    const logRetention = props?.logRetention ?? DEFAULT_LOG_RETENTION;
+    const logRemovalPolicy = props?.logRemovalPolicy ?? DEFAULT_LOG_REMOVAL_POLICY;
+
     // Validate domain configuration
     const domainName = props?.domainName;
     const hostedZoneId = props?.hostedZoneId;
@@ -441,6 +478,8 @@ export class VSCodeServer extends Construct {
       // Have a custom resource to pass the secret data on? -> yes because not resolvable on compile time
       const secretRetriever = SecretRetriever.new({
         secretArn: secret.secretArn,
+        logRetention: logRetention,
+        logRemovalPolicy: logRemovalPolicy,
       })._bind(this);
 
       vscodePassword = secretRetriever.secretPasswordPlaintext;
@@ -524,6 +563,20 @@ export class VSCodeServer extends Construct {
           }),
         });
 
+        // The validation Lambda is created inside DnsValidatedCertificate, which has no log group prop
+        const requestor = certificate.node.tryFindChild(
+          'CertificateRequestorFunction',
+        );
+        const requestorFunction = requestor?.node.defaultChild;
+        if (requestor && requestorFunction instanceof lambda.CfnFunction) {
+          // drop CDK's own default log group (TWO_YEARS), it is unused once routed
+          requestor.node.tryRemoveChild('LogGroup');
+          routeFunctionLogs(
+            requestorFunction,
+            createLogGroup(this, 'CertificateRequestorLogGroup', logRetention, logRemovalPolicy),
+          );
+        }
+
         Validations.of(certificate).acknowledge(
           {
             id: 'AwsSolutions-ACM1',
@@ -552,6 +605,7 @@ export class VSCodeServer extends Construct {
       enableDnsHostnames: true,
       enableDnsSupport: true,
     });
+    routeRestrictDefaultSgLogs(this, logRetention, logRemovalPolicy);
     Validations.of(vpc).acknowledge({
       id: 'AwsSolutions-VPC7',
       reason: 'For this tmp vpc we do not need flow logs',
@@ -569,6 +623,8 @@ export class VSCodeServer extends Construct {
       'cf-prefixlistId',
       {
         name: 'com.amazonaws.global.cloudfront.origin-facing',
+        logRetention: logRetention,
+        logRemovalPolicy: logRemovalPolicy,
       },
     );
     Validations.of(awsManagedPrefixList).acknowledge({
@@ -1000,6 +1056,8 @@ export class VSCodeServer extends Construct {
           devServerPort: props?.devServerPort,
           homeFolder: homeFolder,
           linuxFlavorType: instanceOperatingSystem,
+          logRetention: logRetention,
+          logRemovalPolicy: logRemovalPolicy,
           customDomainName: domainName,
           repoUrl: props?.repoUrl,
           assetZipS3Path: props?.assetZipS3Path,
@@ -1017,6 +1075,8 @@ export class VSCodeServer extends Construct {
           devServerPort: props?.devServerPort,
           homeFolder: homeFolder,
           linuxFlavorType: instanceOperatingSystem,
+          logRetention: logRetention,
+          logRemovalPolicy: logRemovalPolicy,
           customDomainName: domainName,
           repoUrl: props?.repoUrl,
           assetZipS3Path: props?.assetZipS3Path,
@@ -1045,18 +1105,27 @@ export class VSCodeServer extends Construct {
         idleTimeoutMinutes: props?.idleTimeoutMinutes ?? 30,
         checkIntervalMinutes: props?.idleCheckIntervalMinutes ?? 5,
         skipStatusChecks: props?.skipStatusChecks ?? false,
+        logRetention: logRetention,
+        logRemovalPolicy: logRemovalPolicy,
       });
 
       // Enable the IdleMonitor schedule only after installation completes
       // This prevents the monitor from stopping the instance during VS Code Server installation
       const enabler = new IdleMonitorEnabler(this, 'IdleMonitorEnabler', {
         scheduleRule: this.idleMonitor.scheduleRule,
+        logRetention: logRetention,
+        logRemovalPolicy: logRemovalPolicy,
       });
 
       // Create explicit dependency: enabler depends on installer completion
       // The installer creates a custom resource named 'SSMInstallerCustomResource'
       const installerCustomResource = this.node.findChild('SSMInstallerCustomResource');
-      enabler.node.addDependency(installerCustomResource);
+      for (const resource of enabler.node.findAll()) {
+        // not its log groups, they are deleted last (see deleteLogGroupsLast)
+        if (resource instanceof CfnResource && !(resource instanceof CfnLogGroup)) {
+          resource.node.addDependency(installerCustomResource);
+        }
+      }
     }
 
     // Outputs
@@ -1072,6 +1141,8 @@ export class VSCodeServer extends Construct {
       description: 'The password for the VSCode server',
       value: vscodePassword,
     });
+
+    deleteLogGroupsLast(this);
   }
 }
 

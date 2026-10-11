@@ -1,12 +1,14 @@
 import * as path from 'path';
-import { Duration, Stack, Validations } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy, Stack, Validations } from 'aws-cdk-lib';
 import { IDistributionRef } from 'aws-cdk-lib/aws-cloudfront';
 import { IInstanceRef } from 'aws-cdk-lib/aws-ec2';
 import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction as LambdaFunctionTarget } from 'aws-cdk-lib/aws-events-targets';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Runtime, Code, Function as LambdaFunction } from 'aws-cdk-lib/aws-lambda';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Construct } from 'constructs';
+import { DEFAULT_LOG_REMOVAL_POLICY, DEFAULT_LOG_RETENTION, createLogGroup } from '../log-groups';
 
 /**
  * Props for IdleMonitor construct
@@ -41,6 +43,19 @@ export interface IdleMonitorProps {
    * @default false
    */
   readonly skipStatusChecks?: boolean;
+  /**
+   * How long the logs of the monitoring Lambda function are kept
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 /**
@@ -66,6 +81,12 @@ export class IdleMonitor extends Construct {
       code: Code.fromAsset(path.join(__dirname, '../../assets/idle-monitor/idle-monitor.lambda')),
       timeout: Duration.seconds(30),
       memorySize: 256,
+      logGroup: createLogGroup(
+        this,
+        'FunctionLogGroup',
+        props.logRetention ?? DEFAULT_LOG_RETENTION,
+        props.logRemovalPolicy ?? DEFAULT_LOG_REMOVAL_POLICY,
+      ),
       environment: {
         INSTANCE_ID: props.instance.instanceRef.instanceId,
         DISTRIBUTION_ID: props.distribution.distributionRef.distributionId,

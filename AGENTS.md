@@ -176,8 +176,20 @@ aws ssm get-parameters --names \
 - `customInstallSteps` - Array of custom shell commands that run after standard installation
 - `repoUrl` - Git repository to clone into home folder during setup
 
+**Logging**:
+- `logRetention` - Retention of every log group the construct creates (default: `RetentionDays.FIVE_DAYS`)
+- `logRemovalPolicy` - What happens to them when the stack is deleted (default: `RemovalPolicy.DESTROY`)
+
 **Extensions**:
 - `additionalInstanceRolePolicies`, `additionalTags`
+
+## Log Groups
+
+Every Lambda the construct creates must log to a log group from `createLogGroup()` (`src/log-groups.ts`), which applies the configured retention and removal policy. CDK's own default is `TWO_YEARS` and `RETAIN`, so a function without an explicit `logGroup` leaves a group that never expires or is orphaned. Where a CDK library construct creates the Lambda (`DnsValidatedCertificate`, the VPC default security group provider) use `routeFunctionLogs()`. The SSM command output group is created by SSM itself, so the installer sets its retention with `LogRetention`, which also adopts a group left by an earlier deployment.
+
+Lambda delivers the last logs of a function (the delete-time invocation of a custom resource) a few seconds late, and recreates a log group that was just deleted, without retention. `deleteLogGroupsLast()` therefore makes every other resource of the construct wait for a no-op sentinel (`LogGroupsDeletedLast`) that waits for all log groups, so CloudFormation deletes the log groups last. Do not add a `node.addDependency()` from a construct that contains a log group to a resource that is created after the sentinel: it creates a dependency cycle (see how the idle monitor enabler waits for the installer).
+
+The `vscode-server-log-retention` tests fail for any Lambda without a log group, with and without the feature flags of `cdk init` apps, so a new Lambda cannot slip through.
 
 ## JSII Constraints
 

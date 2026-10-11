@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { App, Stack, Validations } from 'aws-cdk-lib';
+import { App, RemovalPolicy, Stack, Validations } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { AwsSolutionsChecks } from 'cdk-nag';
 import { VSCodeServer, VSCodeServerProps, LinuxFlavorType, LinuxArchitectureType } from '../src';
 import { suppressCommonNags } from '../src/suppress-nags';
@@ -750,6 +751,175 @@ describe('vscode-server-ubuntu26', () => {
     });
     template.hasResourceProperties('AWS::SSM::Document', {
       Name: Match.stringLikeRegexp('^vscode-server-ubuntu-'),
+    });
+  });
+});
+
+describe('vscode-server-log-retention', () => {
+  // Apps created by `cdk init` have these flags on: CDK then gives every Lambda
+  // a default log group (retention TWO_YEARS) and the VPC adds a provider Lambda
+  // that restricts the default security group.
+  const cdkInitFlags = {
+    '@aws-cdk/aws-lambda:useCdkManagedLogGroup': true,
+    '@aws-cdk/aws-ec2:restrictDefaultSecurityGroup': true,
+  };
+
+  const variants: [string, VSCodeServerProps][] = [
+    ['defaults', {}],
+    ['auto-stop', { enableAutoStop: true }],
+    [
+      'custom domain with auto certificate',
+      {
+        domainName: 'vscode.example.com',
+        hostedZoneId: 'Z123EXAMPLE456',
+        autoCreateCertificate: true,
+      },
+    ],
+  ];
+
+  function synth(props: VSCodeServerProps, context: Record<string, boolean>) {
+    const app = new App({ context });
+    const stack = new Stack(app, 'testStack', {
+      env: { region: 'us-east-1', account: '123456789012' },
+    });
+    new VSCodeServer(stack, 'testVSCodeServer', props);
+    return Template.fromStack(stack);
+  }
+
+  // The singleton Lambda behind Custom::LogRetention is owned by CDK and sets
+  // the retention of its own log group.
+  function lambdasWithoutLogGroup(template: Template): string[] {
+    return Object.entries(template.findResources('AWS::Lambda::Function'))
+      .filter(([id, fn]) => !id.startsWith('LogRetention') && !fn.Properties.LoggingConfig?.LogGroup)
+      .map(([id]) => id);
+  }
+
+  describe.each(variants)('%s', (_name, props) => {
+    test.each([
+      ['without feature flags', {}],
+      ['with cdk init feature flags', cdkInitFlags],
+    ])('expires every log group after 5 days %s', (_flags, context) => {
+      const template = synth(props, context);
+
+      const logGroups = Object.values(template.findResources('AWS::Logs::LogGroup'));
+      const logRetentions = Object.values(template.findResources('Custom::LogRetention'));
+      expect(logGroups.length + logRetentions.length).toBeGreaterThan(0);
+      for (const logGroup of logGroups) {
+        expect(logGroup.Properties.RetentionInDays).toBe(5);
+        expect(logGroup.DeletionPolicy).toBe('Delete');
+      }
+      for (const logRetention of logRetentions) {
+        expect(logRetention.Properties.RetentionInDays).toBe(5);
+      }
+      expect(lambdasWithoutLogGroup(template)).toEqual([]);
+    });
+  });
+
+  // Lambda delivers the last logs of a custom resource's delete-time invocation a few seconds
+  // late. A log group that is already deleted by then is recreated, without retention.
+  describe.each(variants)('deletes the log groups last: %s', (_name, props) => {
+    const dependsOn = (resource: any): string[] => [resource.DependsOn ?? []].flat();
+
+    test('every custom resource is deleted before the first log group', () => {
+      const resources = synth(props, cdkInitFlags).toJSON().Resources as Record<string, any>;
+      const entries = Object.entries(resources);
+      const sentinels = entries.filter(([, r]) => r.Type === 'AWS::CloudFormation::WaitConditionHandle');
+      expect(sentinels).toHaveLength(1);
+      const [sentinelId, sentinel] = sentinels[0];
+
+      const logGroupIds = entries.filter(([, r]) => r.Type === 'AWS::Logs::LogGroup').map(([id]) => id);
+      expect(logGroupIds.length).toBeGreaterThan(0);
+      expect(dependsOn(sentinel).sort()).toEqual(logGroupIds.sort());
+
+      const customResources = entries.filter(([, r]) =>
+        /^(Custom::|AWS::CloudFormation::CustomResource)/.test(r.Type),
+      );
+      expect(customResources.length).toBeGreaterThan(0);
+      for (const [id, resource] of customResources) {
+        expect([id, dependsOn(resource).includes(sentinelId)]).toEqual([id, true]);
+      }
+    });
+
+    test('every Lambda is deleted before the log group it logs to', () => {
+      // a Ref in LoggingConfig makes CloudFormation delete the function before its group,
+      // also for functions outside the construct scope (the VPC default security group provider)
+      const resources = synth(props, cdkInitFlags).toJSON().Resources as Record<string, any>;
+      const logGroupIds = Object.entries(resources)
+        .filter(([, r]) => r.Type === 'AWS::Logs::LogGroup')
+        .map(([id]) => id);
+      const functions = Object.entries(resources).filter(
+        ([id, r]) => r.Type === 'AWS::Lambda::Function' && !id.startsWith('LogRetention'),
+      );
+      expect(functions.length).toBeGreaterThan(0);
+      for (const [id, fn] of functions) {
+        expect([id, logGroupIds.includes(fn.Properties.LoggingConfig?.LogGroup?.Ref)]).toEqual([id, true]);
+      }
+    });
+
+    test('no log group waits for another resource', () => {
+      const resources = synth(props, cdkInitFlags).toJSON().Resources as Record<string, any>;
+      for (const [id, resource] of Object.entries(resources)) {
+        if (resource.Type === 'AWS::Logs::LogGroup') {
+          expect([id, dependsOn(resource)]).toEqual([id, []]);
+        }
+      }
+    });
+  });
+
+  test('uses the configured retention for every log group', () => {
+    const template = synth(
+      { enableAutoStop: true, logRetention: RetentionDays.ONE_MONTH },
+      cdkInitFlags,
+    );
+
+    const retentions = [
+      ...Object.values(template.findResources('AWS::Logs::LogGroup')),
+      ...Object.values(template.findResources('Custom::LogRetention')),
+    ].map((resource) => resource.Properties.RetentionInDays);
+    expect(retentions.length).toBeGreaterThan(0);
+    expect(new Set(retentions)).toEqual(new Set([30]));
+    expect(lambdasWithoutLogGroup(template)).toEqual([]);
+  });
+
+  test('never expires the logs with RetentionDays.INFINITE', () => {
+    const template = synth({ logRetention: RetentionDays.INFINITE }, cdkInitFlags);
+
+    const resources = [
+      ...Object.values(template.findResources('AWS::Logs::LogGroup')),
+      ...Object.values(template.findResources('Custom::LogRetention')),
+    ];
+    expect(resources.length).toBeGreaterThan(0);
+    for (const resource of resources) {
+      expect(resource.Properties?.RetentionInDays).toBeUndefined();
+    }
+  });
+
+  test('retains the log groups with logRemovalPolicy RETAIN', () => {
+    const template = synth(
+      { enableAutoStop: true, logRemovalPolicy: RemovalPolicy.RETAIN },
+      cdkInitFlags,
+    );
+
+    const logGroups = Object.values(template.findResources('AWS::Logs::LogGroup'));
+    const logRetentions = Object.values(template.findResources('Custom::LogRetention'));
+    expect(logGroups.length).toBeGreaterThan(0);
+    expect(logRetentions.length).toBeGreaterThan(0);
+    for (const logGroup of logGroups) {
+      expect(logGroup.DeletionPolicy).toBe('Retain');
+      expect(logGroup.UpdateReplacePolicy).toBe('Retain');
+    }
+    for (const logRetention of logRetentions) {
+      expect(logRetention.Properties.RemovalPolicy).toBe('retain');
+    }
+  });
+
+  test('sets the retention of the install log group, which SSM creates itself, and removes it with the stack', () => {
+    const template = synth({}, {});
+
+    template.hasResourceProperties('Custom::LogRetention', {
+      LogGroupName: '/aws/ssm/vscode-server-ubuntu-testStack',
+      RetentionInDays: 5,
+      RemovalPolicy: 'destroy',
     });
   });
 });

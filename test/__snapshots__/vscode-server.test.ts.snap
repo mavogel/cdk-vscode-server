@@ -69,10 +69,121 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-123456789012-us-east-1",
+          "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs24.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "logs:DeleteLogGroup",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:us-east-1:123456789012:log-group:/aws/ssm/vscode-server-ubuntu-testStack:*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "testVSCodeServerInstallLogRetention030DEE36": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
+      "Properties": {
+        "LogGroupName": "/aws/ssm/vscode-server-ubuntu-testStack",
+        "RemovalPolicy": "destroy",
+        "RetentionInDays": 5,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
     "testVSCodeServerInstallerOnEventHandler7769B15E": {
       "DependsOn": [
         "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69",
         "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Code": {
@@ -81,6 +192,11 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         },
         "Description": "src/installer/installer.lambda.ts",
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "testVSCodeServerInstallerOnEventLogGroup3530AE75",
+          },
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
@@ -94,6 +210,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -163,6 +282,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -193,10 +315,47 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "testVSCodeServerInstallerOnEventLogGroup3530AE75": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+          {
+            "Key": "unit-test",
+            "Value": "True",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "testVSCodeServerInstallerProviderLogGroupF41BBA0F": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+          {
+            "Key": "unit-test",
+            "Value": "True",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServerInstallerProviderframeworkonEvent1CA2C6CB": {
       "DependsOn": [
         "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635",
         "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Code": {
@@ -218,6 +377,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "LoggingConfig": {
           "ApplicationLogLevel": "FATAL",
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "testVSCodeServerInstallerProviderLogGroupF41BBA0F",
+          },
         },
         "Role": {
           "Fn::GetAtt": [
@@ -231,6 +393,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -262,6 +427,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -313,8 +481,22 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "testVSCodeServerLogGroupsDeletedLast31C52098": {
+      "DependsOn": [
+        "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D",
+        "testVSCodeServerInstallerOnEventLogGroup3530AE75",
+        "testVSCodeServerInstallerProviderLogGroupF41BBA0F",
+        "testVSCodeServerSecretRetrieveProviderLogGroup2231D773",
+        "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1",
+      ],
+      "Type": "AWS::CloudFormation::WaitConditionHandle",
+    },
     "testVSCodeServerSSMInstallerCustomResourceCC9A01E3": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerInstallLogRetention030DEE36",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CloudWatchLogGroupName": "/aws/ssm/vscode-server-ubuntu-testStack",
         "DocumentName": "vscode-server-ubuntu-testStack",
@@ -338,8 +520,27 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
+    "testVSCodeServerSecretRetrieveProviderLogGroup2231D773": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+          {
+            "Key": "unit-test",
+            "Value": "True",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServerSecretRetrieveProviderframeworkonEvent65095393": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
       ],
@@ -363,6 +564,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         "LoggingConfig": {
           "ApplicationLogLevel": "FATAL",
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "testVSCodeServerSecretRetrieveProviderLogGroup2231D773",
+          },
         },
         "Role": {
           "Fn::GetAtt": [
@@ -376,6 +580,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -407,6 +614,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -460,6 +670,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServerSecretRetrieverCustomResource3FC6DE1D": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "SecretArn": {
           "Ref": "testVSCodeServerpasswordsecret61CA6F59",
@@ -477,6 +690,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServerSecretRetrieverOnEventHandler024BA1E6": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655",
       ],
@@ -487,6 +701,11 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
         },
         "Description": "src/secret-retriever/secret-retriever.lambda.ts",
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1",
+          },
+        },
         "MemorySize": 128,
         "Role": {
           "Fn::GetAtt": [
@@ -500,6 +719,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -531,6 +753,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -553,7 +778,28 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+          {
+            "Key": "unit-test",
+            "Value": "True",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServercfcachepolicy9DCAAA93": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CachePolicyConfig": {
           "Comment": "Cache policy for VSCodeServer",
@@ -590,6 +836,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::CloudFront::CachePolicy",
     },
     "testVSCodeServercfdistribution1BAE37CA": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "DistributionConfig": {
           "CacheBehaviors": [
@@ -669,6 +918,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Create": "{"service":"@aws-sdk/client-ec2","action":"DescribeManagedPrefixListsCommand","parameters":{"Filters":[{"Name":"prefix-list-name","Values":["com.amazonaws.global.cloudfront.origin-facing"]}]},"physicalResourceId":{"id":"cf-prefixlistId-c8fb0620fa063618"}}",
@@ -685,6 +935,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -708,7 +961,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "RetentionInDays": 1,
+        "RetentionInDays": 5,
         "Tags": [
           {
             "Key": "app",
@@ -724,6 +977,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdRoleD421D2BB": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -741,6 +997,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServercftoserversgACBBC0C4": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "GroupDescription": "SG for VSCodeServer - only allow CloudFront ingress",
         "GroupName": "cloudfront-to-vscode-server",
@@ -768,6 +1027,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::EC2::SecurityGroup",
     },
     "testVSCodeServercftoserversgfromIndirectPeer80F072AD44": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Description": "Allow HTTP from com.amazonaws.global.cloudfront.origin-facing",
         "FromPort": 80,
@@ -790,6 +1052,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServerpasswordsecret61CA6F59": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "GenerateSecretString": {
           "ExcludePunctuation": true,
@@ -814,6 +1079,7 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
     },
     "testVSCodeServerserverinstance48076E15": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerserverinstancerole26B442A8",
         "testVSCodeServervpcpublicSubnet1DefaultRoute560CE994",
         "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E",
@@ -893,6 +1159,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::EC2::Instance",
     },
     "testVSCodeServerserverinstanceInstanceProfileA6EA56E2": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Roles": [
           {
@@ -903,6 +1172,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::InstanceProfile",
     },
     "testVSCodeServerserverinstanceLaunchTemplateE6889C82": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "MetadataOptions": {
@@ -914,6 +1186,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::EC2::LaunchTemplate",
     },
     "testVSCodeServerserverinstancerole26B442A8": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -1109,6 +1384,9 @@ exports[`vscode-server vscode-server-custom-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerssmdocumentubuntuE27DF408": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Content": {
           "description": "Bootstrap VSCode code-server instance",
@@ -1673,6 +1951,9 @@ fi",
       "Type": "AWS::SSM::Document",
     },
     "testVSCodeServervpc982B35EC": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
@@ -1696,6 +1977,9 @@ fi",
       "Type": "AWS::EC2::VPC",
     },
     "testVSCodeServervpcIGW63D01881": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -1715,6 +1999,9 @@ fi",
       "Type": "AWS::EC2::InternetGateway",
     },
     "testVSCodeServervpcVPCGW0DC5006F": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "InternetGatewayId": {
           "Ref": "testVSCodeServervpcIGW63D01881",
@@ -1727,6 +2014,7 @@ fi",
     },
     "testVSCodeServervpcpublicSubnet1DefaultRoute560CE994": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
       "Properties": {
@@ -1741,6 +2029,9 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -1763,6 +2054,9 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540",
@@ -1774,6 +2068,9 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet1SubnetF59A4000": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.0.0/17",
@@ -1808,6 +2105,7 @@ fi",
     },
     "testVSCodeServervpcpublicSubnet2DefaultRoute476F0834": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
       "Properties": {
@@ -1822,6 +2120,9 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet2RouteTableE1816C99",
@@ -1833,6 +2134,9 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableE1816C99": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -1855,6 +2159,9 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet2SubnetC19D96B0": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.128.0/17",
@@ -1987,10 +2294,121 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       },
       "Type": "AWS::Lambda::Function",
     },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+      "DependsOn": [
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-123456789012-us-east-1",
+          "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs24.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "logs:PutRetentionPolicy",
+                "logs:DeleteRetentionPolicy",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "logs:DeleteLogGroup",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":logs:us-east-1:123456789012:log-group:/aws/ssm/vscode-server-ubuntu-testStack:*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+        "Roles": [
+          {
+            "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "testVSCodeServerInstallLogRetention030DEE36": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
+      "Properties": {
+        "LogGroupName": "/aws/ssm/vscode-server-ubuntu-testStack",
+        "RemovalPolicy": "destroy",
+        "RetentionInDays": 5,
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::LogRetention",
+    },
     "testVSCodeServerInstallerOnEventHandler7769B15E": {
       "DependsOn": [
         "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69",
         "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Code": {
@@ -1999,6 +2417,11 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         },
         "Description": "src/installer/installer.lambda.ts",
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "testVSCodeServerInstallerOnEventLogGroup3530AE75",
+          },
+        },
         "MemorySize": 512,
         "Role": {
           "Fn::GetAtt": [
@@ -2012,6 +2435,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy16C3BD69": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2081,6 +2507,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Policy",
     },
     "testVSCodeServerInstallerOnEventHandlerServiceRoleE2DD5DD5": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2111,10 +2540,39 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "testVSCodeServerInstallerOnEventLogGroup3530AE75": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "testVSCodeServerInstallerProviderLogGroupF41BBA0F": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServerInstallerProviderframeworkonEvent1CA2C6CB": {
       "DependsOn": [
         "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635",
         "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Code": {
@@ -2136,6 +2594,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "LoggingConfig": {
           "ApplicationLogLevel": "FATAL",
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "testVSCodeServerInstallerProviderLogGroupF41BBA0F",
+          },
         },
         "Role": {
           "Fn::GetAtt": [
@@ -2149,6 +2610,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRole3CE845C8": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2180,6 +2644,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicyAD261635": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2231,8 +2698,22 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "testVSCodeServerLogGroupsDeletedLast31C52098": {
+      "DependsOn": [
+        "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D",
+        "testVSCodeServerInstallerOnEventLogGroup3530AE75",
+        "testVSCodeServerInstallerProviderLogGroupF41BBA0F",
+        "testVSCodeServerSecretRetrieveProviderLogGroup2231D773",
+        "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1",
+      ],
+      "Type": "AWS::CloudFormation::WaitConditionHandle",
+    },
     "testVSCodeServerSSMInstallerCustomResourceCC9A01E3": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerInstallLogRetention030DEE36",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CloudWatchLogGroupName": "/aws/ssm/vscode-server-ubuntu-testStack",
         "DocumentName": "vscode-server-ubuntu-testStack",
@@ -2256,8 +2737,23 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::CloudFormation::CustomResource",
       "UpdateReplacePolicy": "Delete",
     },
+    "testVSCodeServerSecretRetrieveProviderLogGroup2231D773": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServerSecretRetrieveProviderframeworkonEvent65095393": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94",
         "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199",
       ],
@@ -2281,6 +2777,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         "LoggingConfig": {
           "ApplicationLogLevel": "FATAL",
           "LogFormat": "JSON",
+          "LogGroup": {
+            "Ref": "testVSCodeServerSecretRetrieveProviderLogGroup2231D773",
+          },
         },
         "Role": {
           "Fn::GetAtt": [
@@ -2294,6 +2793,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole1FC09199": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2325,6 +2827,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicy83701C94": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2378,6 +2883,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServerSecretRetrieverCustomResource3FC6DE1D": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "SecretArn": {
           "Ref": "testVSCodeServerpasswordsecret61CA6F59",
@@ -2395,6 +2903,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServerSecretRetrieverOnEventHandler024BA1E6": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E",
         "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655",
       ],
@@ -2405,6 +2914,11 @@ exports[`vscode-server vscode-server-default-props 1`] = `
         },
         "Description": "src/secret-retriever/secret-retriever.lambda.ts",
         "Handler": "index.handler",
+        "LoggingConfig": {
+          "LogGroup": {
+            "Ref": "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1",
+          },
+        },
         "MemorySize": 128,
         "Role": {
           "Fn::GetAtt": [
@@ -2418,6 +2932,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::Lambda::Function",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRole36DDE655": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2449,6 +2966,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy27D5150E": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2471,7 +2991,24 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "testVSCodeServerSecretRetrieverOnEventLogGroupD7856EE1": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "RetentionInDays": 5,
+        "Tags": [
+          {
+            "Key": "app",
+            "Value": "vscode-server",
+          },
+        ],
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
     "testVSCodeServercfcachepolicy9DCAAA93": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CachePolicyConfig": {
           "Comment": "Cache policy for VSCodeServer",
@@ -2508,6 +3045,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::CloudFront::CachePolicy",
     },
     "testVSCodeServercfdistribution1BAE37CA": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "DistributionConfig": {
           "CacheBehaviors": [
@@ -2583,6 +3123,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "DeletionPolicy": "Delete",
       "DependsOn": [
         "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2",
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
       ],
       "Properties": {
         "Create": "{"service":"@aws-sdk/client-ec2","action":"DescribeManagedPrefixListsCommand","parameters":{"Filters":[{"Name":"prefix-list-name","Values":["com.amazonaws.global.cloudfront.origin-facing"]}]},"physicalResourceId":{"id":"cf-prefixlistId-c8fb0620fa063618"}}",
@@ -2599,6 +3140,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicy18EA23B2": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -2622,7 +3166,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     "testVSCodeServercfprefixlistIdGetPrefixListIdLogGroupD5BE947D": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "RetentionInDays": 1,
+        "RetentionInDays": 5,
         "Tags": [
           {
             "Key": "app",
@@ -2634,6 +3178,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "testVSCodeServercfprefixlistIdGetPrefixListIdRoleD421D2BB": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -2651,6 +3198,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServercftoserversgACBBC0C4": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "GroupDescription": "SG for VSCodeServer - only allow CloudFront ingress",
         "GroupName": "cloudfront-to-vscode-server",
@@ -2674,6 +3224,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::EC2::SecurityGroup",
     },
     "testVSCodeServercftoserversgfromIndirectPeer80F072AD44": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Description": "Allow HTTP from com.amazonaws.global.cloudfront.origin-facing",
         "FromPort": 80,
@@ -2696,6 +3249,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServerpasswordsecret61CA6F59": {
       "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "GenerateSecretString": {
           "ExcludePunctuation": true,
@@ -2716,6 +3272,7 @@ exports[`vscode-server vscode-server-default-props 1`] = `
     },
     "testVSCodeServerserverinstance48076E15": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServerserverinstancerole26B442A8",
         "testVSCodeServervpcpublicSubnet1DefaultRoute560CE994",
         "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E",
@@ -2791,6 +3348,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::EC2::Instance",
     },
     "testVSCodeServerserverinstanceInstanceProfileA6EA56E2": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Roles": [
           {
@@ -2801,6 +3361,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::InstanceProfile",
     },
     "testVSCodeServerserverinstanceLaunchTemplateE6889C82": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "LaunchTemplateData": {
           "MetadataOptions": {
@@ -2812,6 +3375,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::EC2::LaunchTemplate",
     },
     "testVSCodeServerserverinstancerole26B442A8": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3007,6 +3573,9 @@ exports[`vscode-server vscode-server-default-props 1`] = `
       "Type": "AWS::IAM::Role",
     },
     "testVSCodeServerssmdocumentubuntuE27DF408": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Content": {
           "description": "Bootstrap VSCode code-server instance",
@@ -3567,6 +4136,9 @@ fi",
       "Type": "AWS::SSM::Document",
     },
     "testVSCodeServervpc982B35EC": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "CidrBlock": "10.0.0.0/16",
         "EnableDnsHostnames": true,
@@ -3586,6 +4158,9 @@ fi",
       "Type": "AWS::EC2::VPC",
     },
     "testVSCodeServervpcIGW63D01881": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -3601,6 +4176,9 @@ fi",
       "Type": "AWS::EC2::InternetGateway",
     },
     "testVSCodeServervpcVPCGW0DC5006F": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "InternetGatewayId": {
           "Ref": "testVSCodeServervpcIGW63D01881",
@@ -3613,6 +4191,7 @@ fi",
     },
     "testVSCodeServervpcpublicSubnet1DefaultRoute560CE994": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
       "Properties": {
@@ -3627,6 +4206,9 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -3645,6 +4227,9 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet1RouteTableAssociation4AE2516E": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet1RouteTable9DBF6540",
@@ -3656,6 +4241,9 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet1SubnetF59A4000": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AvailabilityZone": "dummy1a",
         "CidrBlock": "10.0.0.0/17",
@@ -3686,6 +4274,7 @@ fi",
     },
     "testVSCodeServervpcpublicSubnet2DefaultRoute476F0834": {
       "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
         "testVSCodeServervpcVPCGW0DC5006F",
       ],
       "Properties": {
@@ -3700,6 +4289,9 @@ fi",
       "Type": "AWS::EC2::Route",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableAssociation2AF3BAA1": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "RouteTableId": {
           "Ref": "testVSCodeServervpcpublicSubnet2RouteTableE1816C99",
@@ -3711,6 +4303,9 @@ fi",
       "Type": "AWS::EC2::SubnetRouteTableAssociation",
     },
     "testVSCodeServervpcpublicSubnet2RouteTableE1816C99": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "Tags": [
           {
@@ -3729,6 +4324,9 @@ fi",
       "Type": "AWS::EC2::RouteTable",
     },
     "testVSCodeServervpcpublicSubnet2SubnetC19D96B0": {
+      "DependsOn": [
+        "testVSCodeServerLogGroupsDeletedLast31C52098",
+      ],
       "Properties": {
         "AvailabilityZone": "dummy1b",
         "CidrBlock": "10.0.128.0/17",

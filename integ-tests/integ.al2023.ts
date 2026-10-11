@@ -6,10 +6,13 @@ import {
   Duration,
   PhysicalName,
   Stack,
+  RemovalPolicy,
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { LinuxFlavorType, VSCodeServer } from '../src/vscode-server';
+import { expireAssertionLogs } from './expire-assertion-logs';
 // CDK App for Integration Tests
 const app = new App();
 // Stack under test
@@ -42,7 +45,10 @@ const loginHandler = new NodejsFunction(stackUnderTest, 'login-handler', {
   functionName: PhysicalName.GENERATE_IF_NEEDED,
   entry: path.join(__dirname, 'functions', 'login-handler.ts'),
   runtime: lambda.Runtime.NODEJS_20_X,
-  logRetention: 1,
+  logGroup: new LogGroup(stackUnderTest, 'LoginHandlerLogGroup', {
+    retention: RetentionDays.FIVE_DAYS,
+    removalPolicy: RemovalPolicy.DESTROY,
+  }),
   timeout: Duration.seconds(30),
   bundling: {
     esbuildArgs: {
@@ -71,3 +77,6 @@ const sendTestLoginAssertion = integ.assertions
  */
 // Attempt a login at the domain with the given password
 sendTestLoginAssertion
+
+// The assertion provider Lambda would otherwise log to a group that never expires
+expireAssertionLogs(integ.assertions);
