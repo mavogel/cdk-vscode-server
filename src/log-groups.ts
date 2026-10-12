@@ -77,7 +77,7 @@ export function deleteLogGroupsLast(scope: Construct): void {
 
   const sentinel = new CfnWaitConditionHandle(scope, 'LogGroupsDeletedLast');
   for (const logGroup of logGroups) {
-    sentinel.addDependency(logGroup);
+    sentinel.addResourceDependency(logGroup);
   }
   Aspects.of(scope).add(new WaitForSentinel(sentinel));
 }
@@ -91,7 +91,7 @@ class WaitForSentinel implements IAspect {
       node !== this.sentinel &&
       !(node instanceof CfnLogGroup)
     ) {
-      node.addDependency(this.sentinel);
+      node.addResourceDependency(this.sentinel);
     }
   }
 }
