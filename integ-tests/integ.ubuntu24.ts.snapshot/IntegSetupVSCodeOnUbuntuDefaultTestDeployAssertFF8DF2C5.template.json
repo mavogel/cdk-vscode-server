@@ -63,7 +63,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1791736959395"
+    "salt": "1791791413108"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -187,9 +187,20 @@
     },
     "LoggingConfig": {
      "LogFormat": "JSON",
-     "ApplicationLogLevel": "FATAL"
+     "ApplicationLogLevel": "FATAL",
+     "LogGroup": {
+      "Ref": "AssertionProviderLogGroupACA7F48C"
+     }
     }
    }
+  },
+  "AssertionProviderLogGroupACA7F48C": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   }
  },
  "Outputs": {

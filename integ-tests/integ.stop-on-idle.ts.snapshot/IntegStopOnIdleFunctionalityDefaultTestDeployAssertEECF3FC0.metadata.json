@@ -1,4 +1,13 @@
 {
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/AssertionProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/BootstrapVersion": [
     {
       "type": "aws:cdk:logicalId",
@@ -125,6 +134,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "AssertionResultsLambdaInvoke493987f824f978002013a8ed7c9980f4"
+    }
+  ],
+  "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/AssertionProviderLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionProviderLogGroupACA7F48C"
     }
   ],
   "/IntegStopOnIdleFunctionality/DefaultTest/DeployAssert/LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637/Default/Default": [

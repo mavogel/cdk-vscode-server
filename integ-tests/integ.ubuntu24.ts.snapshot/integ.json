@@ -6,7 +6,7 @@
         "IntegTestStackUbuntu24"
       ],
       "regions": [
-        "${Token[AWS.Region.13]}"
+        "${Token[AWS.Region.10]}"
       ],
       "cdkCommandOptions": {
         "destroy": {

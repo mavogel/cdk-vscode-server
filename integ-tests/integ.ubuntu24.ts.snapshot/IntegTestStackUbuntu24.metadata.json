@@ -7,8 +7,8 @@
       },
       "trace": [
         "    ...new Vpc2 in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:543:17)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:596:17)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node..."
       ]
     }
@@ -17,6 +17,15 @@
     {
       "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
       "data": true
+    }
+  ],
+  "/IntegTestStackUbuntu24/VpcRestrictDefaultSgLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackUbuntu24/AWS679f53fac002430cb0da5b7982bd2287": [
@@ -50,6 +59,43 @@
       "data": "SsmParameterValueawsservicecanonicalubuntuservernoblestablecurrentarm64hvmebsgp3amiidC96584B6F00A464EAD1953AFF4B05118Parameter"
     }
   ],
+  "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this log retention handler we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM5[Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/ssm/vscode-server-ubuntu-IntegTestStackUbuntu24:*]": "The log retention handler manages the install log group and its streams"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "logs:PutRetentionPolicy and logs:DeleteRetentionPolicy do not support resource-level permissions in the CDK log retention handler"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1390:43)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/LoginHandlerLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegTestStackUbuntu24/login-handler": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -57,7 +103,7 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
@@ -72,7 +118,7 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
@@ -112,10 +158,19 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:435:30)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:472:30)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler": [
@@ -125,6 +180,7 @@
         "description": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "runtime": "*",
         "handler": "*",
         "code": "*"
@@ -143,12 +199,21 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:86:29)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:107:29)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider": [
@@ -165,10 +230,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:134:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -179,10 +244,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:134:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -201,10 +266,10 @@
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
-        "new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:123:22)",
-        "SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:145:22)",
+        "SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "Module._compile (node:internal/modules/cjs/loader:1968:14)",
         "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
         "node:internal/modules/cjs/loader:2108:10",
@@ -252,8 +317,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:555:25)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:609:25)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -290,8 +355,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:574:42)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:630:42)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -358,8 +423,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -370,8 +435,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -382,8 +447,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -394,8 +459,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -406,8 +471,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -418,8 +483,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -430,8 +495,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -442,8 +507,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -454,8 +519,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -466,8 +531,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -478,8 +543,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -490,8 +555,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -528,8 +593,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:834:35)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:890:35)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -591,8 +656,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -603,8 +668,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -615,8 +680,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -627,8 +692,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -639,8 +704,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -651,6 +716,15 @@
       "data": "IntegVSCodeServerssmdocumentubuntuED32BACB"
     }
   ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -658,6 +732,7 @@
         "description": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "runtime": "*",
         "handler": "*",
         "code": "*"
@@ -676,10 +751,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1231:29)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1266:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -690,12 +765,21 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1282:29)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1317:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider": [
@@ -712,10 +796,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1338:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -726,10 +810,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1338:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -748,10 +832,10 @@
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
-        "new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1313:5)",
-        "Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1358:37)",
+        "Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "Module._compile (node:internal/modules/cjs/loader:1968:14)",
         "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
         "node:internal/modules/cjs/loader:2108:10",
@@ -776,6 +860,12 @@
       "data": "IntegVSCodeServerpasswordE38D3B2C"
     }
   ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/LogGroupsDeletedLast": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+    }
+  ],
   "/IntegTestStackUbuntu24/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
     {
       "type": "aws:cdk:logicalId",
@@ -788,32 +878,16 @@
       "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
     }
   ],
+  "/IntegTestStackUbuntu24/VpcRestrictDefaultSgLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VpcRestrictDefaultSgLogGroup736DE614"
+    }
+  ],
   "/IntegTestStackUbuntu24/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
     {
       "type": "aws:cdk:logicalId",
       "data": "AWS679f53fac002430cb0da5b7982bd22872D164C4C"
-    }
-  ],
-  "/IntegTestStackUbuntu24/login-handler/ServiceRole": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "assumedBy": {
-          "principalAccount": "*",
-          "assumeRoleAction": "*"
-        },
-        "managedPolicies": [
-          {
-            "managedPolicyArn": "*"
-          }
-        ]
-      }
-    }
-  ],
-  "/IntegTestStackUbuntu24/login-handler/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "loginhandler99CCCCFD"
     }
   ],
   "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole": [
@@ -854,12 +928,48 @@
           "*"
         ]
       }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
     }
   ],
   "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
     {
       "type": "aws:cdk:logicalId",
       "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+    }
+  ],
+  "/IntegTestStackUbuntu24/LoginHandlerLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LoginHandlerLogGroup2351D4F9"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/ServiceRole": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "assumedBy": {
+          "principalAccount": "*",
+          "assumeRoleAction": "*"
+        },
+        "managedPolicies": [
+          {
+            "managedPolicyArn": "*"
+          }
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "loginhandler99CCCCFD"
     }
   ],
   "/IntegTestStackUbuntu24/Publish/Output{\"Ref\":\"loginhandler99CCCCFD\"}": [
@@ -884,6 +994,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerpasswordsecret202A5DB3"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventLogGroup85022BA4"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole": [
@@ -932,12 +1048,10 @@
       "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3"
     }
   ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup": [
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProviderLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderLogGroupCA7357BF"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent": [
@@ -1072,8 +1186,8 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": {
-        "removalPolicy": "destroy",
-        "retention": 1
+        "retention": 5,
+        "removalPolicy": "destroy"
       }
     },
     {
@@ -1108,9 +1222,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new AwsManagedPrefixList (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/prefixlist-retriever/prefixlist-retriever.ts:72:24)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:567:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:20:28)",
+        "    at new AwsManagedPrefixList (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/prefixlist-retriever/prefixlist-retriever.ts:88:24)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:621:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.ubuntu24.ts:23:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -1149,6 +1263,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServercfdistributionFDBE873F"
+    }
+  ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventLogGroup320D03D7"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole": [
@@ -1205,12 +1325,10 @@
       "data": "IntegVSCodeServerInstallerOnEventHandler6FF91542"
     }
   ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/LogGroup": [
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProviderLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderLogGroupC44B027B"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent": [
@@ -1243,6 +1361,12 @@
       }
     }
   ],
+  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallLogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallLogRetentionF3D42FD5"
+    }
+  ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SSMInstallerCustomResource/Default": [
     {
       "type": "aws:cdk:logicalId",
@@ -1253,24 +1377,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackUbuntu24/login-handler/ServiceRole/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "loginhandlerServiceRole330B0B32"
-    }
-  ],
-  "/IntegTestStackUbuntu24/login-handler/Code/AssetBucket": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": "*"
-    }
-  ],
-  "/IntegTestStackUbuntu24/login-handler/LogRetention/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "loginhandlerLogRetentionFD323A9B"
     }
   ],
   "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code/AssetBucket": [
@@ -1313,6 +1419,26 @@
           {}
         ]
       }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
+        ]
+      }
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "loginhandlerServiceRole330B0B32"
+    }
+  ],
+  "/IntegTestStackUbuntu24/login-handler/Code/AssetBucket": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": "*"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole/Resource": [
@@ -1355,12 +1481,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerLogGroupA4FDBA01"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole": [
@@ -1415,14 +1535,6 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventCF035CA3"
-    }
-  ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/vpc/publicSubnet1/Subnet": [
@@ -1624,12 +1736,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerOnEventHandler/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerInstallerOnEventHandlerLogGroupBDB3B9B0"
-    }
-  ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -1682,14 +1788,6 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerInstallerProviderframeworkonEvent7B6C1190"
-    }
-  ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
     }
   ],
   "/IntegTestStackUbuntu24/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
@@ -1752,12 +1850,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventLogGroupBE7DEEA2"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/Resource/Default": [
@@ -1826,12 +1918,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackUbuntu24/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerInstallerProviderframeworkonEventLogGroupAF3D3931"
     }
   ],
   "/IntegTestStackUbuntu24/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource": [

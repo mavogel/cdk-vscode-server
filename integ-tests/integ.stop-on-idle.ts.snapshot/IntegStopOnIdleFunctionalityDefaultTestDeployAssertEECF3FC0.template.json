@@ -63,7 +63,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1791738446180"
+    "salt": "1791791630247"
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -325,7 +325,10 @@
     },
     "LoggingConfig": {
      "LogFormat": "JSON",
-     "ApplicationLogLevel": "FATAL"
+     "ApplicationLogLevel": "FATAL",
+     "LogGroup": {
+      "Ref": "AssertionProviderLogGroupACA7F48C"
+     }
     }
    }
   },
@@ -382,7 +385,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1791738446181"
+    "salt": "1791791630247"
    },
    "DependsOn": [
     "LambdaInvoke2b0ac1bc65c03d14e22d254e216f0637",
@@ -469,7 +472,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1791738446181"
+    "salt": "1791791630248"
    },
    "DependsOn": [
     "LambdaInvoke7ec14df5ab88e3e4c0d00edb2d94921b",
@@ -566,7 +569,7 @@
      }
     },
     "flattenResponse": "false",
-    "salt": "1791738446181"
+    "salt": "1791791630248"
    },
    "DependsOn": [
     "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7",
@@ -599,6 +602,14 @@
     "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7",
     "LambdaInvokedc3da1442e925b8c33569d5fea03b0f7Invoke9C84C933"
    ]
+  },
+  "AssertionProviderLogGroupACA7F48C": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   }
  },
  "Outputs": {
