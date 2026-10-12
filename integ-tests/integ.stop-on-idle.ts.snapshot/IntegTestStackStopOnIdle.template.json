@@ -26,6 +26,31 @@
      }
     ]
    },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "IntegVSCodeServerSecretRetrieverOnEventLogGroup85022BA4": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "vscode-server"
+     },
+     {
+      "Key": "IntegTest",
+      "Value": "True"
+     },
+     {
+      "Key": "TestType",
+      "Value": "StopOnIdle"
+     }
+    ]
+   },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -58,7 +83,10 @@
       ]
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy2641E2C6": {
    "Type": "AWS::IAM::Policy",
@@ -81,7 +109,10 @@
       "Ref": "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleBEF8D4D2"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3": {
    "Type": "AWS::Lambda::Function",
@@ -94,6 +125,11 @@
     },
     "Description": "src/secret-retriever/secret-retriever.lambda.ts",
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerSecretRetrieverOnEventLogGroup85022BA4"
+     }
+    },
     "MemorySize": 128,
     "Role": {
      "Fn::GetAtt": [
@@ -105,25 +141,15 @@
     "Timeout": 10
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleDefaultPolicy2641E2C6",
     "IntegVSCodeServerSecretRetrieverOnEventHandlerServiceRoleBEF8D4D2"
    ]
   },
-  "IntegVSCodeServerSecretRetrieverOnEventHandlerLogGroupA4FDBA01": {
+  "IntegVSCodeServerSecretRetrieveProviderLogGroupCA7357BF": {
    "Type": "AWS::Logs::LogGroup",
    "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 731,
+    "RetentionInDays": 5,
     "Tags": [
      {
       "Key": "app",
@@ -139,8 +165,8 @@
      }
     ]
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole0F156B64": {
    "Type": "AWS::IAM::Role",
@@ -171,7 +197,10 @@
       ]
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicyEC4DCEA0": {
    "Type": "AWS::IAM::Policy",
@@ -223,7 +252,10 @@
       "Ref": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole0F156B64"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerSecretRetrieveProviderframeworkonEventCF035CA3": {
    "Type": "AWS::Lambda::Function",
@@ -248,7 +280,10 @@
     "Handler": "framework.onEvent",
     "LoggingConfig": {
      "ApplicationLogLevel": "FATAL",
-     "LogFormat": "JSON"
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerSecretRetrieveProviderLogGroupCA7357BF"
+     }
     },
     "Role": {
      "Fn::GetAtt": [
@@ -260,42 +295,10 @@
     "Timeout": 900
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRoleDefaultPolicyEC4DCEA0",
     "IntegVSCodeServerSecretRetrieveProviderframeworkonEventServiceRole0F156B64"
    ]
-  },
-  "IntegVSCodeServerSecretRetrieveProviderframeworkonEventLogGroupBE7DEEA2": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventCF035CA3"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 731,
-    "Tags": [
-     {
-      "Key": "app",
-      "Value": "vscode-server"
-     },
-     {
-      "Key": "IntegTest",
-      "Value": "True"
-     },
-     {
-      "Key": "TestType",
-      "Value": "StopOnIdle"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
   },
   "IntegVSCodeServerSecretRetrieverCustomResource2F3DB8BD": {
    "Type": "AWS::CloudFormation::CustomResource",
@@ -311,6 +314,9 @@
      "Ref": "IntegVSCodeServerpasswordsecret202A5DB3"
     }
    },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -339,7 +345,10 @@
       "Value": "StopOnIdle"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet1Subnet928029A1": {
    "Type": "AWS::EC2::Subnet",
@@ -383,7 +392,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet1RouteTableFD418D0B": {
    "Type": "AWS::EC2::RouteTable",
@@ -409,7 +421,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet1RouteTableAssociation599AB80D": {
    "Type": "AWS::EC2::SubnetRouteTableAssociation",
@@ -420,7 +435,10 @@
     "SubnetId": {
      "Ref": "IntegVSCodeServervpcpublicSubnet1Subnet928029A1"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet1DefaultRoute36845B30": {
    "Type": "AWS::EC2::Route",
@@ -434,6 +452,7 @@
     }
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServervpcVPCGWA7CDED90"
    ]
   },
@@ -479,7 +498,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet2RouteTableC264EFB4": {
    "Type": "AWS::EC2::RouteTable",
@@ -505,7 +527,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet2RouteTableAssociationC62A1999": {
    "Type": "AWS::EC2::SubnetRouteTableAssociation",
@@ -516,7 +541,10 @@
     "SubnetId": {
      "Ref": "IntegVSCodeServervpcpublicSubnet2SubnetE381654D"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcpublicSubnet2DefaultRouteEAD8BC23": {
    "Type": "AWS::EC2::Route",
@@ -530,6 +558,7 @@
     }
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServervpcVPCGWA7CDED90"
    ]
   },
@@ -554,7 +583,10 @@
       "Value": "StopOnIdle"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcVPCGWA7CDED90": {
    "Type": "AWS::EC2::VPCGatewayAttachment",
@@ -565,7 +597,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServervpcRestrictDefaultSecurityGroupCustomResourceF6EA8ED1": {
    "Type": "Custom::VpcRestrictDefaultSG",
@@ -586,6 +621,9 @@
      "Ref": "AWS::AccountId"
     }
    },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
   },
@@ -618,7 +656,10 @@
     "VpcId": {
      "Ref": "IntegVSCodeServervpc93DDE887"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServercftoserversgfromIndirectPeer80C4F51713": {
    "Type": "AWS::EC2::SecurityGroupIngress",
@@ -639,12 +680,15 @@
      ]
     },
     "ToPort": 80
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServercfprefixlistIdGetPrefixListIdLogGroup171C2803": {
    "Type": "AWS::Logs::LogGroup",
    "Properties": {
-    "RetentionInDays": 1,
+    "RetentionInDays": 5,
     "Tags": [
      {
       "Key": "app",
@@ -678,7 +722,10 @@
      ],
      "Version": "2012-10-17"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServercfprefixlistIdGetPrefixListIdF0821FFC": {
    "Type": "Custom::AWS",
@@ -694,7 +741,8 @@
     "InstallLatestAwsSdk": false
    },
    "DependsOn": [
-    "IntegVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicyAB3F4958"
+    "IntegVSCodeServercfprefixlistIdGetPrefixListIdCustomResourcePolicyAB3F4958",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -718,7 +766,10 @@
       "Ref": "IntegVSCodeServercfprefixlistIdGetPrefixListIdRole1302B3E1"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerserverinstancerole7745B5BB": {
    "Type": "AWS::IAM::Role",
@@ -980,7 +1031,10 @@
       "PolicyName": "VSCodeInstanceInlinePolicy"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerserverinstanceInstanceProfile6130979E": {
    "Type": "AWS::IAM::InstanceProfile",
@@ -990,7 +1044,10 @@
       "Ref": "IntegVSCodeServerserverinstancerole7745B5BB"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerserverinstance0A3D62D7": {
    "Type": "AWS::EC2::Instance",
@@ -1071,6 +1128,7 @@
     }
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerserverinstancerole7745B5BB",
     "IntegVSCodeServervpcpublicSubnet1DefaultRoute36845B30",
     "IntegVSCodeServervpcpublicSubnet1RouteTableAssociation599AB80D",
@@ -1087,7 +1145,10 @@
      }
     },
     "LaunchTemplateName": "IntegTestStackStopOnIdleIntegVSCodeServerserverinstanceLaunchTemplateD9ABA365"
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerelasticip31D48F71": {
    "Type": "AWS::EC2::EIP",
@@ -1111,7 +1172,10 @@
       "Value": "StopOnIdle"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServereipassociation2A6D7D5A": {
    "Type": "AWS::EC2::EIPAssociation",
@@ -1125,7 +1189,10 @@
     "InstanceId": {
      "Ref": "IntegVSCodeServerserverinstance0A3D62D7"
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServercfcachepolicy8F5F1F69": {
    "Type": "AWS::CloudFront::CachePolicy",
@@ -1161,7 +1228,10 @@
       }
      }
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServercfdistributionFDBE873F": {
    "Type": "AWS::CloudFront::Distribution",
@@ -1264,7 +1334,10 @@
       "Value": "StopOnIdle"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerssmdocumentubuntuED32BACB": {
    "Type": "AWS::SSM::Document",
@@ -1689,7 +1762,32 @@
       "Value": "StopOnIdle"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
+  },
+  "IntegVSCodeServerInstallerOnEventLogGroup320D03D7": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "vscode-server"
+     },
+     {
+      "Key": "IntegTest",
+      "Value": "True"
+     },
+     {
+      "Key": "TestType",
+      "Value": "StopOnIdle"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "IntegVSCodeServerInstallerOnEventHandlerServiceRole59651FEF": {
    "Type": "AWS::IAM::Role",
@@ -1720,7 +1818,10 @@
       ]
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy1CAD86C2": {
    "Type": "AWS::IAM::Policy",
@@ -1813,7 +1914,10 @@
       "Ref": "IntegVSCodeServerInstallerOnEventHandlerServiceRole59651FEF"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerInstallerOnEventHandler6FF91542": {
    "Type": "AWS::Lambda::Function",
@@ -1826,6 +1930,11 @@
     },
     "Description": "src/installer/installer.lambda.ts",
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerInstallerOnEventLogGroup320D03D7"
+     }
+    },
     "MemorySize": 512,
     "Role": {
      "Fn::GetAtt": [
@@ -1838,24 +1947,14 @@
    },
    "DependsOn": [
     "IntegVSCodeServerInstallerOnEventHandlerServiceRoleDefaultPolicy1CAD86C2",
-    "IntegVSCodeServerInstallerOnEventHandlerServiceRole59651FEF"
+    "IntegVSCodeServerInstallerOnEventHandlerServiceRole59651FEF",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
    ]
   },
-  "IntegVSCodeServerInstallerOnEventHandlerLogGroupBDB3B9B0": {
+  "IntegVSCodeServerInstallerProviderLogGroupC44B027B": {
    "Type": "AWS::Logs::LogGroup",
    "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerInstallerOnEventHandler6FF91542"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 731,
+    "RetentionInDays": 5,
     "Tags": [
      {
       "Key": "app",
@@ -1871,8 +1970,8 @@
      }
     ]
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleA509851F": {
    "Type": "AWS::IAM::Role",
@@ -1903,7 +2002,10 @@
       ]
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicy3E54FC3A": {
    "Type": "AWS::IAM::Policy",
@@ -1955,7 +2057,10 @@
       "Ref": "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleA509851F"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerInstallerProviderframeworkonEvent7B6C1190": {
    "Type": "AWS::Lambda::Function",
@@ -1980,7 +2085,10 @@
     "Handler": "framework.onEvent",
     "LoggingConfig": {
      "ApplicationLogLevel": "FATAL",
-     "LogFormat": "JSON"
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerInstallerProviderLogGroupC44B027B"
+     }
     },
     "Role": {
      "Fn::GetAtt": [
@@ -1993,41 +2101,26 @@
    },
    "DependsOn": [
     "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleDefaultPolicy3E54FC3A",
-    "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleA509851F"
+    "IntegVSCodeServerInstallerProviderframeworkonEventServiceRoleA509851F",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
    ]
   },
-  "IntegVSCodeServerInstallerProviderframeworkonEventLogGroupAF3D3931": {
-   "Type": "AWS::Logs::LogGroup",
+  "IntegVSCodeServerInstallLogRetentionF3D42FD5": {
+   "Type": "Custom::LogRetention",
    "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerInstallerProviderframeworkonEvent7B6C1190"
-       }
-      ]
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
      ]
     },
-    "RetentionInDays": 731,
-    "Tags": [
-     {
-      "Key": "app",
-      "Value": "vscode-server"
-     },
-     {
-      "Key": "IntegTest",
-      "Value": "True"
-     },
-     {
-      "Key": "TestType",
-      "Value": "StopOnIdle"
-     }
-    ]
+    "LogGroupName": "/aws/ssm/vscode-server-ubuntu-IntegTestStackStopOnIdle",
+    "RetentionInDays": 5,
+    "RemovalPolicy": "destroy"
    },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68": {
    "Type": "AWS::CloudFormation::CustomResource",
@@ -2050,6 +2143,32 @@
       "secretPasswordValue"
      ]
     }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerInstallLogRetentionF3D42FD5",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
+  },
+  "IntegVSCodeServerIdleMonitorFunctionLogGroupD71D3EE6": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "vscode-server"
+     },
+     {
+      "Key": "IntegTest",
+      "Value": "True"
+     },
+     {
+      "Key": "TestType",
+      "Value": "StopOnIdle"
+     }
+    ]
    },
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
@@ -2083,7 +2202,10 @@
       ]
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerIdleMonitorFunctionServiceRoleDefaultPolicyE13A3890": {
    "Type": "AWS::IAM::Policy",
@@ -2132,7 +2254,10 @@
       "Ref": "IntegVSCodeServerIdleMonitorFunctionServiceRoleC1088A0D"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerIdleMonitorFunctionCACBFA32": {
    "Type": "AWS::Lambda::Function",
@@ -2156,6 +2281,11 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerIdleMonitorFunctionLogGroupD71D3EE6"
+     }
+    },
     "MemorySize": 256,
     "Role": {
      "Fn::GetAtt": [
@@ -2168,41 +2298,9 @@
    },
    "DependsOn": [
     "IntegVSCodeServerIdleMonitorFunctionServiceRoleDefaultPolicyE13A3890",
-    "IntegVSCodeServerIdleMonitorFunctionServiceRoleC1088A0D"
+    "IntegVSCodeServerIdleMonitorFunctionServiceRoleC1088A0D",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
    ]
-  },
-  "IntegVSCodeServerIdleMonitorFunctionLogGroupE9475DB5": {
-   "Type": "AWS::Logs::LogGroup",
-   "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerIdleMonitorFunctionCACBFA32"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 731,
-    "Tags": [
-     {
-      "Key": "app",
-      "Value": "vscode-server"
-     },
-     {
-      "Key": "IntegTest",
-      "Value": "True"
-     },
-     {
-      "Key": "TestType",
-      "Value": "StopOnIdle"
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
   },
   "IntegVSCodeServerIdleMonitorScheduleRuleCF2E60F5": {
    "Type": "AWS::Events::Rule",
@@ -2234,7 +2332,10 @@
       "Id": "Target0"
      }
     ]
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
   },
   "IntegVSCodeServerIdleMonitorScheduleRuleAllowEventRuleIntegTestStackStopOnIdleIntegVSCodeServerIdleMonitorFunction8C52CC5D407CFD6D": {
    "Type": "AWS::Lambda::Permission",
@@ -2253,7 +2354,32 @@
       "Arn"
      ]
     }
-   }
+   },
+   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+   ]
+  },
+  "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroupAE01848A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5,
+    "Tags": [
+     {
+      "Key": "app",
+      "Value": "vscode-server"
+     },
+     {
+      "Key": "IntegTest",
+      "Value": "True"
+     },
+     {
+      "Key": "TestType",
+      "Value": "StopOnIdle"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "IntegVSCodeServerIdleMonitorEnablerFunctionServiceRole71DD1E5D": {
    "Type": "AWS::IAM::Role",
@@ -2286,6 +2412,7 @@
     ]
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
@@ -2332,6 +2459,7 @@
     ]
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
@@ -2346,6 +2474,11 @@
     },
     "Description": "src/idle-monitor-enabler/idle-monitor-enabler.lambda.ts",
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroupAE01848A"
+     }
+    },
     "MemorySize": 128,
     "Role": {
      "Fn::GetAtt": [
@@ -2359,24 +2492,14 @@
    "DependsOn": [
     "IntegVSCodeServerIdleMonitorEnablerFunctionServiceRoleDefaultPolicyCDD8B46F",
     "IntegVSCodeServerIdleMonitorEnablerFunctionServiceRole71DD1E5D",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
-  "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroup71D235EF": {
+  "IntegVSCodeServerIdleMonitorEnablerProviderLogGroupF139281E": {
    "Type": "AWS::Logs::LogGroup",
    "Properties": {
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerIdleMonitorEnablerFunction32DA729B"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 731,
+    "RetentionInDays": 5,
     "Tags": [
      {
       "Key": "app",
@@ -2392,11 +2515,8 @@
      }
     ]
    },
-   "DependsOn": [
-    "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
-   ],
-   "UpdateReplacePolicy": "Retain",
-   "DeletionPolicy": "Retain"
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEventServiceRole941AC96C": {
    "Type": "AWS::IAM::Role",
@@ -2429,6 +2549,7 @@
     ]
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
@@ -2484,6 +2605,7 @@
     ]
    },
    "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
@@ -2510,7 +2632,10 @@
     "Handler": "framework.onEvent",
     "LoggingConfig": {
      "ApplicationLogLevel": "FATAL",
-     "LogFormat": "JSON"
+     "LogFormat": "JSON",
+     "LogGroup": {
+      "Ref": "IntegVSCodeServerIdleMonitorEnablerProviderLogGroupF139281E"
+     }
     },
     "Role": {
      "Fn::GetAtt": [
@@ -2524,32 +2649,7 @@
    "DependsOn": [
     "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEventServiceRoleDefaultPolicy995CAD91",
     "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEventServiceRole941AC96C",
-    "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
-   ]
-  },
-  "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEventLogRetentionE879C0C0": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEvent3B68F506"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   },
-   "DependsOn": [
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ]
   },
@@ -2569,10 +2669,25 @@
    "DependsOn": [
     "IntegVSCodeServerIdleMonitorScheduleRuleAllowEventRuleIntegTestStackStopOnIdleIntegVSCodeServerIdleMonitorFunction8C52CC5D407CFD6D",
     "IntegVSCodeServerIdleMonitorScheduleRuleCF2E60F5",
+    "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA",
     "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete"
+  },
+  "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA": {
+   "Type": "AWS::CloudFormation::WaitConditionHandle",
+   "DependsOn": [
+    "IntegVSCodeServercfprefixlistIdGetPrefixListIdLogGroup171C2803",
+    "IntegVSCodeServerIdleMonitorFunctionLogGroupD71D3EE6",
+    "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroupAE01848A",
+    "IntegVSCodeServerIdleMonitorEnablerProviderLogGroupF139281E",
+    "IntegVSCodeServerInstallerOnEventLogGroup320D03D7",
+    "IntegVSCodeServerInstallerProviderLogGroupC44B027B",
+    "IntegVSCodeServerSecretRetrieveProviderLogGroupCA7357BF",
+    "IntegVSCodeServerSecretRetrieverOnEventLogGroup85022BA4",
+    "VpcRestrictDefaultSgLogGroup736DE614"
+   ]
   },
   "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0": {
    "Type": "AWS::IAM::Role",
@@ -2662,11 +2777,24 @@
      ]
     },
     "Runtime": "nodejs24.x",
-    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group"
+    "Description": "Lambda function for removing all inbound/outbound rules from the VPC default security group",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "VpcRestrictDefaultSgLogGroup736DE614"
+     }
+    }
    },
    "DependsOn": [
     "CustomVpcRestrictDefaultSGCustomResourceProviderRole26592FE0"
    ]
+  },
+  "VpcRestrictDefaultSgLogGroup736DE614": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
    "Type": "AWS::Lambda::Function",
@@ -2739,6 +2867,30 @@
        ],
        "Effect": "Allow",
        "Resource": "*"
+      },
+      {
+       "Action": "logs:DeleteLogGroup",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":logs:",
+          {
+           "Ref": "AWS::Region"
+          },
+          ":",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":log-group:/aws/ssm/vscode-server-ubuntu-IntegTestStackStopOnIdle:*"
+         ]
+        ]
+       }
       }
      ],
      "Version": "2012-10-17"
@@ -2774,6 +2926,14 @@
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
     "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
    ]
+  },
+  "IdleTestHandlerLogGroupE8FE184E": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 5
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "idletesthandlerServiceRoleBB9B4624": {
    "Type": "AWS::IAM::Role",
@@ -2870,6 +3030,11 @@
      }
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "IdleTestHandlerLogGroupE8FE184E"
+     }
+    },
     "Role": {
      "Fn::GetAtt": [
       "idletesthandlerServiceRoleBB9B4624",
@@ -2884,28 +3049,13 @@
     "idletesthandlerServiceRoleBB9B4624"
    ]
   },
-  "idletesthandlerLogRetentionEE227743": {
-   "Type": "Custom::LogRetention",
+  "LoginHandlerLogGroup2351D4F9": {
+   "Type": "AWS::Logs::LogGroup",
    "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "idletesthandler1A304024"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
+    "RetentionInDays": 5
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete"
   },
   "loginhandlerServiceRole330B0B32": {
    "Type": "AWS::IAM::Role",
@@ -2948,6 +3098,11 @@
      "S3Key": "cf551b9486b7d659176866961b59c229e25bb1d1de3e5fd5d1ca4bca396c316d.zip"
     },
     "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "LoginHandlerLogGroup2351D4F9"
+     }
+    },
     "Role": {
      "Fn::GetAtt": [
       "loginhandlerServiceRole330B0B32",
@@ -2960,29 +3115,6 @@
    "DependsOn": [
     "loginhandlerServiceRole330B0B32"
    ]
-  },
-  "loginhandlerLogRetentionFD323A9B": {
-   "Type": "Custom::LogRetention",
-   "Properties": {
-    "ServiceToken": {
-     "Fn::GetAtt": [
-      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
-      "Arn"
-     ]
-    },
-    "LogGroupName": {
-     "Fn::Join": [
-      "",
-      [
-       "/aws/lambda/",
-       {
-        "Ref": "loginhandler99CCCCFD"
-       }
-      ]
-     ]
-    },
-    "RetentionInDays": 1
-   }
   }
  },
  "Outputs": {

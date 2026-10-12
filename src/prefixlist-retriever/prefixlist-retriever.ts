@@ -6,13 +6,14 @@ import {
   Role,
   ServicePrincipal,
 } from 'aws-cdk-lib/aws-iam';
-import { LogGroup } from 'aws-cdk-lib/aws-logs';
+import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import {
   AwsCustomResource,
   AwsCustomResourcePolicy,
   PhysicalResourceId,
 } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
+import { DEFAULT_LOG_REMOVAL_POLICY, DEFAULT_LOG_RETENTION, createLogGroup } from '../log-groups';
 
 export interface AwsManagedPrefixListProps {
   /**
@@ -23,6 +24,20 @@ export interface AwsManagedPrefixListProps {
    * see all via aws ec2 describe-managed-prefix-lists  --region <REGION> | jq -r '.PrefixLists[] | select (.PrefixListName == "com.amazonaws.global.cloudfront.origin-facing") | .PrefixListId'
    */
   readonly name: string;
+
+  /**
+   * How long the logs of the Lambda function are kept
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 // copied with grace from here until cdk supports it
@@ -33,15 +48,16 @@ export class AwsManagedPrefixList extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { name }: AwsManagedPrefixListProps,
+    {
+      name,
+      logRetention = DEFAULT_LOG_RETENTION,
+      logRemovalPolicy = DEFAULT_LOG_REMOVAL_POLICY,
+    }: AwsManagedPrefixListProps,
   ) {
     super(scope, id);
 
     const cr = new AwsCustomResource(this, 'GetPrefixListId', {
-      logGroup: new LogGroup(this, 'GetPrefixListIdLogGroup', {
-        removalPolicy: RemovalPolicy.DESTROY,
-        retention: 1,
-      }),
+      logGroup: createLogGroup(this, 'GetPrefixListIdLogGroup', logRetention, logRemovalPolicy),
       onUpdate: {
         service: '@aws-sdk/client-ec2',
         action: 'DescribeManagedPrefixListsCommand',

@@ -1,4 +1,13 @@
 {
+  "/IntegSetupVSCodeOnAl2023/DefaultTest/DeployAssert/AssertionProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegSetupVSCodeOnAl2023/DefaultTest/DeployAssert/BootstrapVersion": [
     {
       "type": "aws:cdk:logicalId",
@@ -47,6 +56,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "SingletonFunction1488541a7b23466481b69b4408076b81HandlerCD40AE9F"
+    }
+  ],
+  "/IntegSetupVSCodeOnAl2023/DefaultTest/DeployAssert/AssertionProviderLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "AssertionProviderLogGroupACA7F48C"
     }
   ],
   "/IntegSetupVSCodeOnAl2023/DefaultTest/DeployAssert/LambdaInvoke493987f824f978002013a8ed7c9980f4/Default/Default": [

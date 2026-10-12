@@ -7,8 +7,8 @@
       },
       "trace": [
         "    ...new Vpc2 in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:543:17)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:596:17)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node..."
       ]
     }
@@ -17,6 +17,15 @@
     {
       "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
       "data": true
+    }
+  ],
+  "/IntegTestStackStopOnIdle/VpcRestrictDefaultSgLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/AWS679f53fac002430cb0da5b7982bd2287": [
@@ -50,6 +59,43 @@
       "data": "SsmParameterValueawsservicecanonicalubuntuservernoblestablecurrentarm64hvmebsgp3amiidC96584B6F00A464EAD1953AFF4B05118Parameter"
     }
   ],
+  "/IntegTestStackStopOnIdle/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a": [
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM4[Policy::arn:<AWS::Partition>:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]": "For this log retention handler we do not need to restrict managed policies"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "AwsSolutions-IAM5[Resource::arn:<AWS::Partition>:logs:<AWS::Region>:<AWS::AccountId>:log-group:/aws/ssm/vscode-server-ubuntu-IntegTestStackStopOnIdle:*]": "The log retention handler manages the install log group and its streams"
+      }
+    },
+    {
+      "type": "aws:cdk:acknowledged-rules",
+      "data": {
+        "Annotation::AwsSolutions-IAM5[Resource::*]": "logs:PutRetentionPolicy and logs:DeleteRetentionPolicy do not support resource-level permissions in the CDK log retention handler"
+      },
+      "trace": [
+        "    ...Validations.acknowledge in aws-cdk-lib...",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1390:43)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
+        "    ...node internals, ts-node, ts-node..."
+      ]
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IdleTestHandlerLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegTestStackStopOnIdle/idle-test-handler": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -57,7 +103,7 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
@@ -89,12 +135,21 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
         },
         "environment": "*"
+      }
+    }
+  ],
+  "/IntegTestStackStopOnIdle/LoginHandlerLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
       }
     }
   ],
@@ -105,7 +160,7 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
@@ -120,7 +175,7 @@
         "functionName": "*",
         "entry": "*",
         "runtime": "*",
-        "logRetention": 1,
+        "logGroup": "*",
         "timeout": "*",
         "bundling": {
           "esbuildArgs": "*"
@@ -160,10 +215,19 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:435:30)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:472:30)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventHandler": [
@@ -173,6 +237,7 @@
         "description": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "runtime": "*",
         "handler": "*",
         "code": "*"
@@ -191,12 +256,21 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:86:29)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:107:29)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProvider": [
@@ -213,10 +287,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:134:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -227,10 +301,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:112:30)",
-        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:134:30)",
+        "    at SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -249,10 +323,10 @@
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
-        "new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:123:22)",
-        "SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:31:33)",
-        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:444:10)",
-        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "new CustomResourceSecretRetriever (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:145:22)",
+        "SecretRetriever._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/secret-retriever/secret-retriever.ts:47:33)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:483:10)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "Module._compile (node:internal/modules/cjs/loader:1968:14)",
         "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
         "node:internal/modules/cjs/loader:2108:10",
@@ -300,8 +374,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:555:25)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:609:25)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -338,8 +412,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:574:42)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:630:42)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -406,8 +480,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -418,8 +492,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -430,8 +504,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -442,8 +516,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -454,8 +528,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -466,8 +540,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -478,8 +552,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -490,8 +564,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -502,8 +576,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -514,8 +588,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -526,8 +600,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -538,8 +612,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:748:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:804:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -576,8 +650,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:834:35)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:890:35)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -594,8 +668,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:861:27)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:917:27)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -663,8 +737,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -675,8 +749,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -687,8 +761,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -699,8 +773,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -711,8 +785,8 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:947:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1003:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -723,6 +797,15 @@
       "data": "IntegVSCodeServerssmdocumentubuntuED32BACB"
     }
   ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventHandler": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -730,6 +813,7 @@
         "description": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "runtime": "*",
         "handler": "*",
         "code": "*"
@@ -748,10 +832,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1231:29)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1266:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -762,12 +846,21 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1282:29)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1317:29)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProvider": [
@@ -784,10 +877,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1338:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -798,10 +891,10 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1302:30)",
-        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1338:30)",
+        "    at Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -820,10 +913,10 @@
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/custom-resource.js:1:5440)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/prop-injectable.js:1:855)",
         "new CustomResource2 (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/aws-cdk-lib/core/lib/no-box-stack-traces.js:1:345)",
-        "new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1313:5)",
-        "Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:164:27)",
-        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1009:12)",
-        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "new CustomResourceInstaller (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:1358:37)",
+        "Installer._bind (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/installer/installer.ts:181:27)",
+        "new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1067:12)",
+        "Object.<anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "Module._compile (node:internal/modules/cjs/loader:1968:14)",
         "Module.m._compile (/Users/mavogel/Developer/projects/vscode-server-on-aws/node_modules/ts-node/src/index.ts:1618:23)",
         "node:internal/modules/cjs/loader:2108:10",
@@ -848,6 +941,12 @@
       "data": "IntegVSCodeServerpasswordE38D3B2C"
     }
   ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/LogGroupsDeletedLast": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerLogGroupsDeletedLast4BADFCCA"
+    }
+  ],
   "/IntegTestStackStopOnIdle/Custom::VpcRestrictDefaultSGCustomResourceProvider/Role": [
     {
       "type": "aws:cdk:logicalId",
@@ -858,6 +957,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "CustomVpcRestrictDefaultSGCustomResourceProviderHandlerDC833E5E"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/VpcRestrictDefaultSgLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "VpcRestrictDefaultSgLogGroup736DE614"
     }
   ],
   "/IntegTestStackStopOnIdle/AWS679f53fac002430cb0da5b7982bd2287/Resource": [
@@ -904,12 +1009,26 @@
           "*"
         ]
       }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addToPrincipalPolicy": [
+          {}
+        ]
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
     {
       "type": "aws:cdk:logicalId",
       "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IdleTestHandlerLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IdleTestHandlerLogGroupE8FE184E"
     }
   ],
   "/IntegTestStackStopOnIdle/idle-test-handler/ServiceRole": [
@@ -956,6 +1075,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "idletesthandler1A304024"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/LoginHandlerLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "LoginHandlerLogGroup2351D4F9"
     }
   ],
   "/IntegTestStackStopOnIdle/login-handler/ServiceRole": [
@@ -1022,6 +1147,12 @@
       "data": "IntegVSCodeServerpasswordsecret202A5DB3"
     }
   ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieverOnEventLogGroup85022BA4"
+    }
+  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -1068,12 +1199,10 @@
       "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerDD084AE3"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup": [
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProviderLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerSecretRetrieveProviderLogGroupCA7357BF"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent": [
@@ -1208,8 +1337,8 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": {
-        "removalPolicy": "destroy",
-        "retention": 1
+        "retention": 5,
+        "removalPolicy": "destroy"
       }
     },
     {
@@ -1244,9 +1373,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new AwsManagedPrefixList (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/prefixlist-retriever/prefixlist-retriever.ts:72:24)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:567:34)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new AwsManagedPrefixList (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/prefixlist-retriever/prefixlist-retriever.ts:88:24)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:621:34)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -1285,6 +1414,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServercfdistributionFDBE873F"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerOnEventLogGroup320D03D7"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventHandler/ServiceRole": [
@@ -1341,12 +1476,10 @@
       "data": "IntegVSCodeServerInstallerOnEventHandler6FF91542"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventHandler/LogGroup": [
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProviderLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallerProviderLogGroupC44B027B"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProvider/framework-onEvent": [
@@ -1379,10 +1512,25 @@
       }
     }
   ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallLogRetention/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerInstallLogRetentionF3D42FD5"
+    }
+  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SSMInstallerCustomResource/Default": [
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerSSMInstallerCustomResource9F9AFE68"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/FunctionLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/Function": [
@@ -1394,6 +1542,7 @@
         "code": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "environment": "*"
       }
     },
@@ -1440,9 +1589,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:123:35)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1042:26)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:144:35)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1102:26)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -1453,9 +1602,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:123:35)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1042:26)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:144:35)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1102:26)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -1466,9 +1615,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:123:35)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1042:26)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitor (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor/idle-monitor.ts:144:35)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1102:26)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -1498,6 +1647,15 @@
       }
     }
   ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/FunctionLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
+    }
+  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Function": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -1505,6 +1663,7 @@
         "description": "*",
         "timeout": "*",
         "memorySize": "*",
+        "logGroup": "*",
         "runtime": "*",
         "handler": "*",
         "code": "*"
@@ -1517,9 +1676,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:73:37)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1052:23)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:92:37)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1114:23)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -1530,11 +1689,20 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:73:37)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1052:23)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:92:37)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1114:23)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/ProviderLogGroup": [
+    {
+      "type": "aws:cdk:analytics:construct",
+      "data": {
+        "retention": 5,
+        "removalPolicy": "destroy"
+      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Provider": [
@@ -1545,9 +1713,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:85:30)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1052:23)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:104:30)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1114:23)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     },
@@ -1558,9 +1726,9 @@
       },
       "trace": [
         "    ...Validations.acknowledge in aws-cdk-lib...",
-        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:85:30)",
-        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1052:23)",
-        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:24:28)",
+        "    at new IdleMonitorEnabler (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/idle-monitor-enabler/idle-monitor-enabler.ts:104:30)",
+        "    at new VSCodeServer (/Users/mavogel/Developer/projects/vscode-server-on-aws/src/vscode-server.ts:1114:23)",
+        "    at <anonymous> (/Users/mavogel/Developer/projects/vscode-server-on-aws/integ-tests/integ.stop-on-idle.ts:27:28)",
         "    ...node internals, ts-node, ts-node..."
       ]
     }
@@ -1601,6 +1769,14 @@
       "data": {
         "attachToRole": [
           "*"
+        ]
+      }
+    },
+    {
+      "type": "aws:cdk:analytics:method",
+      "data": {
+        "addStatements": [
+          {}
         ]
       }
     },
@@ -1655,12 +1831,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackStopOnIdle/idle-test-handler/LogRetention/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "idletesthandlerLogRetentionEE227743"
-    }
-  ],
   "/IntegTestStackStopOnIdle/login-handler/ServiceRole/Resource": [
     {
       "type": "aws:cdk:logicalId",
@@ -1671,12 +1841,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackStopOnIdle/login-handler/LogRetention/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "loginhandlerLogRetentionFD323A9B"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventHandler/ServiceRole/Resource": [
@@ -1719,12 +1883,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieverOnEventHandler/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerSecretRetrieverOnEventHandlerLogGroupA4FDBA01"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/ServiceRole": [
@@ -1779,14 +1937,6 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventCF035CA3"
-    }
-  ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/vpc/publicSubnet1/Subnet": [
@@ -1988,12 +2138,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerOnEventHandler/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerInstallerOnEventHandlerLogGroupBDB3B9B0"
-    }
-  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProvider/framework-onEvent/ServiceRole": [
     {
       "type": "aws:cdk:analytics:construct",
@@ -2048,12 +2192,10 @@
       "data": "IntegVSCodeServerInstallerProviderframeworkonEvent7B6C1190"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup": [
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/FunctionLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerIdleMonitorFunctionLogGroupD71D3EE6"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/Function/ServiceRole": [
@@ -2118,14 +2260,6 @@
       "data": "IntegVSCodeServerIdleMonitorFunctionCACBFA32"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/Function/LogGroup": [
-    {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
-    }
-  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/ScheduleRule/Resource": [
     {
       "type": "aws:cdk:logicalId",
@@ -2136,6 +2270,12 @@
     {
       "type": "aws:cdk:logicalId",
       "data": "IntegVSCodeServerIdleMonitorScheduleRuleAllowEventRuleIntegTestStackStopOnIdleIntegVSCodeServerIdleMonitorFunction8C52CC5D407CFD6D"
+    }
+  ],
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/FunctionLogGroup/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroupAE01848A"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Function/ServiceRole": [
@@ -2184,12 +2324,10 @@
       "data": "IntegVSCodeServerIdleMonitorEnablerFunction32DA729B"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Function/LogGroup": [
+  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/ProviderLogGroup/Resource": [
     {
-      "type": "aws:cdk:analytics:construct",
-      "data": {
-        "logGroupName": "*"
-      }
+      "type": "aws:cdk:logicalId",
+      "data": "IntegVSCodeServerIdleMonitorEnablerProviderLogGroupF139281E"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Provider/framework-onEvent": [
@@ -2203,7 +2341,6 @@
         "timeout": "*",
         "loggingFormat": "JSON",
         "applicationLogLevelV2": "FATAL",
-        "logRetention": 1,
         "logGroup": "*",
         "vpc": "*",
         "vpcSubnets": "*",
@@ -2297,12 +2434,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/SecretRetrieveProvider/framework-onEvent/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerSecretRetrieveProviderframeworkonEventLogGroupBE7DEEA2"
-    }
-  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/cf-prefixlistId/GetPrefixListId/Resource/Default": [
     {
       "type": "aws:cdk:logicalId",
@@ -2371,12 +2502,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/InstallerProvider/framework-onEvent/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerInstallerProviderframeworkonEventLogGroupAF3D3931"
-    }
-  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/Function/ServiceRole/Resource": [
     {
       "type": "aws:cdk:logicalId",
@@ -2435,12 +2560,6 @@
       "data": "*"
     }
   ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitor/Function/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerIdleMonitorFunctionLogGroupE9475DB5"
-    }
-  ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Function/ServiceRole/Resource": [
     {
       "type": "aws:cdk:logicalId",
@@ -2481,12 +2600,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Function/LogGroup/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerIdleMonitorEnablerFunctionLogGroup71D235EF"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Provider/framework-onEvent/ServiceRole": [
@@ -2621,12 +2734,6 @@
     {
       "type": "aws:cdk:analytics:construct",
       "data": "*"
-    }
-  ],
-  "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Provider/framework-onEvent/LogRetention/Resource": [
-    {
-      "type": "aws:cdk:logicalId",
-      "data": "IntegVSCodeServerIdleMonitorEnablerProviderframeworkonEventLogRetentionE879C0C0"
     }
   ],
   "/IntegTestStackStopOnIdle/IntegVSCodeServer/IdleMonitorEnabler/Provider/framework-onEvent/ServiceRole/DefaultPolicy/Resource": [

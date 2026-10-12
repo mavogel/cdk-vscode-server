@@ -6,11 +6,14 @@ import {
   Duration,
   PhysicalName,
   Stack,
+  RemovalPolicy,
   aws_lambda as lambda,
 } from 'aws-cdk-lib';
 import { PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { VSCodeServer } from '../src/vscode-server';
+import { expireAssertionLogs } from './expire-assertion-logs';
 
 // CDK App for Integration Tests
 const app = new App();
@@ -38,7 +41,10 @@ const idleTestHandler = new NodejsFunction(stackUnderTest, 'idle-test-handler', 
   functionName: PhysicalName.GENERATE_IF_NEEDED,
   entry: path.join(__dirname, 'functions', 'idle-test-handler.ts'),
   runtime: lambda.Runtime.NODEJS_20_X,
-  logRetention: 1,
+  logGroup: new LogGroup(stackUnderTest, 'IdleTestHandlerLogGroup', {
+    retention: RetentionDays.FIVE_DAYS,
+    removalPolicy: RemovalPolicy.DESTROY,
+  }),
   timeout: Duration.minutes(2), // Max 2m from CDK IntegTest assertion timeout
   bundling: {
     esbuildArgs: {
@@ -58,7 +64,10 @@ const loginHandler = new NodejsFunction(stackUnderTest, 'login-handler', {
   functionName: PhysicalName.GENERATE_IF_NEEDED,
   entry: path.join(__dirname, 'functions', 'login-handler.ts'),
   runtime: lambda.Runtime.NODEJS_20_X,
-  logRetention: 1,
+  logGroup: new LogGroup(stackUnderTest, 'LoginHandlerLogGroup', {
+    retention: RetentionDays.FIVE_DAYS,
+    removalPolicy: RemovalPolicy.DESTROY,
+  }),
   timeout: Duration.seconds(30),
   bundling: {
     esbuildArgs: {
@@ -170,3 +179,6 @@ integ.assertions
         Payload: '"OK"',
       })),
   );
+
+// The assertion provider Lambda would otherwise log to a group that never expires
+expireAssertionLogs(integ.assertions);

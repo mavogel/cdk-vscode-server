@@ -1,11 +1,13 @@
-import { Validations } from 'aws-cdk-lib';
+import { RemovalPolicy, Token, Validations } from 'aws-cdk-lib';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { CfnFunction, Function } from 'aws-cdk-lib/aws-lambda';
+import { LogRetention, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Arn, CustomResource, Duration, Stack } from 'aws-cdk-lib/core';
 import { Provider } from 'aws-cdk-lib/custom-resources';
 import { Construct } from 'constructs';
 import { InstallerFunction } from './installer-function';
+import { DEFAULT_LOG_REMOVAL_POLICY, DEFAULT_LOG_RETENTION, createLogGroup } from '../log-groups';
 import { acknowledgeGranularFinding } from '../suppress-nags';
 import { LinuxFlavorType, CustomInstallStep } from '../vscode-server';
 
@@ -127,6 +129,21 @@ interface InstallerOptionsBase {
    * @default - no custom installation steps
    */
   readonly customInstallSteps?: CustomInstallStep[];
+
+  /**
+   * How long the logs of the Lambda functions and of the installation
+   * (SSM command output) are kept
+   *
+   * @default RetentionDays.FIVE_DAYS
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   *
+   * @default RemovalPolicy.DESTROY
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 export interface InstallerOptions extends InstallerOptionsBase {}
@@ -168,6 +185,8 @@ export abstract class Installer {
           vsCodeUser: options.vsCodeUser,
           vsCodePassword: options.vsCodePassword,
           homeFolder: options.homeFolder,
+          logRetention: options.logRetention,
+          logRemovalPolicy: options.logRemovalPolicy,
         });
 
         return installer;
@@ -211,6 +230,8 @@ export abstract class Installer {
           vsCodeUser: options.vsCodeUser,
           vsCodePassword: options.vsCodePassword,
           homeFolder: options.homeFolder,
+          logRetention: options.logRetention,
+          logRemovalPolicy: options.logRemovalPolicy,
         });
 
         return installer;
@@ -1209,11 +1230,24 @@ interface CustomResourceInstallerOptions {
    * The home folder of the user under which the vscode server runs
    */
   readonly homeFolder: string;
+
+  /**
+   * How long the logs are kept
+   */
+  readonly logRetention?: RetentionDays;
+
+  /**
+   * What happens to the log groups when the stack is deleted
+   */
+  readonly logRemovalPolicy?: RemovalPolicy;
 }
 
 class CustomResourceInstaller extends Installer {
   constructor(scope: Construct, options: CustomResourceInstallerOptions) {
     super();
+
+    const logRetention = options.logRetention ?? DEFAULT_LOG_RETENTION;
+    const logRemovalPolicy = options.logRemovalPolicy ?? DEFAULT_LOG_REMOVAL_POLICY;
 
     const onEvent: Function = new InstallerFunction(
       scope,
@@ -1221,6 +1255,7 @@ class CustomResourceInstaller extends Installer {
       {
         timeout: Duration.minutes(15), // 15 minutes to allow for VS Code Server installation
         memorySize: 512, // TODO configurable
+        logGroup: createLogGroup(scope, 'InstallerOnEventLogGroup', logRetention, logRemovalPolicy),
       },
     );
     acknowledgeGranularFinding(
@@ -1287,6 +1322,7 @@ class CustomResourceInstaller extends Installer {
 
     const provider = new Provider(scope, 'InstallerProvider', {
       onEventHandler: onEvent,
+      logGroup: createLogGroup(scope, 'InstallerProviderLogGroup', logRetention, logRemovalPolicy),
     });
     acknowledgeGranularFinding(
       provider,
@@ -1310,7 +1346,16 @@ class CustomResourceInstaller extends Installer {
       },
     );
 
-    new CustomResource(scope, 'SSMInstallerCustomResource', {
+    // SSM writes the command output to this group on first use, with no expiry.
+    // LogRetention (instead of a LogGroup) also adopts a group that already exists
+    // from an earlier deployment, and removes it again with the stack.
+    const installLogRetention = new LogRetention(scope, 'InstallLogRetention', {
+      logGroupName: options.cloudWatchLogGroupName,
+      retention: logRetention,
+      removalPolicy: logRemovalPolicy,
+    });
+
+    const installerCustomResource = new CustomResource(scope, 'SSMInstallerCustomResource', {
       serviceToken: provider.serviceToken,
       properties: {
         ServiceTimeout: Duration.minutes(15).toSeconds() + 5, // Lambda timeout + 5 seconds buffer
@@ -1320,6 +1365,34 @@ class CustomResourceInstaller extends Installer {
         VSCodePassword: options.vsCodePassword,
       },
     });
+    // the retention is in place before SSM writes the first output
+    installerCustomResource.node.addDependency(installLogRetention);
+
+    // LogRetention runs on a stack-wide singleton Lambda owned by CDK
+    const logRetentionHandler = Stack.of(scope).node.children.find(
+      (child) => child.node.id.startsWith('LogRetention') && child !== installLogRetention,
+    );
+    if (logRetentionHandler) {
+      // cdk-nag renders unresolved account and region (env-agnostic stack) as placeholders
+      const stack = Stack.of(scope);
+      const account = Token.isUnresolved(stack.account) ? '<AWS::AccountId>' : stack.account;
+      const region = Token.isUnresolved(stack.region) ? '<AWS::Region>' : stack.region;
+      acknowledgeGranularFinding(
+        logRetentionHandler,
+        AWS_LAMBDA_BASIC_EXECUTION_ROLE_IAM4,
+        'For this log retention handler we do not need to restrict managed policies',
+      );
+      acknowledgeGranularFinding(
+        logRetentionHandler,
+        `AwsSolutions-IAM5[Resource::arn:<AWS::Partition>:logs:${region}:${account}:log-group:${options.cloudWatchLogGroupName}:*]`,
+        'The log retention handler manages the install log group and its streams',
+      );
+      Validations.of(logRetentionHandler).acknowledge({
+        id: 'AwsSolutions-IAM5[Resource::*]',
+        reason:
+          'logs:PutRetentionPolicy and logs:DeleteRetentionPolicy do not support resource-level permissions in the CDK log retention handler',
+      });
+    }
   }
 
   public _bind() {}
