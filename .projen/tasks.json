@@ -38,7 +38,7 @@
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
         "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"section\":\"Features\"},{\"type\":\"fix\",\"section\":\"Bug Fixes\"},{\"type\":\"chore\",\"section\":\"Chores\"},{\"type\":\"docs\",\"section\":\"Docs\"},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"section\":\"Performance\"},{\"type\":\"test\",\"hidden\":true}]}",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12"
+        "BUMP_PACKAGE": "commit-and-tag-version@^13"
       },
       "steps": [
         {
@@ -99,6 +99,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -117,6 +118,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/idle-monitor-enabler/idle-monitor-enabler.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -136,6 +138,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/idle-monitor/idle-monitor.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -154,6 +157,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/idle-monitor/idle-monitor.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -173,6 +177,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/installer/installer.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -191,6 +196,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/installer/installer.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -210,6 +216,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/secret-retriever/secret-retriever.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*"
           ]
@@ -228,6 +235,7 @@
             "--target=node24",
             "--platform=node",
             "--outfile=assets/secret-retriever/secret-retriever.lambda/index.js",
+            "--packages=bundle",
             "--tsconfig=test/tsconfig.json",
             "--external:@aws-sdk/*",
             "--watch"
@@ -489,7 +497,8 @@
         {
           "exec": "git diff --ignore-space-at-eol --exit-code"
         }
-      ]
+      ],
+      "condition": "git log --oneline -1 | grep -v \"chore(release):\" > /dev/null"
     },
     "test": {
       "name": "test",
@@ -530,7 +539,7 @@
         "RELEASETAG": "dist/releasetag.txt",
         "RELEASE_TAG_PREFIX": "",
         "VERSIONRCOPTIONS": "{\"types\":[{\"type\":\"feat\",\"section\":\"Features\"},{\"type\":\"fix\",\"section\":\"Bug Fixes\"},{\"type\":\"chore\",\"section\":\"Chores\"},{\"type\":\"docs\",\"section\":\"Docs\"},{\"type\":\"style\",\"hidden\":true},{\"type\":\"refactor\",\"hidden\":true},{\"type\":\"perf\",\"section\":\"Performance\"},{\"type\":\"test\",\"hidden\":true}]}",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12"
+        "BUMP_PACKAGE": "commit-and-tag-version@^13"
       },
       "steps": [
         {
