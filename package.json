@@ -49,15 +49,15 @@
     "organization": true
   },
   "devDependencies": {
-    "@aws-cdk/integ-runner": "2.205.5",
+    "@aws-cdk/integ-runner": "2.205.6",
     "@aws-cdk/integ-tests-alpha": "2.269.0-alpha.0",
-    "@aws-sdk/client-cloudwatch": "^3.1149.0",
-    "@aws-sdk/client-dynamodb": "^3.1149.0",
-    "@aws-sdk/client-ec2": "^3.1149.0",
-    "@aws-sdk/client-eventbridge": "^3.1149.0",
-    "@aws-sdk/client-secrets-manager": "^3.1149.0",
-    "@aws-sdk/client-ssm": "^3.1149.0",
-    "@aws-sdk/lib-dynamodb": "^3.1149.0",
+    "@aws-sdk/client-cloudwatch": "^3.1150.0",
+    "@aws-sdk/client-dynamodb": "^3.1150.0",
+    "@aws-sdk/client-ec2": "^3.1150.0",
+    "@aws-sdk/client-eventbridge": "^3.1150.0",
+    "@aws-sdk/client-secrets-manager": "^3.1150.0",
+    "@aws-sdk/client-ssm": "^3.1150.0",
+    "@aws-sdk/lib-dynamodb": "^3.1150.0",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@stylistic/eslint-plugin": "^2",
@@ -69,7 +69,7 @@
     "@typescript-eslint/parser": "^8",
     "aws-cdk-lib": "2.269.0",
     "awslint": "2.269.0-alpha.0",
-    "commit-and-tag-version": "^12",
+    "commit-and-tag-version": "^13",
     "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-import-resolver-typescript": "^4.4.5",
@@ -92,7 +92,7 @@
     "constructs": "^10.5.1"
   },
   "dependencies": {
-    "@mavogel/mvc-projen": "^0.0.54",
+    "@mavogel/mvc-projen": "^0.0.59",
     "cdk-nag": "^3.0.1",
     "constructs": "^10.5.1",
     "node-html-parser": "^9.0.4"
