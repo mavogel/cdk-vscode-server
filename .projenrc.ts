@@ -21,15 +21,11 @@ const project = new MvcCdkConstructLibrary({
     '@mavogel/mvc-projen',
     'constructs@^10.5.1',
   ],
-  // `@mavogel/mvc-projen` pins its own `projen` dependency (currently ^0.103.23).
-  // The default UpgradeDependencies task bumps this project's top-level `projen`
-  // devDependency independently (e.g. to 0.101.x), which drifts out of that range:
-  // npm then installs a second, nested `projen` for mvc-projen's synthesis, so the
-  // generated release workflow's builtin task names (from the nested version) no
-  // longer match what the top-level `projen` CLI can resolve at runtime, breaking
-  // `npx projen release` with "Cannot find module '.../bump-version.task.js'".
-  // Exclude `projen` from auto-upgrade so it stays aligned with mvc-projen's pin;
-  // if an automated mvc-projen bump raises that pin, bump `projen` in the same PR.
+  // `projenVersion` is deliberately not set: mvc-projen defaults the top-level
+  // `projen` devDependency to its own `projen` range. Keep `projen` out of
+  // auto-upgrade so it only ever follows mvc-projen's pin - a second, nested
+  // `projen` breaks synthesis and `npx projen release` ("Cannot find module
+  // '.../bump-version.task.js'").
   depsUpgradeOptions: {
     exclude: ['projen'],
     // The upgrade-main PR is opened as 'mvc-bot' via PROJEN_GITHUB_TOKEN, so

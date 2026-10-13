@@ -593,6 +593,7 @@
             "@typescript-eslint/parser",
             "awslint",
             "commit-and-tag-version",
+            "conventional-changelog-conventionalcommits",
             "esbuild",
             "eslint-import-resolver-typescript",
             "eslint-plugin-import",
