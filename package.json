@@ -49,15 +49,15 @@
     "organization": true
   },
   "devDependencies": {
-    "@aws-cdk/integ-runner": "2.205.6",
+    "@aws-cdk/integ-runner": "2.205.8",
     "@aws-cdk/integ-tests-alpha": "2.269.0-alpha.0",
-    "@aws-sdk/client-cloudwatch": "^3.1156.0",
-    "@aws-sdk/client-dynamodb": "^3.1156.0",
-    "@aws-sdk/client-ec2": "^3.1156.0",
-    "@aws-sdk/client-eventbridge": "^3.1156.0",
-    "@aws-sdk/client-secrets-manager": "^3.1156.0",
-    "@aws-sdk/client-ssm": "^3.1156.0",
-    "@aws-sdk/lib-dynamodb": "^3.1156.0",
+    "@aws-sdk/client-cloudwatch": "^3.1157.0",
+    "@aws-sdk/client-dynamodb": "^3.1157.0",
+    "@aws-sdk/client-ec2": "^3.1157.0",
+    "@aws-sdk/client-eventbridge": "^3.1157.0",
+    "@aws-sdk/client-secrets-manager": "^3.1157.0",
+    "@aws-sdk/client-ssm": "^3.1157.0",
+    "@aws-sdk/lib-dynamodb": "^3.1157.0",
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
     "@stylistic/eslint-plugin": "^2",
@@ -83,7 +83,7 @@
     "jsii-docgen": "^10.5.0",
     "jsii-pacmak": "^1.142.0",
     "jsii-rosetta": "~6.0.0",
-    "projen": "^0.104.8",
+    "projen": "^0.104.17",
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.2"
@@ -93,7 +93,7 @@
     "constructs": "^10.5.1"
   },
   "dependencies": {
-    "@mavogel/mvc-projen": "^0.0.63",
+    "@mavogel/mvc-projen": "^0.0.67",
     "cdk-nag": "^3.0.1",
     "constructs": "^10.5.1",
     "node-html-parser": "^9.0.5"
