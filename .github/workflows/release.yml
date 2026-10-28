@@ -42,7 +42,7 @@ jobs:
         id: setup_node_js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 24.x
+          node-version: 26.x
           package-manager-cache: false
       - name: Install dependencies
         id: install_dependencies
@@ -90,7 +90,7 @@ jobs:
     steps:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 24.x
+          node-version: 26.x
           package-manager-cache: false
       - name: Download build artifacts
         id: download_build_artifacts
@@ -124,7 +124,7 @@ jobs:
     steps:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 24.x
+          node-version: 26.x
           package-manager-cache: false
       - name: Download build artifacts
         id: download_build_artifacts
@@ -176,7 +176,7 @@ jobs:
     steps:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 24.x
+          node-version: 26.x
           package-manager-cache: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
