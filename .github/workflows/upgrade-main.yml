@@ -24,7 +24,7 @@ jobs:
         id: setup_node_js
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 26.x
+          node-version: 24.x
           package-manager-cache: false
       - name: Install dependencies
         id: install_dependencies
