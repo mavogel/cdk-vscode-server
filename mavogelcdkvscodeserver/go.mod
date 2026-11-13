@@ -5,7 +5,7 @@ go 1.23
 require (
 	github.com/aws/jsii-runtime-go v1.142.0
 	github.com/MV-Consulting/mvc-projen/mavogelmvcprojen v0.0.75
-	github.com/aws/aws-cdk-go/awscdk/v2 v2.276.0
+	github.com/aws/aws-cdk-go/awscdk/v2 v2.277.0
 	github.com/cdklabs/cdk-nag-go/cdknag/v3 v3.0.2
 	github.com/aws/constructs-go/constructs/v10 v10.8.1
 	github.com/projen/projen-go/projen v0.91.8 // indirect
