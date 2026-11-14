@@ -64,7 +64,7 @@
     "@types/aws-lambda": "^8.10.164",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^30.0.0",
-    "@types/node": "^24",
+    "@types/node": "^26",
     "@typescript-eslint/eslint-plugin": "^8",
     "@typescript-eslint/parser": "^8",
     "aws-cdk-lib": "2.269.0",
@@ -109,7 +109,7 @@
     "vscode"
   ],
   "engines": {
-    "node": ">= 24.x"
+    "node": ">= 26.x"
   },
   "devEngines": {
     "packageManager": {
