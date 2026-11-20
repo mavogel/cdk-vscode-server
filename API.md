@@ -4,6 +4,8 @@
 
 ### IdleMonitor <a name="IdleMonitor" id="@mavogel/cdk-vscode-server.IdleMonitor"></a>
 
+- *Implements:* constructs.IConstruct, constructs.IDependable
+
 Construct that monitors CloudFront request metrics and stops the EC2 instance when idle.
 
 #### Initializers <a name="Initializers" id="@mavogel/cdk-vscode-server.IdleMonitor.Initializer"></a>
@@ -166,6 +168,8 @@ The EventBridge rule that triggers idle monitoring checks.
 
 
 ### VSCodeServer <a name="VSCodeServer" id="@mavogel/cdk-vscode-server.VSCodeServer"></a>
+
+- *Implements:* constructs.IConstruct, constructs.IDependable
 
 VSCodeServer - spin it up in under 10 minutes.
 
